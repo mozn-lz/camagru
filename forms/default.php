@@ -1,7 +1,14 @@
 <?php
 define ("SERVERNAME" , "localhost");
 define ("USERNAME" , "root");
-define ("PASSWORD" , "1234");
+define ("PASSWORD" , "wethinkcode");
 define ("DBNAME" , "comagaru");
-define ("PASSWORD_DEFAULT" , "randomfire" );
+define ("SALT" , "randomfire" );
+
+echo (SERVERNAME . "\n");
+echo (USERNAME . "\n");
+echo (PASSWORD . "\n");
+echo (DBNAME . "\n");
+// echo (SALT . "\n");
+
 ?>

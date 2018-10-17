@@ -18,24 +18,24 @@
 		<div class="form-row">
 			<div class="form-group col-sm-6">
 				<label for="userName">First Name</label>
-				<input type="text" class="form-control" name="fname" placeholder="First Name">
+				<input required type="text" id="reg_fname" class="form-control" name="fname" placeholder="First Name">
 			</div>
 			<div class="form-group col-sm-6">
 				<label for="userName">Last Name</label>
-				<input type="text" class="form-control" name="sname" placeholder="Last Name">
+				<input required type="text" id="reg_sname" class="form-control" name="sname" placeholder="Last Name">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="Email">Email address</label>
-			<input type="email" class="form-control" name="email" placeholder="Email">
+			<input required type="email" id="reg_email" class="form-control" name="email" placeholder="Email">
 		</div>
 		<div class="form-group">
 			<label for="Password">Password</label>
-			<input type="password" class="form-control" name="password1" placeholder="Password">
+			<input required type="password" id="reg_password1" class="form-control" name="password1" placeholder="Password">
 		</div>
 		<div class="form-group">
 			<label for="Password2">Confirm Password</label>
-			<input type="password" class="form-control" name="password2" placeholder="Confirm Password">
+			<input required type="password" id="reg_password2" class="form-control" name="password2" placeholder="Confirm Password">
 		</div>
 		<button type="submit" class="btn btn-default" value="reg">Submit</button>
 	</form>

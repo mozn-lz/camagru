@@ -1,27 +1,34 @@
 <?php
-require_once 'default.php';
+include 'default.php';
 
 // $conn = new PDO("mysql: SERVERNAME, BDNAME", USERNAME, PASSWORD);
 
 try
 {
-	$conn = new PDO("mysql: SERVERNAME, BDNAME", USERNAME, PASSWORD);
+	$conn = new PDO("mysql: SERVERNAME, DBNAME", USERNAME, PASSWORD);
 
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	echo "Connected successfully";
 	
-
+	// function create_session(array $usr_data){
+	// 	session_start();
+	// 	session['id'] = $usr_data[0];
+	// 	session['name'] = $usr_data[1];
+	// 	session['sname'] = $usr_data[2];
+	// 	session['email'] = $usr_data[3];
+	// }
 
 	/********************/
 	/*		updte		*/
 	/********************/
 	if (isset($_POST['updte']))
 	{
+		echo "Updaate\n\n";
 		if ( isset($_POST['email']) || isset($_POST['lname']) || isset($_POST['fname']) )
 		{
 			$email = $_POST['email'];
 			$paswd = $_POST['password'];
-			$stmt = $conn->prepare("UPDATE users (email, paswd) VALUES (:email, :paswd)");
+			$stmt = $conn->prepare("UPDATE users SET (email, paswd) VALUES (:email, :paswd)");
 			$stmt->bindparam(':email', $email);
 			$stmt->bindparam(':paswd', $paswd);
 			if ($stmt->execute()) {
@@ -36,6 +43,7 @@ try
 	/********************/
 	if (isset($_POST['login']))
 	{
+		echo "login\n\n";
 		if ( isset($_POST['email']) && isset($_POST['password']) )
 		{
 			$email = $_POST['email'];
@@ -52,17 +60,14 @@ try
 				echo "Unable to create record";
 			}
 		}
-		try{
-			$conn = new PDO($dsn,$username,$password,$options);
-		} catch (PDOException $e){
-			echo "Error!".$e->getMessage();
-		}
+		
 	}
 	/********************/
 	/*		reg			*/
 	/********************/
 	if (isset($_POST['reg']))
 	{
+		echo "Reg\n\n";
 		if ( isset($_POST['fname']) && isset($_POST['sname']) && isset($_POST['email']) && isset($_POST['password']) )
 		{
 			$fname = $_POST['fname'];
@@ -83,7 +88,7 @@ try
 		}
 	}
 }
-catch ($conn->connect_error) {
+catch (PDOException $e) {
 	echo "Connection failed: " . $e->getMessage();
 }
 

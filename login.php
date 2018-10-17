@@ -15,12 +15,12 @@
 	<h2>main</h2>
 	<form action="forms/form.php" method="POST">
 		<div class="form-group">
-			<label for="exampleInputEmail1">Email address</label>
-			<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+			<label for="Email1">Email address</label>
+			<input required type="email" class="form-control" id="loginEmail" placeholder="Email" >
 		</div>
 		<div class="form-group">
-			<label for="exampleInputPassword1">Password</label>
-			<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+			<label for="Password1">Password</label>
+			<input required type="password" class="form-control" id="loginPassword" placeholder="Password">
 		</div>
 		<button type="submit" class="btn btn-default" value="login">Submit</button>
 	</form>
