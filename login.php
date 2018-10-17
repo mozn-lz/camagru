@@ -13,7 +13,7 @@
 <!-- main startss here -->
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<h2>main</h2>
-	<form action="" method="POST">
+	<form action="forms/form.php" method="POST">
 		<div class="form-group">
 			<label for="exampleInputEmail1">Email address</label>
 			<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">

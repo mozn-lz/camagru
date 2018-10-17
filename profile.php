@@ -15,7 +15,7 @@
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<h2>profile</h2>
 	<div>
-		<form>
+		<form action="forms/form.php" method="POST">
 			<div class="form-row">
 				<div class="form-group col-sm-6">
 					<label for="userName">First Name</label>

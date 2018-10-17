@@ -1,19 +1,17 @@
 <?php
-$servername = "localhost";
-$username = "username";
-$password = "password";
-$dbname = "myDB";
+require_once 'default.php';
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+// $conn = new PDO("mysql: SERVERNAME, BDNAME", USERNAME, PASSWORD);
 
-// Check connection
-if ($conn->connect_error) {
-	die("Connection failed: " . $conn->connect_error);
-}
-else
+try
 {
-	if (isset($_POST['action']))
+	$conn = new PDO("mysql: SERVERNAME, BDNAME", USERNAME, PASSWORD);
+
+	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	echo "Connected successfully";
+	
+
+
 	/********************/
 	/*		updte		*/
 	/********************/
@@ -41,7 +39,7 @@ else
 		if ( isset($_POST['email']) && isset($_POST['password']) )
 		{
 			$email = $_POST['email'];
-			$paswd = $_POST['password'];
+			$paswd = password_hash($_POST['password'], PASSWORD_DEFAULT);
 			$stmt = $conn->prepare("SELECT * FROM users WHERE email=:email AND paswd=:paswd)");
 			$stmt->bindparam(':email', $email);
 			$stmt->bindparam(':paswd', $paswd);
@@ -70,7 +68,8 @@ else
 			$fname = $_POST['fname'];
 			$sname = $_POST['sname'];
 			$email = $_POST['email'];
-			$paswd = $_POST['password'];
+			$paswd = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
 			$stmt = $conn->prepare("INSERT INTO users (fname, sname, email, paswd) VALUES (:fname, :sname, :email, :paswd)");
 			$stmt->bindparam(':fname', $email);
 			$stmt->bindparam(':sname', $email);
@@ -84,14 +83,17 @@ else
 		}
 	}
 }
+catch ($conn->connect_error) {
+	echo "Connection failed: " . $e->getMessage();
+}
 
-fname
-sname
-email
-paswd
+// fname
+// sname
+// email
+// paswd
 
-:fname
-:sname
-:email
-:paswd
+// :fname
+// :sname
+// :email
+// :paswd
 ?>

@@ -14,7 +14,7 @@
 </section>
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<h2>main</h2>
-	<form>
+	<form action="forms/form.php" method="POST">
 		<div class="form-row">
 			<div class="form-group col-sm-6">
 				<label for="userName">First Name</label>
