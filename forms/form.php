@@ -1,53 +1,62 @@
 <?php
 include 'default.php';
 
-// $conn = new PDO("mysql: SERVERNAME, BDNAME", USERNAME, PASSWORD);
-
 try
 {
-	$conn = new PDO("mysql: SERVERNAME, DBNAME", USERNAME, PASSWORD);
-
+	$conn = new PDO("mysql:host=".SERVERNAME.";dbname=".DBNAME."", USERNAME, PASSWORD);
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	echo "Connected successfully";
-	
+
 	// function create_session(array $usr_data){
 	// 	session_start();
 	// 	session['id'] = $usr_data[0];
 	// 	session['name'] = $usr_data[1];
 	// 	session['sname'] = $usr_data[2];
 	// 	session['email'] = $usr_data[3];
-	// }
 
 	/********************/
 	/*		updte		*/
 	/********************/
-	if (isset($_POST['updte']))
+
+	if ( ($_POST['update_email']) || ($_POST['update_lName']) || ($_POST['update_fName']) || ($_POST['update_uName']) )
 	{
-		echo "Updaate\n\n";
-		if ( isset($_POST['email']) || isset($_POST['lname']) || isset($_POST['fname']) )
-		{
-			$email = $_POST['email'];
-			$paswd = $_POST['password'];
-			$stmt = $conn->prepare("UPDATE users SET (email, paswd) VALUES (:email, :paswd)");
-			$stmt->bindparam(':email', $email);
-			$stmt->bindparam(':paswd', $paswd);
-			if ($stmt->execute()) {
-				echo "New record created successfully";
-			} else {
-				echo "Unable to create record";
-			}
+		if ($_POST['update_email']) {
+			$email = $_POST('update_email');
+			$stmt->bindParam(':email', $email);
+		}
+		if ($_POST['update_lName']) {
+			$lName = $_POST('update_lName');
+			$stmt->bindParam(':lName', $lName);
+		}
+		if ($_POST['update_fName']) {
+			$fName = $_POST('update_fName');
+			$stmt->bindParam(':fName', $fName);
+		}
+		if ($_POST['update_uName']) {
+			$uName = $_POST('update_uName');
+			$stmt->bindParam(':uName', $uName);
+		}
+		(condition) ? a : b ;
+		$email = $_POST['email'];
+		$paswd = $_POST['password'];
+		$stmt = $conn->prepare("UPDATE users SET (email, paswd) VALUES (:email, :paswd)");
+		$stmt->bindparam(':email', $email);
+		$stmt->bindparam(':paswd', $paswd);
+		if ($stmt->execute()) {
+			echo "New record created successfully";
+		} else {
+			echo "Unable to create record";
 		}
 	}
+
 	/********************/
 	/*		login		*/
 	/********************/
-	if (isset($_POST['login']))
-	{
-		echo "login\n\n";
-		if ( isset($_POST['email']) && isset($_POST['password']) )
+
+		if ( ($_POST['log_email']) && ($_POST['log_password']) )
 		{
 			$email = $_POST['email'];
-			$paswd = password_hash($_POST['password'], PASSWORD_DEFAULT);
+			$psword = password_hash($_POST['password'], PASSWORD_DEFAULT);
 			$stmt = $conn->prepare("SELECT * FROM users WHERE email=:email AND paswd=:paswd)");
 			$stmt->bindparam(':email', $email);
 			$stmt->bindparam(':paswd', $paswd);
@@ -61,44 +70,49 @@ try
 			}
 		}
 		
-	}
+
 	/********************/
 	/*		reg			*/
 	/********************/
-	if (isset($_POST['reg']))
-	{
-		echo "Reg\n\n";
-		if ( isset($_POST['fname']) && isset($_POST['sname']) && isset($_POST['email']) && isset($_POST['password']) )
-		{
-			$fname = $_POST['fname'];
-			$sname = $_POST['sname'];
-			$email = $_POST['email'];
-			$paswd = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-			$stmt = $conn->prepare("INSERT INTO users (fname, sname, email, paswd) VALUES (:fname, :sname, :email, :paswd)");
-			$stmt->bindparam(':fname', $email);
-			$stmt->bindparam(':sname', $email);
-			$stmt->bindparam(':email', $email);
-			$stmt->bindparam(':paswd', $paswd);
-			if ($stmt->execute()) {
-				echo "New record created successfully";
-			} else {
-				echo "Unable to create record";
-			}
+	if ( $_POST['reg_uName'] && $_POST['reg_fName'] && $_POST['reg_sName'] && $_POST['reg_email'] && $_POST['reg_password1'] )
+	{
+		try {
+			$conn = new PDO("mysql:host=".SERVERNAME.";dbname=".DBNAME."", USERNAME, PASSWORD);
+			// set the PDO error mode to exception
+			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+			// prepare sql and bind parameters
+			$stmt = $conn->prepare("INSERT INTO ".$usrsTB." 
+			(username, firstname, lastname, email, pssword, verified) 
+			VALUES (:username, :firstname, :lastname, :email, :pssword, :verified)");
+			$username = $_POST['reg_uName'];
+			$firstname = $_POST['reg_fName'];
+			$lastname = $_POST['reg_sName'];
+			$email = $_POST['reg_email'];
+			$psword = $_POST['reg_password1'];
+			$verified = 0;
+			
+			$stmt->bindParam(':username', $username);
+			$stmt->bindParam(':firstname', $firstname);
+			$stmt->bindParam(':lastname', $lastname);
+			$stmt->bindParam(':email', $email);
+			$stmt->bindParam(':pssword', $psword);
+			$stmt->bindParam(':verified', $verified);
+			$stmt->execute();
+			echo "New records created successfully";
+		}
+		catch(PDOException $e)
+		{
+			echo "Error: " . $e->getMessage();
 		}
 	}
+
 }
+
 catch (PDOException $e) {
-	echo "Connection failed: " . $e->getMessage();
+	echo "PDO Connection failed: " . $e->getMessage();
 }
 
-// fname
-// sname
-// email
-// paswd
-
-// :fname
-// :sname
-// :email
-// :paswd
+$conn = null;
 ?>

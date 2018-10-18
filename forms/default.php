@@ -1,14 +1,16 @@
 <?php
+
 define ("SERVERNAME" , "localhost");
 define ("USERNAME" , "root");
 define ("PASSWORD" , "wethinkcode");
-define ("DBNAME" , "comagaru");
+define ("DBNAME" , "camagru");
 define ("SALT" , "randomfire" );
+$servername = "localhost";
+$myDB = "camagru";
+$username = "root";
+$password = "wethinkcode";
+$usrsTB = "users";
 
-echo (SERVERNAME . "\n");
-echo (USERNAME . "\n");
-echo (PASSWORD . "\n");
-echo (DBNAME . "\n");
 // echo (SALT . "\n");
 
 ?>
