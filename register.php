@@ -47,7 +47,7 @@ include 'frame/head.php';
 		</div>
 		<button type="submit" class="btn btn-default" name="register" value="reg">Submit</button>
 	</form>
-	<a href="login.php">already have an account? Click to login</a>
+	<a href="login.php">Already have an account? Click to login</a>
 </section>
 <section class="shadow-lg p-3 mb-5 bg-white " id="footer">
 	<h2>footer</h2>
