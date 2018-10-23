@@ -94,8 +94,7 @@ try
 						$_SESSION['fName'] = $result['firstname'];
 						$_SESSION['sName'] = $result['lastname'];
 						$_SESSION['email'] = $result['email'];
-						// echo "Login successfull";
-						print_r ($_SESSION);
+						send_mail($email);
 						header("Location: ../index.php");
 					}
 				}elseif ($stmt->rowCount() < 1) {
@@ -143,6 +142,7 @@ try
 					$stmt->bindParam(':verified', $verified);
 					$stmt->execute();
 					echo "New records created successfully";
+					send_mail($email, "new account");
 					header("Location: ../index.php");
 				}
 				catch(PDOException $e) {

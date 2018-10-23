@@ -1,5 +1,6 @@
 <?php 
 session_start();
+$page_title = "Profile";
 $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
 if ($sess) {
 	$username = $_SESSION['uName'];

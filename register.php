@@ -1,5 +1,7 @@
-<?php include 'frame/head.php'; ?>
-
+<?php 
+$page_title = "Camagru Registration";
+include 'frame/head.php'; 
+?>
 <section class="shadow-lg p-3 mb-5 bg-white " id="header">
 	<ul class="nav nav-pills">
 		<li role="presentation" class="active"><a href="index.php">Comagaru</a></li>
@@ -45,6 +47,7 @@
 		</div>
 		<button type="submit" class="btn btn-default" name="register" value="reg">Submit</button>
 	</form>
+	<a href="login.php">already have an account? Click to login</a>
 </section>
 <section class="shadow-lg p-3 mb-5 bg-white " id="footer">
 	<h2>footer</h2>

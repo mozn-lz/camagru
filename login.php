@@ -1,4 +1,7 @@
-<?php include 'frame/head.php'; ?>
+<?php 
+$page_title = "Camagru Logon";
+include 'frame/head.php'; 
+?>
 
 <!-- header startss here -->
 <section class="shadow-lg p-3 mb-5 bg-white " id="header">
@@ -29,6 +32,7 @@
 		</div>
 		<button type="submit" class="btn btn-default" value="login">Submit</button>
 	</form>
+	<a href="register.php">Don't have an account? Click to register</a>
 </section>
 
 <!-- footer startss here -->
