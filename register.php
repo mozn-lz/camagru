@@ -32,7 +32,7 @@ include 'frame/head.php';
 				<label for="userName">User Name</label>
 				<input required type="text" class="form-control" id="reg_uName" name="reg_uName" placeholder="First Name">
 			</div>
-			<div class="form-group col-sm-6">
+		 	<div class="form-group col-sm-6">
 				<label for="Email">Email address</label>
 				<input required type="email" class="form-control" id="reg_email" name="reg_email" placeholder="Email">
 			</div>

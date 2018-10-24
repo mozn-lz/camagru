@@ -1,51 +1,49 @@
 <?php
 session_start();
 include 'default.php';
-include 'forms/helpers.php';
+// include 'forms/helpers.php';
 
-date_default_timezone_set('Africa/Johannesburg');
-$date = date('d/m/Y H:i:s', time());
-$headers .= 'From: <admin@lcamagaru.com>' . "\r\n";
 
 function send_mail($username, $firstname, $lastname, $email, $hash, $type) {
+	date_default_timezone_set('Africa/Johannesburg');
+	$date = date('d/m/Y H:i:s', time());
+	$to      = $email; // Send email to our user
+	$headers = 'From:noreply@comagaru.com' . "\r\n"; // Set from headers
 	echo "sending mail<br>";
-    // if ($type == "user details") {
-    //     $subject = "Your Camagaru user details have been changed";
-    //     $message = "Your account has successfully been created";
-    // }
-    // if ($type == "new user") {
-    //     $subject = "Email confirmation on Camagaru";
-    //     $message = "Your account was created at " . $date;
-    // }
-    // if ($type == "user login") {
-	//     $subject = "Login confirmation";
-    //     $message = "You signed in at " . $date;
-	// }
+    if ($type == "user details") {
+        $subject = "Your Camagaru user details have been changed";
+        $message = "Your account has successfully been created";
+    }
+    if ($type == "new user") {
+		$subject = 'Signup | Verification'; // Give the email a subject    
+		// $message = "Your account was created at " . $date;
+		$message = '
+		
+	   Thanks for signing up!
+	   Your account has been created, you can login with the following credentials after you have activated your account by pressing the url below.
+		
+	   ------------------------
+	   username: '.$username.'
+	   First Name: '.$firstname.'
+	   Last Name: '.$lastname.'
+	   Email: '.$email.'
+	   Password: ...just kidding, thats a serurity risk.
+	   ------------------------
+		
+	   Please click this link to activate your account:
+	   http://127.0.0.1:8080/camagru/?email='.$email.'&hash='.$hash.'
+		
+	   '; // Our message above including the link
+    }
+    if ($type == "user login") {
+	    $subject = "Login confirmation";
+        $message = "You signed in at " . $date;
+	}
 	// echo $date;
 
-	$to      = $email; // Send email to our user
-	$subject = 'Signup | Verification'; // Give the email a subject 
-	$message = '
-	 
-	Thanks for signing up!
-	Your account has been created, you can login with the following credentials after you have activated your account by pressing the url below.
-	 
-	------------------------
-	username: '.$username.'
-	First Name: '.$firstname.'
-	Last Name: '.$lastname.'
-	Email: '.$email.'
-	Password: ...just kidding, thats a serurity risk.
-	------------------------
-	 
-	Please click this link to activate your account:
-	http://127.0.0.1:8080/camagru/?email='.$email.'&hash='.$hash.'
-	 
-	'; // Our message above including the link
-						 
-	$headers = 'From:noreply@yourwebsite.com' . "\r\n"; // Set from headers
 
-	mail($email, $subject, $message, $headers);
+	
+	mail($to, $subject, $message, $headers);
 }
 
 try
