@@ -18,15 +18,10 @@ include 'frame/head.php';
 	</ul>
 </section>
 
-
 <!-- main startss here -->
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<h2>Login</h2>
-	<?php
-	echo ("<div class=".$type.">".$message."</div>");
-	$_SESSION['type'] = "";
-	$_SESSION['message'] = "";
-	?>
+		<div class="<?php echo $type; ?>"><?php echo $message; ?></div>
 	<form name="reg_form" action="forms/form.php" onsubmit="return validateRegForm()" method="POST">
 		<div class="form-group">
 			<label for="email">Email address</label>
@@ -46,4 +41,8 @@ include 'frame/head.php';
 	<h2>footer</h2>
 </section>
 
-<?php include 'frame/tail.php'; ?>
+<?php 
+// $_SESSION['type'] = '';
+// $_SESSION['message'] = '';
+include 'frame/tail.php'; 
+?>

@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +11,7 @@
 </head>
 <body>
 <?php 
-$masg_type = $_SESSION['type'];
+$type = $_SESSION['type'];
 $message = $_SESSION['message'];
 include 'frame/qm.php'; 
 ?>

@@ -3,14 +3,11 @@ session_start();
 include 'default.php';
 // include 'forms/helpers.php';
 
-
 function send_mail($username, $firstname, $lastname, $email, $hash, $type) {
-	date_default_timezone_set('Africa/Johannesburg');
-	$date = date('d/m/Y H:i:s', time());
 	$to      = $email; // Send email to our user
 	$headers = 'From:noreply@comagaru.com' . "\r\n"; // Set from headers
-	echo "sending mail<br>";
-    if ($type == "user details") {
+
+	if ($type == "user details") {
         $subject = "Your Camagaru user details have been changed";
         $message = "Your account has successfully been created";
     }
@@ -35,13 +32,18 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {
 	   '; // Our message above including the link
     }
     if ($type == "user login") {
-	    $subject = "Login confirmation";
-        $message = "You signed in at " . $date;
+		$subject = 'Signin | Notification'; // Give the email a subject    
+		// $message = "Your account was created at " . $date;
+		$message = '
+		
+		<h2>Account accessed</h2> 
+
+		Hi '.$username.',
+
+		Your account has been accessed. Please let us know if this was not done by you.
+
+	   '; // Our message above including the link
 	}
-	// echo $date;
-
-
-	
 	mail($to, $subject, $message, $headers);
 }
 
@@ -49,8 +51,7 @@ try
 {
 	$conn = new PDO("mysql:host=".SERVERNAME.";dbname=".DBNAME."", USERNAME, PASSWORD);
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	echo "Connected successfully :0 <br>";
-
+	
 	/********************/
 	/*		updte		*/
 	/********************/
@@ -125,7 +126,7 @@ try
 					if ($result['active'] == 0)
 					{	//	check if account has been verified
 						$_SESSION['message'] = "It seams your account has not been verified yet.<br>Please check your email for verification details.<br>";
-						$_SESSION['type'] = "danger";
+						$_SESSION['type'] = 'danger';
 						header("Location: ../login.php");
 					}
 					if ($result['active'] == 1) 
@@ -135,17 +136,23 @@ try
 						$_SESSION['fName'] = $result['firstname'];
 						$_SESSION['sName'] = $result['lastname'];
 						$_SESSION['email'] = $result['email'];
-						$_SESSION['msg'] = '';
+						$_SESSION['message'] = "logged in successfully<br>";
+						$_SESSION['type'] = 'success';
 						send_mail($username, $firstname, $lastname, $email, $psword, "user login");
 						header("Location: ../index.php");
 					}
 				}elseif ($count < 1) {
-					$_SESSION['message'] = "Incorrect email or password<br>";
-					$_SESSION['type'] = "danger";
+					$_SESSION['message'] = 'Incorrect email or password<br>';
+					$_SESSION['type'] = 'danger';
 					header("Location: ../login.php");
 				}elseif ($count > 1) {
 					$_SESSION['message'] = "multiple identity chrisis<br>Relax, a psychologist has been called<br>";
-					$_SESSION['type'] = "danger";
+					$_SESSION['type'] = 'danger';
+					header("Location: ../login.php");
+				}else{
+					$_SESSION['message'] = "We ran out of errors... who knew, we sent an admin to fix it.<br>";
+					$_SESSION['type'] = 'danger';
+					header("Location: ../login.php");
 				}
 			}
 			catch(PDOException $e) {
@@ -157,8 +164,6 @@ try
 	/********************/
 	/*		reg			*/
 	/********************/
-
-
 	if ( $_POST['reg_uName'] && $_POST['reg_fName'] && $_POST['reg_sName'] && $_POST['reg_email'] && $_POST['reg_password1'] && $_POST['reg_password2'] )
 	{ // Check if ita the right form and if form elemsnts exist
 		if ( (trim($_POST['reg_uName']) != "") && (trim($_POST['reg_fName']) != "") && (trim($_POST['reg_sName']) != "") && (trim($_POST['reg_email']) != "") && (trim($_POST['reg_password1']) != "") && (trim($_POST['reg_password2']) != "") )
@@ -198,7 +203,7 @@ try
 						$stmt->execute();
 						// echo "New records created successfully";
 						$_SESSION['message'] = "Account created successfully. <br> Please check your email to confirm";
-						$_SESSION['type'] = "success";
+						$_SESSION['type'] = 'success';
 						send_mail($username, $firstname, $lastname, $email, $confirm, "new user");
 						header("Location: ../index.php");
 					}
@@ -207,12 +212,12 @@ try
 					}
 				}else {
 					$_SESSION['message'] = "User email already exists please try to login";
-					$_SESSION['type'] = "danger";
+					$_SESSION['type'] = 'danger';
 					header("Location: ../register.php");
 				}
 			}else{
 				$_SESSION['message'] = "Passwords don't match";
-				$_SESSION['type'] = "danger";
+				$_SESSION['type'] = 'danger';
 				header("Location: ../register.php");
 			}
 		}

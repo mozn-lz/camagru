@@ -9,6 +9,8 @@ if ($sess) {
 	$email = $_SESSION['email'];
 	include 'frame/head.php';
 } else {
+	$_SESSION['message'] = "Please login/register to access that page<br>";
+	$_SESSION['type'] = "danger";
 	header("Location: login.php");
 }
 ?>
@@ -29,8 +31,8 @@ if ($sess) {
 	<h2>profile</h2>
 	<?php
 	echo ("<div class=".$type.">".$message."</div>");
-	$_SESSION['type'] = "";
-	$_SESSION['message'] = "";
+	// $_SESSION['type'] = '';
+	// $_SESSION['message'] = '';
 	?>
 	<div>
 		<form action="forms/form.php" method="POST">

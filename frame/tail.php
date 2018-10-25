@@ -1,4 +1,9 @@
 </body>
 <script src="style/masterjs.js"></script>
-<?php $conn = null; ?>
+<?php 
+// $_SESSION['type'] = '';
+// $_SESSION['message'] = '';
+
+$conn = null; 
+?>
 </html>

@@ -1,4 +1,5 @@
 <?php 
+session_start();
 $page_title = "Camagru Registration";
 include 'frame/head.php'; 
 ?>
@@ -18,8 +19,8 @@ include 'frame/head.php';
 	<h2>Registration</h2>
 	<?php
 	echo ("<div class=".$type.">".$message."</div>");
-	$_SESSION['type'] = "";
-	$_SESSION['message'] = "";
+	// $_SESSION['type'] = "";
+	// $_SESSION['message'] = "";
 	?>
 	<form name="reg_form" action="forms/form.php" onsubmit="return validateRegForm()" method="POST">
 		<div class="form-row">
