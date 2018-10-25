@@ -27,21 +27,26 @@ if ($sess) {
 </section>
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<h2>profile</h2>
+	<?php
+	echo ("<div class=".$type.">".$message."</div>");
+	$_SESSION['type'] = "";
+	$_SESSION['message'] = "";
+	?>
 	<div>
 		<form action="forms/form.php" method="POST">
 			<div class="form-row">
 				<div class="form-group col-sm-6">
 					<label for="userName">First Name</label>
-					<input type="text" class="form-control" name="fname" placeholder="First Name">
+					<input type="text" class="form-control" name="fname" <?php echo "value=".$firstame ?> placeholder="First Name">
 				</div>
 				<div class="form-group col-sm-6">
 					<label for="userName">Last Name</label>
-					<input type="text" class="form-control" name="sname" placeholder="Last Name">
+					<input type="text" class="form-control" name="sname" <?php echo "value=".$surname ?> placeholder="Last Name">
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="Email">Email address</label>
-				<input type="email" class="form-control" name="email" placeholder="Email">
+				<input type="email" class="form-control" name="email" <?php echo "value=".$email ?> placeholder="Email">
 			</div>
 		<button type="submit" class="btn btn-default" value="updte">Save</button>
 	</form>

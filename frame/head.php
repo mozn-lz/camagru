@@ -9,4 +9,8 @@
     <title><?php echo "$page_title"; ?></title>
 </head>
 <body>
-<?php include 'frame/qm.php'; ?>
+<?php 
+$masg_type = $_SESSION['type'];
+$message = $_SESSION['message'];
+include 'frame/qm.php'; 
+?>

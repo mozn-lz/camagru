@@ -7,6 +7,14 @@ section{
 #qm{
 	padding-top: 50px;
 }
+.success{
+	box-shadow: 3px 3px 6px 8px rgb(3, 248, 44);
+	text: white;
+}
+.danger{
+	box-shadow: 3px 3px 6px 8px rgb(255, 0, 0);
+	text: white;
+}
 /****************************************/
 /*		EVERYTHING header IN HERE	   	*/
 /****************************************/

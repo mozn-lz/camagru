@@ -28,6 +28,11 @@ if ($sess) {
 
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<h2>main</h2>
+	<?php
+	echo ("<div class=".$type.">".$message."</div>");
+	$_SESSION['type'] = "";
+	$_SESSION['message'] = "";
+	?>
 	<div>
 		SELECT * FROM TABLE
 	</div>

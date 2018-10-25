@@ -31,8 +31,7 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {
 	   ------------------------
 		
 	   Please click this link to activate your account:
-	   http://127.0.0.1:8080/camagru/?email='.$email.'&hash='.$hash.'
-		
+	   http://127.0.0.1:8080/camagru/verify.php?email='.$email.'&hash='.$hash.'
 	   '; // Our message above including the link
     }
     if ($type == "user login") {
@@ -52,17 +51,9 @@ try
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	echo "Connected successfully :0 <br>";
 
-	// function create_session(array $usr_data){
-	// 	session_start();
-	// 	session['id'] = $usr_data[0];
-	// 	session['name'] = $usr_data[1];
-	// 	session['sname'] = $usr_data[2];
-	// 	session['email'] = $usr_data[3];
-
 	/********************/
 	/*		updte		*/
 	/********************/
-
 	if ( ($_POST['update_email']) || ($_POST['update_lName']) || ($_POST['update_fName']) || ($_POST['update_uName']) )
 	{
 		if(isset($_SESSION['id']))
@@ -126,16 +117,18 @@ try
 				$stmt->bindParam(':email', $email);
 				$stmt->bindParam(':pssword', $psword);
 				$stmt->execute();
-				// echo $count = $stmt->rowCount() . "<br>";
+				echo $count = $stmt->rowCount() . "<br>";
 				if ($count = $stmt->rowCount() == 1 ) 
 				{
+					echo $count = $stmt->rowCount() . "<br>";
 					$result = $stmt->fetch(PDO::FETCH_ASSOC);
-					if ($result['verified'] == 0)
+					if ($result['active'] == 0)
 					{	//	check if account has been verified
 						$_SESSION['message'] = "It seams your account has not been verified yet.<br>Please check your email for verification details.<br>";
 						$_SESSION['type'] = "danger";
+						header("Location: ../login.php");
 					}
-					if ($result['verified'] == 1) 
+					if ($result['active'] == 1) 
 					{	//start session if account verified=TRUE and usr email && password match
 						$_SESSION['id'] = $result['id'];
 						$_SESSION['uName'] = $result['username'];
@@ -185,26 +178,28 @@ try
 						
 						// prepare sql and bind parameters
 						$stmt = $conn->prepare("INSERT INTO ".$usrsTB." 
-						(username, firstname, lastname, email, pssword, verified) 
-						VALUES (:username, :firstname, :lastname, :email, :pssword, :verified)");
+						(username,  firstname,  lastname,  email,  pssword,  confirm,  active) 
+						VALUES (:username, :firstname, :lastname, :email, :pssword, :confirm, :active)");
 						$username = $_POST['reg_uName'];
 						$firstname = $_POST['reg_fName'];
 						$lastname = $_POST['reg_sName'];
 						$email = $_POST['reg_email'];
 						$psword = strtoupper(hash('whirlpool' , $_POST['reg_password1']));
-						$verified = 0;
+						$confirm = hash(md5 ,rand());
+						$active = 0;
 						
 						$stmt->bindParam(':username', $username);
 						$stmt->bindParam(':firstname', $firstname);
 						$stmt->bindParam(':lastname', $lastname);
 						$stmt->bindParam(':email', $email);
 						$stmt->bindParam(':pssword', $psword);
-						$stmt->bindParam(':verified', $verified);
+						$stmt->bindParam(':confirm', $confirm);
+						$stmt->bindParam(':active', $active);
 						$stmt->execute();
 						// echo "New records created successfully";
 						$_SESSION['message'] = "Account created successfully. <br> Please check your email to confirm";
 						$_SESSION['type'] = "success";
-						send_mail($username, $firstname, $lastname, $email, $psword, "new user");
+						send_mail($username, $firstname, $lastname, $email, $confirm, "new user");
 						header("Location: ../index.php");
 					}
 					catch(PDOException $e) {
@@ -222,6 +217,7 @@ try
 			}
 		}
 	}
+	header("Location: ../index.php");
  }
 catch (PDOException $e) {
 	echo "PDO Connection failed: " . $e->getMessage();

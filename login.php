@@ -1,6 +1,7 @@
 <?php 
+session_start();
 $page_title = "Camagru Logon";
-include 'frame/head.php'; 
+include 'frame/head.php';
 ?>
 
 <!-- header startss here -->
@@ -21,6 +22,11 @@ include 'frame/head.php';
 <!-- main startss here -->
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<h2>Login</h2>
+	<?php
+	echo ("<div class=".$type.">".$message."</div>");
+	$_SESSION['type'] = "";
+	$_SESSION['message'] = "";
+	?>
 	<form name="reg_form" action="forms/form.php" onsubmit="return validateRegForm()" method="POST">
 		<div class="form-group">
 			<label for="email">Email address</label>
