@@ -3,15 +3,15 @@ session_start();
 include 'default.php';
 // include 'forms/helpers.php';
 
-function send_mail($username, $firstname, $lastname, $email, $hash, $type) {
+function send_mail($username, $firstname, $lastname, $email, $hash, $type) {		//	Send email to Registerd user
 	$to      = $email; // Send email to our user
 	$headers = 'From:noreply@comagaru.com' . "\r\n"; // Set from headers
 
-	if ($type == "user details") {
+	if ($type == "user details") {		//	change user details
         $subject = "Your Camagaru user details have been changed";
         $message = "Your account has successfully been created";
     }
-    if ($type == "new user") {
+    if ($type == "new user") {		//	
 		$subject = 'Signup | Verification'; // Give the email a subject    
 		// $message = "Your account was created at " . $date;
 		$message = '
@@ -31,7 +31,7 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {
 	   http://127.0.0.1:8080/camagru/verify.php?email='.$email.'&hash='.$hash.'
 	   '; // Our message above including the link
     }
-    if ($type == "user login") {
+    if ($type == "user login") {	//	if user login
 		$subject = 'Signin | Notification'; // Give the email a subject    
 		// $message = "Your account was created at " . $date;
 		$message = '
@@ -49,6 +49,7 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {
 
 try
 {
+	//	conect to database  to be able to execute CRUD opperations
 	$conn = new PDO("mysql:host=".SERVERNAME.";dbname=".DBNAME."", USERNAME, PASSWORD);
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	
