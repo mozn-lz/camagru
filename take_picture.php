@@ -29,17 +29,20 @@ $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<h2>MaiN</h2>
 	<div class="top-container">
-		<video id="video">Stream broken...</video>
+		<div id="vid_div">
+			<img id="image" src="#" alt="image load error">
+			<video id="video">Stream broken...</video>
+		</div>
+			<select id="photo-overlay">
+				<option value="">none</option>
+				<option id="1" value="https://dumielauxepices.net/sites/default/files/catwoman-clipart-face-883550-3607898.png">crazy hair</option>
+				<option id="2" value="http://shopforclipart.com/images/funny-face-clipart/20.jpg">catface</option>
+				<option id="3" value="http://www.transparentpng.com/thumb/anonymous-mask/face-mask-funny-fear-nickname-face-anonymous-mask-png-images--15.png">anonimus</option>
+				<option id="4" value="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbZ-iwDmJ742m1J2SudaOQJ7qbCLdEruSfTQYoZOPVf6yR8y_Z4Q">Cuagmire</option>
+				<option id="5" value="https://png.pngtree.com/element_pic/16/12/01/5b3008293536496b29c22ef56c3c9e92.jpg">Sponge</option>
+				<option id="6" value="https://www.clipartmax.com/png/middle/18-187369_face-glasses-clipart-funny-face-icon-png.png">Classic disguise</option>
+			</select>
 		<button id="photo-button" class="btn btn-dark">Take Photo</button>
-		<select id="photo-filter">
-			<option value="none">none</option>
-			<option value="grayscale(100%)">grayscale</option>
-			<option value="sepia(100%)">sepia</option>
-			<option value="invert(100%)">invert</option>
-			<option value="hue-rotate(90deg)"></option>
-			<option value="blur(10px)">blur</option>
-			<option value="contrust(200%)">contrust</option>
-		</select>
 		<button id="clear-button">Clear</button>
 		<canvas id="canvas"></canvas>
 	</div>
