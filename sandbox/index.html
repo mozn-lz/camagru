@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="mastercss.css">
+	<title>Document</title>
+</head>
+<body>
+	<section class="shadow-lg p-3 mb-5 bg-white " id="header">
+		<ul class="nav nav-pills">
+			<li role="presentation" class="active"><a href="index.php">Comagaru</a></li>
+			<li role="presentation"><a href="profile.php">Profile</a></li>
+		</ul>
+	</section>
+	
+	<section class="shadow-lg p-3 mb-5 bg-white " id="main">
+		<h2>Take pic</h2>
+		<div class="top-container">
+			<!-- <div>
+				<button>None</button>
+				<button>crazy</button>
+				<button>catface</button>
+				<button>anonimus</button>
+				<button>Cuagmire</button>
+				<button>Sponge</button>
+				<button>Classic</button>
+			</div> -->
+			<div>
+				<input type="radio" name="overlay" value="" id="none" checked="checkedNone"> None
+				<input type="radio" name="overlay" value="https://dumielauxepices.net/sites/default/files/catwoman-clipart-face-883550-3607898.png" id="crazy"> crazy
+				<input type="radio" name="overlay" value="http://shopforclipart.com/images/funny-face-clipart/20.jpg" id="catface"> catface
+				<input type="radio" name="overlay" value="http://www.transparentpng.com/thumb/anonymous-mask/face-mask-funny-fear-nickname-face-anonymous-mask-png-images--15.png" id="anonimus"> anonimus
+				<input type="radio" name="overlay" value="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbZ-iwDmJ742m1J2SudaOQJ7qbCLdEruSfTQYoZOPVf6yR8y_Z4Q" id="Cuagmire"> Cuagmire
+				<input type="radio" name="overlay" value="https://png.pngtree.com/element_pic/16/12/01/5b3008293536496b29c22ef56c3c9e92.jpg" id="Sponge"> Sponge
+				<input type="radio" name="overlay" value="https://www.clipartmax.com/png/middle/18-187369_face-glasses-clipart-funny-face-icon-png.png" id="Classic"> Classic
+			</div>
+			<img id="tmpImg" src="" alt="" srcset="">
+			<div id="vid_div">
+				<!-- <img id="image" src="#" alt="image load error"> -->
+				<video id="video">Stream broken...</video>
+			</div>
+			<button id="photo-button" class="btn btn-dark">Take Photo</button>
+			<button id="clear-button">Clear</button>
+			<canvas id="canvas"></canvas>
+		</div>
+		<div class="bottom-container">
+			<div id="photos"></div>
+		</div>
+	</section>
+	
+	<section class="shadow-lg p-3 mb-5 bg-white " id="footer">
+		<h2>footer</h2>
+	</section>
+	<script src="./take_pic.js"></script>
+	<script src="./overlay.js"></script>
+</body>
+</html>

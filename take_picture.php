@@ -1,6 +1,6 @@
 <?php 
 session_start();
-$page_title = "Camagru Home";
+$page_title = "Take a Picture";
 $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
 // if ($sess) {
 // 	$username = $_SESSION['uName'];
@@ -27,10 +27,11 @@ $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['
 </section>
 
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
-	<h2>MaiN</h2>
+	<h2>Take pic</h2>
 	<div class="top-container">
 		<div id="vid_div">
-			<img id="image" src="#" alt="image load error">
+		<img src="" alt="" srcset="">
+			<!-- <img id="image" src="#" alt="image load error"> -->
 			<video id="video">Stream broken...</video>
 		</div>
 			<select id="photo-overlay">
@@ -49,30 +50,17 @@ $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['
 	<div class="bottom-container">
 		<div id="photos"></div>
 	</div>
-
-	<!-- echo ("<div class=".$type.">".$message."</div>"); -->
-	<!-- <div id="myOnlineCamera"> -->
-		<!-- <video id="video" autoplay></video>
-		<canvas ></canvas> -->
-		<!-- <button>Take Photo!</button> -->
-	<!-- </div> -->
-	
 	<?php
 	echo ("<div class=".$type.">".$message."</div>");
-	// $_SESSION['type'] = "";
-	// $_SESSION['message'] = "";
 	?>
-	
 	<div>
 		SELECT * FROM TABLE
-		<!-- <center>
-			<video id="video" width="640" height="480" autoplay></video>
-		</center> -->
 	</div>
 </section>
 
 <section class="shadow-lg p-3 mb-5 bg-white " id="footer">
 	<h2>footer</h2>
 </section>
+<script src="./style/pic_script.js"></script>
 
 <?php include 'frame/tail.php'; ?>

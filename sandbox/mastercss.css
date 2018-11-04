@@ -1,0 +1,22 @@
+body {
+	align-content: center;
+}
+#main {
+	border: 1px;
+	border-style: solid;
+	border-color: tomato;
+}
+#tmpImg {
+	width: 200px;
+}
+
+#canvas {
+	display: none;
+}
+#vid_div #video {
+	width: 100%;
+}
+
+#vid_div #image {
+	float: left;
+}

@@ -40,6 +40,7 @@ section{
 #main{
 	height: 80%;
 	margin-top: 4%;
+	margin-bottom: 10%;
 	box-shadow: 3px 3px 6px 8px rgb(139, 139, 139);
 	padding: 2%;
 }
