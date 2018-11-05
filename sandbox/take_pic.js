@@ -8,7 +8,59 @@ const canvas = document.getElementById('canvas');
 const photos = document.getElementById('photos');
 const photoButton = document.getElementById('photo-button');
 const clearButton = document.getElementById('clear-button');
-const photoFiller = document.getElementById('photo-filler');
+const photoFilter = document.getElementById('photo-filter');
+
+
+
+
+/******************/
+/*     OVERLAY    */
+/******************/
+
+var none		= document.getElementById('none');
+var crazy		= document.getElementById('crazy');
+var catface		= document.getElementById('catface');
+var anonimus	= document.getElementById('anonimus');
+var cuagmire	= document.getElementById('cuagmire');
+var sponge		= document.getElementById('sponge');
+var classic		= document.getElementById('classic');
+
+var overlay = document.getElementById('tmpImg');
+// var img = document.getElementById('video');
+
+none.addEventListener('change', function (e) {
+	console.log("None");
+	overlay.src=none.value;
+}, false);
+crazy.addEventListener('change', function (e) {
+	console.log("crazy");
+	overlay.src=crazy.value;
+}, false);
+catface.addEventListener('change', function (e) {
+	console.log("catface");
+	overlay.src=catface.value;
+}, false);
+anonimus.addEventListener('change', function (e) {
+	console.log("anonimus");
+	overlay.src=anonimus.value;
+}, false);
+cuagmire.addEventListener('change', function (e) {
+	console.log("Cuagmire");
+	overlay.src=cuagmire.value;
+}, false);
+sponge.addEventListener('change', function (e) {
+	console.log("Sponge");
+	overlay.src=sponge.value;
+}, false);
+classic.addEventListener('change', function (e) {
+	console.log("Classic");
+    overlay.src=classic.value;
+    console.log(classic.value);
+}, false);
+
+/************************/
+/*      TAKE PICTURE    */
+/************************/
 
 navigator.mediaDevices.getUserMedia({video: true, audio: false})
 .then(function(stream) {
@@ -42,18 +94,38 @@ photoButton.addEventListener('click', function (e) {
 function takePicture() {
     // Create Canvas
     const context = canvas.getContext('2d');
+	// console.log(overlay.src);
+	var ovsr = overlay.src;
+	console.log(ovsr);
     if (width && height) {
         canvas.width = width;
         canvas.height = height;
         // Draw image of the video on the canvas
         context.drawImage(video, 0, 0, width, height);
+		context.drawImage(ovsr, 0, 0);
 
         // Create image from canvas
         const imgUrl = canvas.toDataURL('image/png');
-        // Creane image element
+
+		// Create image element
         const img = document.createElement('img');
         img.setAttribute('src', imgUrl);
         //  Add image to photos
         photos.appendChild(img);
     }
 }
+
+
+var c = document.getElementById("canvas");
+var ctx = c.getContext("2d");
+var img = document.getElementById("scream");
+var img2 = new Image();
+img2.src = 'https://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png';
+  
+$("#button1").click(function(){   
+  ctx.drawImage(img,10,10);
+});
+
+  $("#button2").click(function(){   
+  ctx.drawImage(img2,10,10);
+});
