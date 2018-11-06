@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+	<div>
+		<img id="img1" src="./res/sonic.png" alt="" width="auto" height="auto">
+		<img id="img2" src="./res/saw.png" alt="" width="auto" height="auto">
+	</div>
+	<div>
+		<canvas id="myCanvas"></canvas>
+	</div>
+	<script>
+		var c=document.getElementById("myCanvas");
+		var ctx=c.getContext("2d");
+		var imageObj1 = new Image();
+		var imageObj2 = new Image();
+		imageObj1.src =  document.getElementById('img1').src;
+		imageObj1.onload = function() {
+		   ctx.drawImage(imageObj1, 60, 0, 50, 50);
+		   imageObj2.src = document.getElementById('img2').src;
+		   imageObj2.onload = function() {
+		      ctx.drawImage(imageObj2, 0, 0, 50, 50);
+		      var img = c.toDataURL("image/png");
+		      document.write('<img src="' + img + '" width="1200px" height="600px"/>');
+		   }
+		};
+	</script>
+</body>
+</html>
