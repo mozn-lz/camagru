@@ -12,6 +12,7 @@ body {
 #vid_div #tmpImg {
 	/* width: 200px; */
 	position:absolute;
+	padding-left: 30%;
 
     width:200px;
     min-height:40px;

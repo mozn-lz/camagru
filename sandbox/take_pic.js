@@ -1,15 +1,14 @@
 let width = 500,
-    height = 0,
-    filter = 'none',
-    streaming = false;
+	height = 0,
+	filter = 'none',
+	streaming = false;
 
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
 const photos = document.getElementById('photos');
 const photoButton = document.getElementById('photo-button');
 const clearButton = document.getElementById('clear-button');
-const photoFilter = document.getElementById('photo-filter');
-
+const photoFiller = document.getElementById('photo-filler');
 
 
 
@@ -26,7 +25,6 @@ var sponge		= document.getElementById('sponge');
 var classic		= document.getElementById('classic');
 
 var overlay = document.getElementById('tmpImg');
-// var img = document.getElementById('video');
 
 none.addEventListener('change', function (e) {
 	console.log("None");
@@ -54,78 +52,122 @@ sponge.addEventListener('change', function (e) {
 }, false);
 classic.addEventListener('change', function (e) {
 	console.log("Classic");
-    overlay.src=classic.value;
-    console.log(classic.value);
+	console.log(classic.value);
+	overlay.src=classic.value;
 }, false);
 
+/*--------------------------------------------End Overlay---------------------------------*/
+
+
 /************************/
-/*      TAKE PICTURE    */
+/*      Take Picture    */
 /************************/
 
 navigator.mediaDevices.getUserMedia({video: true, audio: false})
 .then(function(stream) {
-    // Link to video source
-    video.srcObject = stream;
-    // Play video
-    video.play();
+	// Link to video source
+	video.srcObject = stream;
+	// Play video
+	video.play();
 })
 .catch(function (err) {
-    console.log(`Error: ${err}`);
+	console.log(`Error: ${err}`);
 });
 
 // Play when ready 
 video.addEventListener('canplay', function (e) {
-    if(!streaming) {
-        height = video.videoHeight / (video.videoWidth/ width);
-        video.setAttribute('width', width);
-        video.setAttribute('height', height);
-        canvas.setAttribute('width', width);
-        canvas.setAttribute('height', height);
+	if(!streaming) {
+		height = video.videoHeight / (video.videoWidth/ width);
+		video.setAttribute('width', width);
+		video.setAttribute('height', height);
+		canvas.setAttribute('width', width);
+		canvas.setAttribute('height', height);
 
-        streaming = true;
-    }
+		streaming = true;
+	}
 }, false);
 // Photo button Event Listener
 photoButton.addEventListener('click', function (e) {
-    takePicture();
-    e.preventDefault();
+	takePicture();
+	e.preventDefault();
 }, false);
 
 function takePicture() {
-    // Create Canvas
-    const context = canvas.getContext('2d');
-	// console.log(overlay.src);
-	var ovsr = overlay.src;
-	console.log(ovsr);
-    if (width && height) {
-        canvas.width = width;
-        canvas.height = height;
-        // Draw image of the video on the canvas
-        context.drawImage(video, 0, 0, width, height);
-		context.drawImage(ovsr, 0, 0);
+	// Create Canvas
+	const context = canvas.getContext('2d');
+	if (width && height) {
+		canvas.width = width;
+		canvas.height = height;
+		// Draw image of the video on the canvas
+		context.drawImage(video, 0, 0, width, height);
+		context.drawImage(overlay, 150, 0, 200, 200);
 
-        // Create image from canvas
-        const imgUrl = canvas.toDataURL('image/png');
-
+		// Create image from canvas
+		const imgUrl = canvas.toDataURL('image/png');
 		// Create image element
-        const img = document.createElement('img');
-        img.setAttribute('src', imgUrl);
-        //  Add image to photos
-        photos.appendChild(img);
-    }
+		const capture = document.createElement('img');
+		capture.setAttribute('src', imgUrl);             // later
+
+
+		var imageObj1 = new Image();
+		var imageObj2 = new Image();
+		imageObj1 = capture;
+		console.log("Obj1: " + imageObj1 + '\n');
+		
+		imageObj1.onload = function() {
+			context.drawImage(imageObj1, 0, 0, width, height);
+			// imageObj2.src = 'res/mask1.png';
+			imageObj2 = (overlay);
+		console.log("Obj2: " + imageObj2.src + '\n');
+			imageObj2.onload = function() {
+				context.drawImage(imageObj2, 0, 0, width, height);
+				var img = context.toDataURL("image/png");
+				// document.write(' <img src="' + img + '" width="50%" height="%"/>');
+				// document.write('<img src="' + capture + '" width="50%" height="%"/>');
+				// photos.appendChild(img);
+			}
+		};
+	}
+	document.write('1. <img src="' + imageObj1.src + '" width="%" height="%"/><br>' );
+
 }
+/*-------------------------------------------------------------------------------------------------------*/
+
+// var imageObj1 = new Image();
+// var imageObj2 = new Image();
+// imageObj1.src = imgUrl;
+// imageObj1.onload = function() {
+//     context.drawImage(imageObj1, -1, -30, 150, 300);
+//     imageObj2.src = document.getElementById('img2').src;
+//     imageObj2.onload = function() {
+//         context.drawImage(imageObj2, 0, 0, 300, 150);
+//         var img = c.toDataURL("image/png");
+//         document.write('<img src="' + img + '" width="50%" height="%"/>');
+//    }
+// };
 
 
-var c = document.getElementById("canvas");
-var ctx = c.getContext("2d");
-var img = document.getElementById("scream");
-var img2 = new Image();
-img2.src = 'https://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png';
-  
-$("#button1").click(function(){   
-  ctx.drawImage(img,10,10);
+
+// var c=document.getElementById("myCanvas");
+// var ctx=c.getContext("2d");
+// var imageObj1 = new Image();
+// var imageObj2 = new Image();
+// imageObj1.src =  document.getElementById('img1').src;
+// imageObj1.onload = function() {
+//     ctx.drawImage(imageObj1, -1, -30, 150, 300);
+//     imageObj2.src = document.getElementById('img2').src;
+//     imageObj2.onload = function() {
+//         ctx.drawImage(imageObj2, 0, 0, 300, 150);
+//         var img = c.toDataURL("image/png");
+//         document.write('<img src="' + img + '" width="50%" height="%"/>');
+//    }
+// };
+
+/*-------------------------------------------------------------------------------------------------------*/
+
+clearButton.addEventListener('change', function (e) {
+	photos.innerHTML = '';
+	
 });
 
-  $("#button2").click(function(){   
-  ctx.drawImage(img2,10,10);
-});
+
