@@ -7,11 +7,30 @@
 	<title>Document</title>
 </head>
 <body>
-	<div>
+	<style>
+		body{
+			background-color: chartreuse;
+		}
+		img {
+			border: 3px;
+			border-style: solid;
+			border-color: black;
+		}
+		.div {
+			border: 3px;
+			border-style: solid;
+			border-color: black;
+			border-width: thick;
+			background-color: brown;
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+	<div class="div">
 		<img id="img1" src="./res/sonic.png" alt="" width="auto" height="auto">
 		<img id="img2" src="./res/saw.png" alt="" width="auto" height="auto">
 	</div>
-	<div>
+	<div class="div">
 		<canvas id="myCanvas"></canvas>
 	</div>
 	<script>
@@ -21,12 +40,12 @@
 		var imageObj2 = new Image();
 		imageObj1.src =  document.getElementById('img1').src;
 		imageObj1.onload = function() {
-		   ctx.drawImage(imageObj1, 60, 0, 50, 50);
-		   imageObj2.src = document.getElementById('img2').src;
-		   imageObj2.onload = function() {
-		      ctx.drawImage(imageObj2, 0, 0, 50, 50);
-		      var img = c.toDataURL("image/png");
-		      document.write('<img src="' + img + '" width="1200px" height="600px"/>');
+			ctx.drawImage(imageObj1, -1, -30, 150, 300);
+			imageObj2.src = document.getElementById('img2').src;
+			imageObj2.onload = function() {
+				ctx.drawImage(imageObj2, 0, 0, 300, 150);
+				var img = c.toDataURL("image/png");
+				document.write('<img src="' + img + '" width="50%" height="%"/>');
 		   }
 		};
 	</script>
