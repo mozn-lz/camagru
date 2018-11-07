@@ -28,24 +28,30 @@ if ($sess) {
 
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<h2>MaiN</h2>
-	<div class="top-container">
-		<video id="video">Stream broken...</video>
-		<button id="photo-button" class="btn btn-dark">Take Photo</button>
-		<button id="clear-button">Clear</button>
-		<canvas id="canvas"></canvas>
-	</div>
-	<div class="bottom-container">
-		<div id="photos"></div>
-	</div>
-	
 	<?php
 	echo ("<div class=".$type.">".$message."</div>");
-	// $_SESSION['type'] = "";
-	// $_SESSION['message'] = "";
+		// $_SESSION['type'] = "";			// for Errors if any
+		// $_SESSION['message'] = "";		// for Errors if any
+
+		// $query = $conn->prepare("SELECT * FROM $username ORDER BY timestmp DESC LIMIT 10");	
+		// $result = $stmt->fetch(PDO::FETCH_ASSOC);
+		try{
+			$stmt = $conn->prepare("SELECT * FROM $username ORDER BY timestmp DESC LIMIT 10"); 
+			$stmt->execute();
+
+			// set the resulting array to associative
+			$result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 
+			foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) { 
+				echo $v;
+			}
+		}
+		catch(PDOException $e) {
+			echo "Error: " . $e->getMessage();
+		}
 	?>
 	
 	<div>
-		SELECT * FROM TABLE
+			SELECT * FROM TABLE
 	</div>
 </section>
 

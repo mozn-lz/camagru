@@ -44,12 +44,31 @@ section{
 	box-shadow: 3px 3px 6px 8px rgb(139, 139, 139);
 	padding: 2%;
 }
+
+/************** Start Take_pic **************/
+
+#vid_div {
+	padding: 20px;
+}
+#vid_div #tmpImg {
+	/* width: 200px; */
+	position:absolute;
+	padding-left: 30%;
+
+    width:200px;
+    min-height:40px;
+    z-index:300000;
+}
+#vid_div #video{
+	position:absolute;
+	/* position: absolute; */
+	z-index: -1;
+}
 #canvas {
 	display: none;
+	/* position: absolute; */
 }
-#vid_div #video {
-	width: 100%;
-}
+/************** End Take_pic **************/
 
 /****************************************/
 /*		EVERYTHING footer IN HERE		*/

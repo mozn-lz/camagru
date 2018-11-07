@@ -1,13 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<link rel="stylesheet" href="mastercss.css">
-	<title>Document</title>
-</head>
-<body>
+<?php 
+session_start();
+$page_title = "Take selfie";
+$sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
+if ($sess) {
+	$username = $_SESSION['uName'];
+	$firstame = $_SESSION['fName'];
+	$surname = $_SESSION['sName'];
+	$email = $_SESSION['email'];
+	include 'frame/head.php';
+} else {
+	header("Location: login.php");
+}
+?>
+
 	<section class="shadow-lg p-3 mb-5 bg-white " id="header">
 		<ul class="nav nav-pills">
 			<li role="presentation" class="active"><a href="index.php">Comagaru</a></li>
@@ -52,7 +57,6 @@
 	<section class="shadow-lg p-3 mb-5 bg-white " id="footer">
 		<h2>footer</h2>
 	</section>
-	<script src="./take_pic.js"></script>
-	<!-- <script src="./overlay.js"></script> -->
+	<script src="./style/take_pic.js"></script>
 </body>
 </html>

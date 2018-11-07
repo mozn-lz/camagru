@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="mastercss.css">
+	<title>Document</title>
+</head>
+<body>
+	<section class="shadow-lg p-3 mb-5 bg-white " id="header">
+		<ul class="nav nav-pills">
+			<li role="presentation" class="active"><a href="index.php">Comagaru</a></li>
+			<li role="presentation"><a href="profile.php">Profile</a></li>
+		</ul>
+	</section>
+	
+	<section class="shadow-lg p-3 mb-5 bg-white " id="main">
+		<h2>Take pic</h2>
+		<div class="top-container">
+				<div id="overlay-options">
+					<input type="radio" name="overlay" value="#" id="none" checked="checked"> None
+					<input type="radio" name="overlay" value="res/mask1.png" id="crazy"> crazy
+					<input type="radio" name="overlay" value="res/mask2.png" id="catface"> catface
+					<input type="radio" name="overlay" value="." id="anonimus"> anonimus
+					<input type="radio" name="overlay" value="." id="cuagmire"> Cuagmire
+					<input type="radio" name="overlay" value="." id="sponge"> Sponge
+					<input type="radio" name="overlay" value="." id="classic"> Classic
+				</div>
+			<div id="vid_div">
+				<div>
+					<button id="photo-button" class="btn btn-dark">Take Photo</button>
+					<button id="clear-button">Clear</button>
+				</div>
+				<img id="tmpImg" src="#"  alt="">
+				<video id="video">Stream broken...</video>
+			</div>
+			<div id="photos">
+				<form action="" method="post">
+					<img id="selfie" src="" alt="selfie!!!" style="width:100%;max-width:300px">
+
+					<!-- The Modal -->
+					<div id="myModal" class="modal">
+						<span class="close">&times;</span>
+						<img class="modal-content" id="img01">
+						<div id="caption"></div>
+						<div>
+							<a href="./take_pic.html"><button type="submit">Cancel</button></a>
+							<button type="submit">Save</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<canvas id="canvas"></canvas>
+	</section>
+	
+	<section class="shadow-lg p-3 mb-5 bg-white " id="footer">
+		<h2>footer</h2>
+	</section>
+	<script src="./take_pic.js"></script>
+	<!-- <script src="./overlay.js"></script> -->
+</body>
+</html>

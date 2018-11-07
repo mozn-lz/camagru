@@ -128,7 +128,8 @@ function takePicture() {
 			}
 		};
 	}
-	document.write('1. <img src="' + imageObj1.src + '" width="%" height="%"/><br>' );
+	document.write('<img src="' + imageObj1.src + '" width="%" height="%"/><br>');
+				// photos.appendChild(img);
 
 }
 /*-------------------------------------------------------------------------------------------------------*/
