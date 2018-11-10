@@ -24,7 +24,7 @@ if ($sess) {
 		<h2>Take pic</h2>
 		<div class="top-container">
 				<div id="overlay-options">
-					<input type="radio" name="overlay" value="#" id="none" checked="checked"> None
+					<input type="radio" name="overlay" value="#" id="none" checked="checked"> Default
 					<input type="radio" name="overlay" value="res/mask1.png" id="crazy"> crazy
 					<input type="radio" name="overlay" value="res/mask2.png" id="catface"> catface
 					<input type="radio" name="overlay" value="." id="anonimus"> anonimus

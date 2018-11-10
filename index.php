@@ -35,19 +35,20 @@ if ($sess) {
 
 		// $query = $conn->prepare("SELECT * FROM $username ORDER BY timestmp DESC LIMIT 10");	
 		// $result = $stmt->fetch(PDO::FETCH_ASSOC);
-		try{
-			$stmt = $conn->prepare("SELECT * FROM $username ORDER BY timestmp DESC LIMIT 10"); 
-			$stmt->execute();
+	
+		// try{
+		// 	$stmt = $conn->prepare("SELECT * FROM $username ORDER BY timestmp DESC LIMIT 10"); 
+		// 	$stmt->execute();
 
-			// set the resulting array to associative
-			$result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 
-			foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) { 
-				echo $v;
-			}
-		}
-		catch(PDOException $e) {
-			echo "Error: " . $e->getMessage();
-		}
+		// 	// set the resulting array to associative
+		// 	$result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 
+		// 	foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) { 
+		// 		echo $v;
+		// 	}
+		// }
+		// catch(PDOException $e) {
+		// 	echo "Error: " . $e->getMessage();
+		// }
 	?>
 	
 	<div>

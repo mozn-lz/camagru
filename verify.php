@@ -45,6 +45,10 @@ include 'forms/init_connect.php';
 				$stmt->execute();
 				$_SESSION['type'] = "success";
 				$_SESSION['message'] = "Your account has been verified";
+				include('forms/create_user.php');	//user_table related functions
+				/*	Function create_user_table() from "include('forms/create_user.php');" 
+					To create table where user will upload images */
+				create_user_table($username = $query['username']);
 				header("Location: login.php");
 			}catch (PDOException $e){
 				echo "Sql querry error: " . $e->getMessage();

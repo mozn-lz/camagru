@@ -1,11 +1,5 @@
 <?php
-
 include '../forms/default.php';
-
-
-
-// admin 1234
-
 
 /************************************/
 /*				Create DB	   		*/
@@ -33,7 +27,7 @@ try {
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	// sql to create table
 	$sql = "CREATE TABLE ".$usrsTB." (
-	id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+	id aINT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 	username VARCHAR(20) NOT NULL , 
 	firstname VARCHAR(30) NOT NULL,
 	lastname VARCHAR(30) NOT NULL,
