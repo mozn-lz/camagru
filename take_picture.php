@@ -1,66 +1,70 @@
 <?php 
 session_start();
-$page_title = "Take a Picture";
+$page_title = "Take selfie";
 $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
-// if ($sess) {
-// 	$username = $_SESSION['uName'];
-// 	$firstame = $_SESSION['fName'];
-// 	$surname = $_SESSION['sName'];
-// 	$email = $_SESSION['email'];
+if ($sess) {
+	$username = $_SESSION['uName'];
+	$firstame = $_SESSION['fName'];
+	$surname = $_SESSION['sName'];
+	$email = $_SESSION['email'];
 	include 'frame/head.php';
-// } else {
-// 	header("Location: login.php");
-// }
+} else {
+	header("Location: login.php");
+}
 ?>
 
-<section class="shadow-lg p-3 mb-5 bg-white " id="header">
-	<ul class="nav nav-pills">
-		<li role="presentation" class="active"><a href="index.php">Comagaru</a></li>
-		<li role="presentation"><a href="profile.php">Profile</a></li>
-		<?php 
-		if ($sess) 
-			echo '<li role="presentation"><a href="forms/logout.php">Logout</a></li>';
-		else
-			echo '<li role="presentation"><a href="login.php">Login</a></li>';
-		?>
-	</ul>
-</section>
+	<section class="shadow-lg p-3 mb-5 bg-white " id="header">
+		<ul class="nav nav-pills">
+			<li role="presentation" class="active"><a href="index.php">Comagaru</a></li>
+			<li role="presentation"><a href="profile.php">Profile</a></li>
+		</ul>
+	</section>
+	
+	<section class="shadow-lg p-3 mb-5 bg-white " id="main">
+		<h2>Take pic</h2>
+		<div class="top-container">
+			<div id="overlay-options">
+				<input type="radio" name="overlay" value="#" id="none" checked="checked"> Ugly face
+				<input type="radio" name="overlay" value="res/mask1.png" id="crazy"> crazy
+				<input type="radio" name="overlay" value="res/mask2.png" id="catface"> catface
+				<input type="radio" name="overlay" value="." id="anonimus"> anonimus
+				<input type="radio" name="overlay" value="." id="cuagmire"> Cuagmire
+				<input type="radio" name="overlay" value="." id="sponge"> Sponge
+				<input type="radio" name="overlay" value="." id="classic"> Classic
+			</div>
+			<div id="vid_div">
+				<div>
+					<button id="photo-button" class="btn btn-dark">Take Photo</button>
+					<button id="clear-button">Clear</button>
+				</div>
+				<div id="imgVidDiv">
+					<img id="tmpImg" src=""  alt="">
+					<video id="video">Stream broken...</video>
+				</div>	
+			</div>
+			<div id="photos">
+				<form action="" method="post">
+					<img id="selfie" src="" alt="selfie!!!" style="width:100%;max-width:300px">
 
-<section class="shadow-lg p-3 mb-5 bg-white " id="main">
-	<h2>Take pic</h2>
-	<div class="top-container">
-		<div id="vid_div">
-		<img src="" alt="" srcset="">
-			<!-- <img id="image" src="#" alt="image load error"> -->
-			<video id="video">Stream broken...</video>
+					<!-- The Modal -->
+					<div id="myModal" class="modal">
+						<span class="close">&times;</span>
+						<img class="modal-content" id="img01">
+						<div id="caption"></div>
+						<div>
+							<a href="./take_pic.html"><button type="submit">Cancel</button></a>
+							<button type="submit">Save</button>
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
-			<select id="photo-overlay">
-				<option value="">none</option>
-				<option id="1" value="https://dumielauxepices.net/sites/default/files/catwoman-clipart-face-883550-3607898.png">crazy hair</option>
-				<option id="2" value="http://shopforclipart.com/images/funny-face-clipart/20.jpg">catface</option>
-				<option id="3" value="http://www.transparentpng.com/thumb/anonymous-mask/face-mask-funny-fear-nickname-face-anonymous-mask-png-images--15.png">anonimus</option>
-				<option id="4" value="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbZ-iwDmJ742m1J2SudaOQJ7qbCLdEruSfTQYoZOPVf6yR8y_Z4Q">Cuagmire</option>
-				<option id="5" value="https://png.pngtree.com/element_pic/16/12/01/5b3008293536496b29c22ef56c3c9e92.jpg">Sponge</option>
-				<option id="6" value="https://www.clipartmax.com/png/middle/18-187369_face-glasses-clipart-funny-face-icon-png.png">Classic disguise</option>
-			</select>
-		<button id="photo-button" class="btn btn-dark">Take Photo</button>
-		<button id="clear-button">Clear</button>
 		<canvas id="canvas"></canvas>
-	</div>
-	<div class="bottom-container">
-		<div id="photos"></div>
-	</div>
-	<?php
-	echo ("<div class=".$type.">".$message."</div>");
-	?>
-	<div>
-		SELECT * FROM TABLE
-	</div>
-</section>
-
-<section class="shadow-lg p-3 mb-5 bg-white " id="footer">
-	<h2>footer</h2>
-</section>
-<script src="./style/pic_script.js"></script>
-
-<?php include 'frame/tail.php'; ?>
+	</section>
+	
+	<section class="shadow-lg p-3 mb-5 bg-white " id="footer">
+		<h2>footer</h2>
+	</section>
+	<script src="./style/take_pic.js"></script>
+</body>
+</html>

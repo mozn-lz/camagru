@@ -128,8 +128,34 @@ function takePicture() {
 			}
 		};
 	}
-	document.write('<img src="' + imageObj1.src + '" width="%" height="%"/><br>');
-				// photos.appendChild(img);
+	// document.write('1. <img src="' + imageObj1.src + '" width="%" height="%"/><br>' );
+	var selfiePic = document.getElementById('selfie');
+	var modal = document.getElementById('myModal');
+
+	// Get the image and insert it inside the modal - use its "alt" text as a caption
+	// var img = document.getElementById('selfie');
+	var modalImg = document.getElementById("img01");
+	var captionText = document.getElementById("caption");
+
+	
+	selfiePic.addEventListener('load', function () {
+		overlay.style.display = "none";
+		video.style.display = "none";
+		modal.style.display = "block";
+	    modalImg.src = this.src;
+	    captionText.innerHTML = this.alt;
+	});
+	selfiePic = document.getElementById('selfie').src = imageObj1.src;
+
+	// Get the <span> element that closes the modal
+	var span = document.getElementsByClassName("close")[0];
+	
+	// When the user clicks on <span> (x), close the modal
+	span.onclick = function() { 
+		window.location.replace('./take_pic.html');
+		modal.style.display = "none";
+	}
+	
 
 }
 /*-------------------------------------------------------------------------------------------------------*/
