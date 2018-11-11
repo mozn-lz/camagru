@@ -22,31 +22,40 @@ try {
 	// )";
 
 	// // sql to create table
-	function create_user_table($username) {
-		$usrTB = $username;
-		$sql = "CREATE TABLE "$usrTB" 
-		( 
-			id INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,  
-			`image` BLOB NOT NULL ,  
-			`time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,  
-			coments VARCHAR(255) NULL ,  
-			likes TINYINT(1) NULL
-		)";
-			
-			// use exec() because no results are returned
-			$conn->exec($sql);
-			echo "Table ".$usrTB." created successfully";
+
+
+	$val = mysql_query('select 1 from `table_name` LIMIT 1');
+
+	if($val !== FALSE)
+	{
+	//DO SOMETHING! IT EXISTS!
 	}
-	function uplolad_pictures($username) {
-	// $stmt = $conn-> INSERT image INTO $username
-	image
-time
-coments
-likes
-	$stmt = $conn->prepare("INSERT INTO ".$username." (image, time, email) VALUES (?, ?, ?)");
-	$stmt->bind_param("sss", $firstname, $lastname, $email);
- 
+	else
+	{
+		function create_user_table($username) {
+			$usrTB = $username;
+			$sql = "CREATE TABLE ".$usrTB." 
+			( 
+				id INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,  
+				`image` BLOB NOT NULL ,  
+				`time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,  
+				coments VARCHAR(255) NULL ,  
+				likes TINYINT(1) NULL
+			)";
+				
+				// use exec() because no results are returned
+				$conn->exec($sql);
+				echo "Table ".$usrTB." created successfully";
+		}
+		function uplolad_pictures($username) {
+		// $stmt = $conn-> INSERT image INTO $username
+			$stmt = $conn->prepare("INSERT INTO ".$username." (image, time, email) VALUES (?, ?, ?)");
+			$stmt->bind_param("sss", $firstname, $lastname, $email);
+		
+		}
 	}
+
+
 }
 catch(PDOException $e) {
 	echo $sql . "<br>" . $e->getMessage();

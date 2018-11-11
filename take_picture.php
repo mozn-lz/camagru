@@ -43,16 +43,16 @@ if ($sess) {
 				</div>	
 			</div>
 			<div id="photos">
-				<form action="" method="post">
-					<img id="selfie" src="" alt="selfie!!!" style="width:100%;max-width:300px">
-
+				<form action="forms/create_user.php" method="post">
+					<img id="selfie" src="" alt="" style="width:100%;max-width:300px">
+					
 					<!-- The Modal -->
 					<div id="myModal" class="modal">
 						<span class="close">&times;</span>
 						<img class="modal-content" id="img01">
 						<div id="caption"></div>
 						<div>
-							<a href="./take_pic.html"><button type="submit">Cancel</button></a>
+							<a href="./take_picture.html"><button type="submit">Cancel</button></a>
 							<button type="submit">Save</button>
 						</div>
 					</div>

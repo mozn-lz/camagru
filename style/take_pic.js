@@ -152,7 +152,7 @@ function takePicture() {
 	
 	// When the user clicks on <span> (x), close the modal
 	span.onclick = function() { 
-		window.location.replace('./take_pic.html');
+		window.location.replace('./take_picture.php');
 		modal.style.display = "none";
 	}
 	
