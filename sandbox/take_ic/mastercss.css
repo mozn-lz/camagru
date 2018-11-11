@@ -9,7 +9,7 @@
 #vid_div #tmpImg {
 	/* width: 200px; */
 	position:absolute;
-	padding-left: 30%;
+	padding-left: 15%;
 
     width:200px;
     min-height:40px;
@@ -19,6 +19,9 @@
 	position:absolute;
 	/* position: absolute; */
 	z-index: -1;
+}
+#imgVidDiv {
+    width: 500px;
 }
 #canvas {
 	display: none;
