@@ -52,8 +52,8 @@ if ($sess) {
 						<img class="modal-content" name="user_pic" id="img01">
 						<div id="caption"></div>
 						<div>
-							<a href="./take_picture.php"><button type="submit">Cancel</button></a>
-							<button type="submit">Save</button>
+							<button name="submit" value="cancel" type="submit">Cancel</button>
+							<button name="submit" value="submit" type="submit">Save</button>
 						</div>
 					</div>
 				</form>
