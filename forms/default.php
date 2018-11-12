@@ -2,10 +2,10 @@
 
 $servername = "localhost";
 $myDB = "camagru";
-$username = "admin";
-$password = "1234";
-// $username = "root";
-// $password = "wethinkcode";
+// $username = "admin";
+// $password = "1234";
+$username = "root";
+$password = "wethinkcode";
 $usrsTB = "users";
 
 define ("SERVERNAME" , $servername);

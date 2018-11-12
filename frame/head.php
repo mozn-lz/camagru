@@ -1,10 +1,10 @@
 <?php session_start(); 
 // to be removed later
-$_SESSION["id"] = "id";
-$_SESSION["uName"] = "username";
-$_SESSION["fName"] = "firstname";
-$_SESSION["sName"] = "lastname";
-$_SESSION["email"] = "email";
+// $_SESSION["id"] = "id";
+// $_SESSION["uName"] = "username";
+// $_SESSION["fName"] = "firstname";
+// $_SESSION["sName"] = "lastname";
+// $_SESSION["email"] = "email";
 ?>
 <!DOCTYPE html>
 <html lang="en">

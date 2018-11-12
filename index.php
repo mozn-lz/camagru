@@ -50,6 +50,12 @@ if ($sess) {
 		// 	echo "Error: " . $e->getMessage();
 		// }
 	?>
+	<?php		echo('id: '.$_SESSION['id']) .'<br>';
+	echo('uName: '.$_SESSION['uName']) .'<br>';
+	echo('fName: '.$_SESSION['fName']) .'<br>';
+	echo('sName: '.$_SESSION['sName']) .'<br>';
+	echo('email: '.$_SESSION['email']) .'<br>';
+	?>
 	
 	<div>
 			SELECT * FROM TABLE

@@ -157,7 +157,7 @@ try
 				}
 			}
 			catch(PDOException $e) {
-				echo "Login error: " . $e->getMessage();
+				echo "Login error: " . $e->getMessage() . "<br>";
 			}
 		}
 	}
@@ -209,7 +209,7 @@ try
 						header("Location: ../index.php");
 					}
 					catch(PDOException $e) {
-						echo "Error: " . $e->getMessage();
+						echo "Error: " . $e->getMessage() . "<br>";
 					}
 				}else {
 					$_SESSION['message'] = "User email already exists please try to login";
@@ -226,7 +226,7 @@ try
 	header("Location: ../index.php");
  }
 catch (PDOException $e) {
-	echo "PDO Connection failed: " . $e->getMessage();
+	echo "PDO Connection failed: " . $e->getMessage() . "<br>";
 }
 
 $conn = null;

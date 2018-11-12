@@ -43,16 +43,16 @@ if ($sess) {
 				</div>	
 			</div>
 			<div id="photos">
-				<form action="forms/create_user.php" method="post">
+				<form action="forms/user_tabe_function.php" method="post">
 					<img id="selfie" src="" alt="" style="width:100%;max-width:300px">
 					
 					<!-- The Modal -->
 					<div id="myModal" class="modal">
 						<span class="close">&times;</span>
-						<img class="modal-content" id="img01">
+						<img class="modal-content" name="user_pic" id="img01">
 						<div id="caption"></div>
 						<div>
-							<a href="./take_picture.html"><button type="submit">Cancel</button></a>
+							<a href="./take_picture.php"><button type="submit">Cancel</button></a>
 							<button type="submit">Save</button>
 						</div>
 					</div>
@@ -60,6 +60,12 @@ if ($sess) {
 			</div>
 		</div>
 		<canvas id="canvas"></canvas>
+<?php		echo('id: '.$_SESSION['id']) .'<br>';
+echo('uName: '.$_SESSION['uName']) .'<br>';
+echo('fName: '.$_SESSION['fName']) .'<br>';
+echo('sName: '.$_SESSION['sName']) .'<br>';
+echo('email: '.$_SESSION['email']) .'<br>';
+?>
 	</section>
 	
 	<section class="shadow-lg p-3 mb-5 bg-white " id="footer">

@@ -9,13 +9,19 @@ section{
 }
 
 .success{
-	box-shadow:  rgba(3, 248, 44, 0.521);
+	box-shadow:  rgba(3, 248, 44, 0.55);
+	color: white;
+	padding: 5px;
+	font-weight: bold;
+}
+.caution{
+	box-shadow:  rgba(255, 140, 0, 0.5);
 	color: white;
 	padding: 5px;
 	font-weight: bold;
 }
 .danger{
-	background: rgba(255, 0, 0, 0.507);
+	background: rgba(255, 0, 0, 0.5);
 	color: white;
 	padding: 5px;
 	font-weight: bold;
