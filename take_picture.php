@@ -43,20 +43,19 @@ if ($sess) {
 				</div>	
 			</div>
 			<div id="photos">
-				<form action="forms/user_tabe_function.php" method="post">
-					<img id="selfie" src="" alt="" style="width:100%;max-width:300px">
-					
-					<!-- The Modal -->
-					<div id="myModal" class="modal">
-						<span class="close">&times;</span>
-						<img class="modal-content" name="user_pic" id="img01">
-						<div id="caption"></div>
-						<div>
-							<button name="submit" value="cancel" type="submit">Cancel</button>
-							<button name="submit" value="submit" type="submit">Save</button>
-						</div>
-					</div>
-				</form>
+				<img id="selfie" src="" alt="" style="width:100%;max-width:300px">
+				
+				<!-- The Modal -->
+				<div id="myModal" class="modal">
+					<span class="close">&times;</span>
+					<img class="modal-content" name="user_pic" id="img01">
+					<div id="caption"></div>
+					<form action="forms/user_tabe_function.php" method="post">
+						<input class="hidden" type="text" id="thmb" name="thmb" value="">
+						<button name="submit" value="cancel" type="submit">Cancel</button>
+						<button name="submit" value="submit" type="submit">Save</button>
+					</form>
+				</div>
 			</div>
 		</div>
 		<canvas id="canvas"></canvas>

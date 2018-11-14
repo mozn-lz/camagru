@@ -26,6 +26,9 @@ section{
 	padding: 5px;
 	font-weight: bold;
 }
+.hidden {
+    display: none;
+}
 
 /****************************************/
 /*		EVERYTHING header IN HERE	   	*/

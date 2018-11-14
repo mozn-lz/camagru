@@ -142,10 +142,11 @@ function takePicture() {
 		overlay.style.display = "none";
 		video.style.display = "none";
 		modal.style.display = "block";
-	    modalImg.src = this.src;
+		modalImg.src = this.src;
 	    captionText.innerHTML = this.alt;
 	});
 	selfiePic = document.getElementById('selfie').src = imageObj1.src;
+	document.getElementById('thmb').value=selfiePic;
 
 	// Get the <span> element that closes the modal
 	var span = document.getElementsByClassName("close")[0];
