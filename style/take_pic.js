@@ -146,7 +146,9 @@ function takePicture() {
 	    captionText.innerHTML = this.alt;
 	});
 	selfiePic = document.getElementById('selfie').src = imageObj1.src;
-	document.getElementById('thmb').value=selfiePic;
+	document.getElementById('thmb').value = selfiePic;
+	console.log("Img: " + document.getElementById('thmb').value);
+	
 
 	// Get the <span> element that closes the modal
 	var span = document.getElementsByClassName("close")[0];

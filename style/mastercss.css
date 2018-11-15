@@ -9,13 +9,13 @@ section{
 }
 
 .success{
-	box-shadow:  rgba(3, 248, 44, 0.55);
+	background:  rgba(3, 248, 44, 0.55);
 	color: white;
 	padding: 5px;
 	font-weight: bold;
 }
 .caution{
-	box-shadow:  rgba(255, 140, 0, 0.5);
+	background:  rgba(255, 140, 0, 0.5);
 	color: white;
 	padding: 5px;
 	font-weight: bold;
@@ -53,6 +53,40 @@ section{
 	box-shadow: 3px 3px 6px 8px rgb(139, 139, 139);
 	padding: 2%;
 }
+
+/*--------------index--------------*/
+
+.display_grp{
+    min-width: 350px;
+    max-width: 550px;
+    margin: 15px;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.user_pic{
+    /* width: 50%; */
+    padding: 10px;
+}
+.user_pic img{
+    min-width: 300px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+}
+img{
+    border-radius: 15px;
+}
+.user_picuser_pic{
+    padding: 3px;
+}
+.coment{
+
+}
+.likes{
+
+}
+
+/*--------------index--------------*/
 
 /************** Start Take_pic **************/
 

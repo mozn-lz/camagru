@@ -25,21 +25,24 @@ if ($_POST['submit'] == 'submit') {
 		$email = $_SESSION['email'];
 		echo '1<br>';
 		
-$filetype = $_FILES['file']['type'];
-$filePointer = fopen($_FILES['file']['tmp_name'], 'rb'); //rb - read , binary
+// $filetype = $_FILES['file']['type'];
+// $filePointer = fopen($_FILES['file']['tmp_name'], 'rb'); //rb - read , binary
 
-		print_r($filetype);
+// 		print_r($filetype);
 		echo '1.50<br>';
+		$image = $_POST['thmb'];
+		// echo $image . "<br>";
 		if ($image) {
-			echo '2<br>';
-			echo $image . "<br>";
+			$current_time = 'CURRENT_TIMESTAMP';
+			$username = $_SESSION['uName'];
 			try{
-				$stmt = $conn->prepare("INSERT INTO ".$usrTB." (username, image) VALUES (:uName, :imge)");
-				$username = $_SESSION['uName'];
-				$stmt->bindParam(':uName', $_SESSION['uName']);
+				$stmt = $conn->prepare("INSERT INTO " .$usrTB."(username, image) 
+				VALUES (:uName, :imge)");
+				$stmt->bindParam(':uName', $username);
 				$stmt->bindParam(':imge', $image);
-				$stmt->extcute();
-				echo 'Image uploaded<br>';
+				$stmt->execute();
+		echo 'Image uploaded<br>';
+				header('location: ../index.php');
 			}catch(PDOException $e){
 				echo "Insertion error :" . $e->getMessage() . "<br>";
 			}
@@ -51,6 +54,16 @@ $filePointer = fopen($_FILES['file']['tmp_name'], 'rb'); //rb - read , binary
 	
 } 
 
+// INSERT INTO `mk` (`id`, `username`, `image`, `time`, `coments`, `likes`) 
+// VALUES (NULL, 'mk', 
+// 'data:image/png;base64,', 
+// CURRENT_TIMESTAMP, 
+// NULL, 
+// NULL);
+
+// INSERT INTO `mk` (`username`, `image`, `time`) 
+// VALUES ('mk', 'data:image/png;base64', CURRENT_TIMESTAMP);
 
 $conn = null;
+
 ?>

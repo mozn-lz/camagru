@@ -1,13 +1,15 @@
 <?php 
 session_start();
-$page_title = "Camagru Home";
+$page_title = "Take selfie";
 $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
 if ($sess) {
+	$usrTB = $_SESSION['uName'];
 	$username = $_SESSION['uName'];
 	$firstame = $_SESSION['fName'];
 	$surname = $_SESSION['sName'];
 	$email = $_SESSION['email'];
 	include 'frame/head.php';
+	include 'forms/init_connect.php';
 } else {
 	header("Location: login.php");
 }
@@ -26,44 +28,55 @@ if ($sess) {
 	</ul>
 </section>
 
-<section class="shadow-lg p-3 mb-5 bg-white " id="main">
-	<h2>MaiN</h2>
-	<?php
-	echo ("<div class=".$type.">".$message."</div>");
-		// $_SESSION['type'] = "";			// for Errors if any
-		// $_SESSION['message'] = "";		// for Errors if any
-
-		// $query = $conn->prepare("SELECT * FROM $username ORDER BY timestmp DESC LIMIT 10");	
-		// $result = $stmt->fetch(PDO::FETCH_ASSOC);
+	<section class="shadow-lg p-3 mb-5 bg-white " id="main">
+		<h2>Take pic</h2>
+		<?php 
+			try {
+				$query = $conn->prepare("SELECT * FROM ".$usrTB);
+				$query->execute();
+				// echo "Select query Executed successfully <br>";
 	
-		// try{
-		// 	$stmt = $conn->prepare("SELECT * FROM $username ORDER BY timestmp DESC LIMIT 10"); 
-		// 	$stmt->execute();
+				$result = $query->fetchAll();
+				$count = count($result);
+			if ($count > 0){
+					echo "<br>";
+					$i = $count - 1;
+						// echo "i: $i <br>";
+					while ($i >= 0) {
+						// if (count($result[$i]['likes'] == 0) {
+						// 	echo "likes";
+						// } else {
+						// 	echo count($result[$i]['likes']);
+						// }
+						echo ("
+						<div class='display_grp col-md-3'>
+							<div class='user_pic'>
+								<img src=".$result[$i]['image']." alt=''>
+							</div>
+							<div class='user_picuser_pic'>
+								<div class='inline time'>".$result[$i]['time']."</div>
+								<div class='inline btn btn-primary coment'>
+									Comment
+								</div>
+								<div class='inline btn btn-primary likes'>".count($result[$i]['likes'])." Likes</div>
+							</div>
+						</div>");
+						$i--;
+					}
+				}
+				else {
+					$_SESSION['message'] = "It looks like your account has been verified. Please try to login, or contat our admin at email@email.mail<br>";
+					$_SESSION['type'] = 'danger';
+				}
+			}catch (PDOException $e){
+				echo "Sql querry error: " . $e->getMessage() . "<br>";
+			}
+		?>
+	</section>
 
-		// 	// set the resulting array to associative
-		// 	$result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 
-		// 	foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) { 
-		// 		echo $v;
-		// 	}
-		// }
-		// catch(PDOException $e) {
-		// 	echo "Error: " . $e->getMessage();
-		// }
-	?>
-	<?php		echo('id: '.$_SESSION['id']) .'<br>';
-	echo('uName: '.$_SESSION['uName']) .'<br>';
-	echo('fName: '.$_SESSION['fName']) .'<br>';
-	echo('sName: '.$_SESSION['sName']) .'<br>';
-	echo('email: '.$_SESSION['email']) .'<br>';
-	?>
+	<section class="shadow-lg p-3 mb-5 bg-white " id="footer">
+		<h2>footer</h2>
+	</section>
 	
-	<div>
-			SELECT * FROM TABLE
-	</div>
-</section>
-
-<section class="shadow-lg p-3 mb-5 bg-white " id="footer">
-	<h2>footer</h2>
-</section>
-
+	<script src="./style/masterjs.js"></script>
 <?php include 'frame/tail.php'; ?>

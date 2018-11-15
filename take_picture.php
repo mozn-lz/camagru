@@ -13,12 +13,19 @@ if ($sess) {
 }
 ?>
 
-	<section class="shadow-lg p-3 mb-5 bg-white " id="header">
-		<ul class="nav nav-pills">
-			<li role="presentation" class="active"><a href="index.php">Comagaru</a></li>
-			<li role="presentation"><a href="profile.php">Profile</a></li>
-		</ul>
-	</section>
+<section class="shadow-lg p-3 mb-5 bg-white " id="header">
+	<ul class="nav nav-pills">
+		<li role="presentation" class="active"><a href="index.php">Comagaru</a></li>
+		<li role="presentation"><a href="profile.php">Profile</a></li>
+		<?php 
+		if ($sess) 
+			echo '<li role="presentation"><a href="forms/logout.php">Logout</a></li>';
+		else
+			echo '<li role="presentation"><a href="login.php">Login</a></li>';
+		?>
+	</ul>
+</section>
+
 	
 	<section class="shadow-lg p-3 mb-5 bg-white " id="main">
 		<h2>Take pic</h2>
@@ -51,7 +58,7 @@ if ($sess) {
 					<img class="modal-content" name="user_pic" id="img01">
 					<div id="caption"></div>
 					<form action="forms/user_tabe_function.php" method="post">
-						<input class="hidden" type="text" id="thmb" name="thmb" value="">
+						<input class="hidden" type="text" id="thmb" name="thmb" value="#">
 						<button name="submit" value="cancel" type="submit">Cancel</button>
 						<button name="submit" value="submit" type="submit">Save</button>
 					</form>
@@ -59,12 +66,6 @@ if ($sess) {
 			</div>
 		</div>
 		<canvas id="canvas"></canvas>
-<?php		echo('id: '.$_SESSION['id']) .'<br>';
-echo('uName: '.$_SESSION['uName']) .'<br>';
-echo('fName: '.$_SESSION['fName']) .'<br>';
-echo('sName: '.$_SESSION['sName']) .'<br>';
-echo('email: '.$_SESSION['email']) .'<br>';
-?>
 	</section>
 	
 	<section class="shadow-lg p-3 mb-5 bg-white " id="footer">
