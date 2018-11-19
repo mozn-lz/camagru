@@ -1,5 +1,15 @@
 <?php
 session_start();
+$usrTB = $_SESSION['uName'];
+$username = $_SESSION['uName'];
+$firstame = $_SESSION['fName'];
+$surname = $_SESSION['sName'];
+$email = $_SESSION['email'];
+// echo('id: '.$_SESSION['id']) .'<br>';
+// echo('uName: '.$_SESSION['uName']) .'<br>';
+// echo('fName: '.$_SESSION['fName']) .'<br>';
+// echo('sName: '.$_SESSION['sName']) .'<br>';
+// echo('email: '.$_SESSION['email']) .'<br>';
 	if ($_POST['submit'] == 'cancel') {
 		header('location: ../take_picture.php');
 	}
@@ -10,28 +20,17 @@ if ($_POST['submit'] == 'submit') {
 	$conn = new PDO("mysql:host=".SERVERNAME.";dbname=".DBNAME."", USERNAME, PASSWORD);
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	echo('Conection established!<br>');
-	// echo('id: '.$_SESSION['id']) .'<br>';
-	// echo('uName: '.$_SESSION['uName']) .'<br>';
-	// echo('fName: '.$_SESSION['fName']) .'<br>';
-	// echo('sName: '.$_SESSION['sName']) .'<br>';
-	// echo('email: '.$_SESSION['email']) .'<br>';
 	
 	$sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
 	if ($sess) {
-		$usrTB = $_SESSION['uName'];
-		$username = $_SESSION['uName'];
-		$firstame = $_SESSION['fName'];
-		$surname = $_SESSION['sName'];
-		$email = $_SESSION['email'];
 		echo '1<br>';
 		
-// $filetype = $_FILES['file']['type'];
-// $filePointer = fopen($_FILES['file']['tmp_name'], 'rb'); //rb - read , binary
-
-// 		print_r($filetype);
 		echo '1.50<br>';
+		
+		/**************************************/
+		/*  Submit new pictute to user table  */
+		/**************************************/
 		$image = $_POST['thmb'];
-		// echo $image . "<br>";
 		if ($image) {
 			$current_time = 'CURRENT_TIMESTAMP';
 			$username = $_SESSION['uName'];
@@ -50,19 +49,58 @@ if ($_POST['submit'] == 'submit') {
 	} else {
 		echo ('File not found.<br>');
 	}
-	// $picture = $_POST('user_pic');
-	
 } 
 
-// INSERT INTO `mk` (`id`, `username`, `image`, `time`, `coments`, `likes`) 
-// VALUES (NULL, 'mk', 
-// 'data:image/png;base64,', 
-// CURRENT_TIMESTAMP, 
-// NULL, 
-// NULL);
 
-// INSERT INTO `mk` (`username`, `image`, `time`) 
-// VALUES ('mk', 'data:image/png;base64', CURRENT_TIMESTAMP);
+		/**************************************/
+		/*               Comments             */
+		/**************************************/
+		$comment = $_POST['comment'];
+		$img = $_POST['img_details'];
+		if ($comment && $img_id) {
+			$usr_coment = $username . ':' . $comment;
+			try{
+				$stmt = $conn->prepare("UPDATE $usrTB SET comment = :usr_coment WHERE id = :img_id");
+				$stmt = bindParam(':usr_coment', $usr_coment);
+				$stmt = bindParam(':img_id', $img['id']);
+				$stmt->execute();
+				echo 'image commented<br>';
+			}catch(PDOException $e){
+				echo ("comment error " . $e->getMessage());
+			}
+		}else{
+			echo "Comment error: comment or username not found<br>";
+		}
+
+		/***********************************/
+		/*               LIKES             */
+		/***********************************/
+		$likes = $_POST['likes'];
+		$img = $_POST['img_details'];
+		if ($likes && $img_id) {
+			$usr_like = $username . ':' . $likes;
+			try{
+				$stmt = $conn->prepare("SELECT FROM $usrTB WHERE id = :img_id");
+				$stmt = bindParam(':usr_like', $usr_like);
+				$stmt = bindParam(':img_id', $img['id']);
+				$stmt->execute();
+				/**
+				 * get results
+				 * fund if user hasalready liked image before,
+				 * 		if user.likes == true ? set user like to false : set user like to true
+				 */
+
+				$stmt = $conn->prepare("UPDATE $usrTB SET likes = :usr_like WHERE id = :img_id");
+				$stmt = bindParam(':usr_like', $usr_like);
+				$stmt = bindParam(':img_id', $img['id']);
+				$stmt->execute();
+				echo 'image LIKED<br>';
+			}catch(PDOException $e){
+				echo ("likes error " . $e->getMessage());
+			}
+		}else{
+			echo "likes error: comment or username not found<br>";
+		}
 
 $conn = null;
 

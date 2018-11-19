@@ -116,18 +116,17 @@ function takePicture() {
 		
 		imageObj1.onload = function() {
 			context.drawImage(imageObj1, 0, 0, width, height);
-			// imageObj2.src = 'res/mask1.png';
 			imageObj2 = (overlay);
-		console.log("Obj2: " + imageObj2.src + '\n');
 			imageObj2.onload = function() {
 				context.drawImage(imageObj2, 0, 0, width, height);
 				var img = context.toDataURL("image/png");
-				// document.write(' <img src="' + img + '" width="50%" height="%"/>');
-				// document.write('<img src="' + capture + '" width="50%" height="%"/>');
-				// photos.appendChild(img);
 			}
 		};
 	}
+
+/**
+ *  Soom effect
+ */
 	// document.write('1. <img src="' + imageObj1.src + '" width="%" height="%"/><br>' );
 	var selfiePic = document.getElementById('selfie');
 	var modal = document.getElementById('myModal');

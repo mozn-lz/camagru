@@ -54,11 +54,17 @@ if ($sess) {
 								<img src=".$result[$i]['image']." alt=''>
 							</div>
 							<div class='user_picuser_pic'>
-								<div class='inline time'>".$result[$i]['time']."</div>
-								<div class='inline btn btn-primary coment'>
-									Comment
-								</div>
-								<div class='inline btn btn-primary likes'>".count($result[$i]['likes'])." Likes</div>
+								<!-- <div class='inline time'>".$result[$i]['time']."</div> -->
+								<form action='forms/user_tabe_function.php' method='post'>
+									<div class='inline form-group coment'>
+										<input type='text' name='img_details' value=".$result[$i].">   <!-- Hidden line !!!!REMEMBER TO SET AS HIDDENT IN CSS -->
+										<input type='text' name='comment' class='form-control' placeholder='Comment' id=''>
+										<button type='submit' class='btn btn-success'>Comment</button>
+									</div>
+									<!-- <div class='inline btn btn-primary likes' name='likes'>".count($result[$i]['likes'])." Likes</div> -->
+									<button type='submit' name='likes' class='btn btn-primary'>".count($result[$i]['likes'])." Likes</button>
+								</form>
+								<div id='comments'></div>
 							</div>
 						</div>");
 						$i--;
