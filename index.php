@@ -55,16 +55,16 @@ if ($sess) {
 							</div>
 							<div class='user_picuser_pic'>
 								<!-- <div class='inline time'>".$result[$i]['time']."</div> -->
-								<form action='forms/user_tabe_function.php' method='post'>
+								<form action='forms/user_tabe_function.php' method='POST'>
 									<div class='inline form-group coment'>
-										<input type='text' name='img_details' value=".$result[$i].">   <!-- Hidden line !!!!REMEMBER TO SET AS HIDDENT IN CSS -->
+										<input type='hidden' name='img_details' value=".$result[$i]['id'].">   <!-- Hidden line !!!!REMEMBER TO SET AS HIDDENT IN CSS -->
 										<input type='text' name='comment' class='form-control' placeholder='Comment' id=''>
-										<button type='submit' class='btn btn-success'>Comment</button>
+										<button type='submit' name='comments' value='comments' class='btn btn-success'>Comment</button>
 									</div>
 									<!-- <div class='inline btn btn-primary likes' name='likes'>".count($result[$i]['likes'])." Likes</div> -->
-									<button type='submit' name='likes' class='btn btn-primary'>".count($result[$i]['likes'])." Likes</button>
+									<button type='submit' name='likes' value='likes' class='btn btn-primary'>".count($result[$i]['likes'])." Likes</button>
 								</form>
-								<div id='comments'></div>
+								<div class='comments'></div>
 							</div>
 						</div>");
 						$i--;

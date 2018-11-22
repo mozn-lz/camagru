@@ -31,7 +31,7 @@ try {
 	username VARCHAR(20) NOT NULL , 
 	firstname VARCHAR(30) NOT NULL,
 	lastname VARCHAR(30) NOT NULL,
-	email VARCHAR(50),
+	email VARCHAR(50) NOT NULL,
 	pssword VARCHAR(255) NOT NULL , 
 	confirm VARCHAR(255) NOT NULL , 
 	active TINYINT(1) NOT NULL
