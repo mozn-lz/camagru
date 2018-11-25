@@ -38,7 +38,7 @@ include 'forms/init_connect.php';
 			$result = $query->fetchAll();
 
 			if ($count = $query->rowCount() == 1){
-				$usrTB = $result[0]['username'];
+				// $usrTB = $result[0]['username'];
 				$id			= $result[0]['id'];
 				$username	= $result[0]['username'];
 				$firstname	= $result[0]['firstname'];
@@ -68,26 +68,26 @@ include 'forms/init_connect.php';
 				echo "Errorr creating user Data.<br>";
 				echo "Sql querry error: " . $e->getMessage() . "<br>";
 			}
-			try{
-				// echo "2. Creating table.<br>";
-				// echo $usrTB . "<br>";
-				$sql = "CREATE TABLE ".$usrTB." 
-				( 
-					id INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,  
-					username VARCHAR(20) NOT NULL , 
-					`image` BLOB NOT NULL ,  
-					`time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,  
-					coments VARCHAR(255) NULL ,  
-					likes TINYINT(1) NULL
-				)";
-				$conn->exec($sql);
-				$_SESSION['message'] = "Your account has been verified, you can login now<br>";
-				$_SESSION['type'] = 'success';
-				// echo "User table ".$usrTB." created Successfully.<br>";
-			}catch (PDOException $e){
-				echo "Errorr creating user table.<br>";
-				echo "Sql querry error: " . $e->getMessage() . "<br>";
-			}
+			// try{
+			// 	// echo "2. Creating table.<br>";
+			// 	// echo $usrTB . "<br>";
+			// 	$sql = "CREATE TABLE ".$usrTB." 
+			// 	( 
+			// 		id INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,  
+			// 		username VARCHAR(20) NOT NULL , 
+			// 		`image` BLOB NOT NULL ,  
+			// 		`time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,  
+			// 		coments VARCHAR(255) NULL ,  
+			// 		likes TINYINT(1) NULL
+			// 	)";
+			// 	$conn->exec($sql);
+			// 	$_SESSION['message'] = "Your account has been verified, you can login now<br>";
+			// 	$_SESSION['type'] = 'success';
+			// 	// echo "User table ".$usrTB." created Successfully.<br>";
+			// }catch (PDOException $e){
+			// 	echo "Errorr creating user table.<br>";
+			// 	echo "Sql querry error: " . $e->getMessage() . "<br>";
+			// }
 			header("Location: login.php");
 		} else {
 			$_SESSION['message'] = "It looks like your account has already been verified. <br>Please try to login, or contat our admin at email@email.mail<br>";

@@ -35,10 +35,10 @@ $userTB = $_SESSION['email'];
 		// {
 		// 	// Nothing exists
 		echo '1. verify file<br>';
-		$usrTB = $_SESSION['email'];
-			if ($usrTB) {
+		// PICTABLE = $_SESSION['email'];
+			// if (PICTABLE) {
 		echo '2. verify file<br>';
-				$sql = "CREATE TABLE ".$usrTB." 
+				$sql = "CREATE TABLE ".PICTABLE." 
 				( 
 					id INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,  
 					`image` BLOB NOT NULL ,  
@@ -49,7 +49,7 @@ $userTB = $_SESSION['email'];
 					
 					// use exec() because no results are returned
 					$conn->exec($sql);
-					echo "Table ".$usrTB." created successfully";
+					echo "Table ".PICTABLE." created successfully";
 			// }
 			// function uplolad_pictures($username) {
 			// // $stmt = $conn-> INSERT image INTO $username
@@ -57,10 +57,10 @@ $userTB = $_SESSION['email'];
 			// 	$stmt->bind_param("sss", $firstname, $lastname, $email);
 			
 			// }
-		}
-		else{
-			echo 'username >'.$usrTB.'< is blank';
-		}
+		// }
+		// else{
+		// 	echo 'username >'.PICTABLE.'< is blank';
+		// }
 
 
 }

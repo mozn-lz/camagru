@@ -83,5 +83,27 @@ catch(PDOException $e)
 // }
 
 
+
+/************************************/
+/*			Create UsrsTbl 	   		*/
+/************************************/
+try{
+	$sql = "CREATE TABLE ".$usrTB." 
+	( 
+		id INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,  
+		username VARCHAR(20) NOT NULL , 
+		`image` LONGTEXT NOT NULL ,  
+		`time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,  
+		coments TEXT NULL ,  
+		likes TEXT NULL
+	)";
+	$conn->exec($sql);
+	$_SESSION['message'] = "Your account has been verified, you can login now<br>";
+	$_SESSION['type'] = 'success';
+	// echo "User table ".$usrTB." created Successfully.<br>";
+}catch (PDOException $e){
+	echo "Errorr creating user table.<br>";
+	echo "Sql querry error: " . $e->getMessage() . "<br>";
+}
 $conn = null;
 ?>

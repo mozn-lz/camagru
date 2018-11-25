@@ -3,7 +3,6 @@ session_start();
 $page_title = "Take selfie";
 $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
 if ($sess) {
-	$usrTB = $_SESSION['uName'];
 	$username = $_SESSION['uName'];
 	$firstame = $_SESSION['fName'];
 	$surname = $_SESSION['sName'];
@@ -32,7 +31,7 @@ if ($sess) {
 		<h2>Take pic</h2>
 		<?php 
 			try {
-				$query = $conn->prepare("SELECT * FROM ".$usrTB);
+				$query = $conn->prepare("SELECT * FROM ".PICTABLE);
 				$query->execute();
 				// echo "Select query Executed successfully <br>";
 	
