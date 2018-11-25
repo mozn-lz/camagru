@@ -44,6 +44,20 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {		//
 
 	   '; // Our message above including the link
 	}
+	if ($type == "reset_password") {		//	
+		$subject = 'Signup | Verification'; // Give the email a subject    
+		// $message = "Your account was created at " . $date;
+		$message = '
+		
+	   Someone said you forgot your password. If it was not you, please ignore this email.
+	   If it was you, click the link below to reser your password.
+
+	   ------------------------
+		
+	   Please click this link to activate your account:
+	   http://127.0.0.1:8080/camagru/verify.php?email='.$email.'&hash='.$hash.'
+	   '; // Our message above including the link
+	}
 	mail($to, $subject, $message, $headers);
 }
 
@@ -53,6 +67,42 @@ try
 	$conn = new PDO("mysql:host=".SERVERNAME.";dbname=".DBNAME."", USERNAME, PASSWORD);
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	
+	/****************************/
+	/*		reset password		*/
+	/****************************/
+	if ($_POST('reset_password')){
+		if ($_POST('reset_email')) {		//	check if user is registerd/valid
+			$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE email = :email");
+			$email = $_POST['reset_password'];
+			$query->bindParam(':email', $email);
+			$query->execute();
+			if ($count = $query->rowCount() == 0 )
+			{ // Find out if email already exists in database (IF USER EXISTS)
+				try {
+					// prepare sql and bind parameters
+					$stmt = $conn->prepare("UPDATE ".$usrsTB. " SET confirm=$confirm WHERE email = :email");
+					$email = $_POST['email'];
+					$confirm = hash(md5 ,rand());
+
+					$stmt->bindParam(':email', $email);
+					$stmt->bindParam(':confirm', $confirm);
+					$stmt->execute();
+					// echo "New records created successfully";
+					$_SESSION['message'] = "Account created successfully. <br> Please check your email to confirm";
+					$_SESSION['type'] = 'success';
+					send_mail($username, $firstname, $lastname, $email, $confirm, "reset_password");
+					header("Location: ../index.php");
+				}
+				catch(PDOException $e) {
+					echo "Error: " . $e->getMessage() . "<br>";
+				}
+		} else {
+			echo ("email address not found");
+		}		
+	}
+
+
+
 	/********************/
 	/*		updte		*/
 	/********************/
@@ -108,10 +158,6 @@ try
 		{ // Check if form elements aren't empty
 			try
 			{
-				$conn = new PDO("mysql:host=".SERVERNAME.";dbname=".DBNAME."", USERNAME, PASSWORD);
-				// set the PDO error mode to exception
-				$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
 				// prepare sql and bind parameters
 				$stmt = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE email = :email AND pssword = :pssword");
 				$email = $_POST['loginEmail'];
@@ -178,10 +224,6 @@ try
 				if ($count = $query->rowCount() == 0 )
 				{ // Find out if email already exists in database (IF USER EXISTS)
 					try {
-						$conn = new PDO("mysql:host=".SERVERNAME.";dbname=".DBNAME."", USERNAME, PASSWORD);
-						// set the PDO error mode to exception
-						$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-						
 						// prepare sql and bind parameters
 						$stmt = $conn->prepare("INSERT INTO ".$usrsTB." 
 						(username,  firstname,  lastname,  email,  pssword,  confirm,  active) 

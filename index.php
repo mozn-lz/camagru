@@ -29,6 +29,9 @@ if ($sess) {
 
 	<section class="shadow-lg p-3 mb-5 bg-white " id="main">
 		<h2>Take pic</h2>
+		<div>
+				<a href="./take_picture.php"><button type="button" class="btn btn-primary btn-lg">Take Picture</button></a>
+		</div>
 		<?php 
 			try {
 				$query = $conn->prepare("SELECT * FROM ".PICTABLE);
@@ -70,6 +73,9 @@ if ($sess) {
 					}
 				}
 				else {
+					echo"This is eemarassing... It loks like your our very first user <br>
+					Click on the take picture to get started taking funny pics
+					";
 					$_SESSION['message'] = "It looks like your account has been verified. Please try to login, or contat our admin at email@email.mail<br>";
 					$_SESSION['type'] = 'danger';
 				}

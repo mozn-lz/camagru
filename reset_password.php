@@ -25,10 +25,10 @@ include 'frame/head.php';
 	<form name="reg_form" action="forms/form.php" onsubmit="return validateRegForm()" method="POST">
 		<div class="form-group">
 			<label for="email">Email address</label>
-			<input required type="email" class="form-control" id="loginEmail" name="loginEmail" placeholder="Email" >
+			<input required type="email" class="form-control" id="reset_email" name="reset_email" placeholder="Email" >
 		</div>
 		
-		<button type="submit" class="btn btn-default" value="login">Submit</button>
+		<button type="submit" class="btn btn-default" value="reset_password">Submit</button>
 	</form>
 	<div class="col-xs-6 tex-left"><a href="register.php">Don't have an account? Click to register</a></div>
 	<div class="col-xs-6 text-right"><a href="login.php">Know your login details? Click here</a></div>
