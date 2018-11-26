@@ -45,7 +45,7 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {		//
 	   '; // Our message above including the link
 	}
 	if ($type == "reset_password") {		//	
-		$subject = 'Signup | Verification'; // Give the email a subject    
+		$subject = 'Reset Password'; // Give the email a subject    
 		// $message = "Your account was created at " . $date;
 		$message = '
 		
@@ -55,7 +55,7 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {		//
 	   ------------------------
 		
 	   Please click this link to activate your account:
-	   http://127.0.0.1:8080/camagru/verify.php?email='.$email.'&hash='.$hash.'
+	   http://127.0.0.1:8080/camagru/reset_password.php?email='.$email.'&hash='.$hash.'
 	   '; // Our message above including the link
 	}
 	mail($to, $subject, $message, $headers);
@@ -66,18 +66,42 @@ try
 	//	conect to database  to be able to execute CRUD opperations
 	$conn = new PDO("mysql:host=".SERVERNAME.";dbname=".DBNAME."", USERNAME, PASSWORD);
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	
 	/****************************/
 	/*		reset password		*/
 	/****************************/
-	if ($_POST('reset_password')){
-		if ($_POST('reset_email')) {		//	check if user is registerd/valid
+	if(['reset_password']) {
+		if((trim($_POST['email']) != "") && (trim($_POST['password1']) != "") && (trim($_POST['password2']) != "")){
+			if ($_POST['password1'] == $_POST['password2']) {
+				$psword = strtoupper(hash('whirlpool' , $_POST['password1']));
+				$stmt = $conn->prepare("UPDATE ".$usrsTB. " SET pssword=$psword WHERE email = :email");
+				$stmt->bindParam(':pssword', $psword);
+				$stmt->execute();
+			} else {
+				echo 'passwords dont match';
+			}
+		}else {
+			echo 'password empty';
+		}
+	}
+	/****************************/
+	/*		forgot password		*/
+	/****************************/
+	if ($_POST['forgot_password']) {
+		if ($_POST['reset_email']) {		//	check if user is registerd/valid
 			$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE email = :email");
-			$email = $_POST['reset_password'];
+			$email = $_POST['forgot_password'];
 			$query->bindParam(':email', $email);
 			$query->execute();
-			if ($count = $query->rowCount() == 0 )
-			{ // Find out if email already exists in database (IF USER EXISTS)
+
+			echo $count = $query->rowCount() . "<br>";
+			if ($count = $query->rowCount() == 1 ) 
+			{	// Find out if email already exists in database (IF USER EXISTS)
+				echo $count	= $query->rowCount() . "<br>";
+				$result		= $query->fetch(PDO::FETCH_ASSOC);
+				$username	= $result['username'];
+				$firstname	= $result['firstname'];
+				$lastname	= $result['lastname'];
+				$email		= $result['email'];
 				try {
 					// prepare sql and bind parameters
 					$stmt = $conn->prepare("UPDATE ".$usrsTB. " SET confirm=$confirm WHERE email = :email");
@@ -96,12 +120,11 @@ try
 				catch(PDOException $e) {
 					echo "Error: " . $e->getMessage() . "<br>";
 				}
-		} else {
-			echo ("email address not found");
-		}		
+			} else {
+				echo ("email address not found");
+			}		
+		}
 	}
-
-
 
 	/********************/
 	/*		updte		*/
@@ -111,25 +134,25 @@ try
 		if(isset($_SESSION['id']))
 		{
 			if ($_POST['update_uName']) {
-				$uName = $_POST('update_uName');
+				$uName = $_POST['update_uName'];
 				$stmt = $conn->prepare("UPDATE users SET email = :email) WHERE id = ".$_SESSION['id']);
 				$stmt->bindParam(':email', $email);
 				$stmt->execute();
 			}
 			if ($_POST['update_fName']) {
-				$fName = $_POST('update_fName');
+				$fName = $_POST['update_fName'];
 				$stmt = $conn->prepare("UPDATE users SET email = :email) WHERE id = ".$_SESSION['id']);
 				$stmt->bindParam(':email', $email);
 				$stmt->execute();
 			}
 			if ($_POST['update_lName']) {
-				$lName = $_POST('update_lName');
+				$lName = $_POST['update_lName'];
 				$stmt = $conn->prepare("UPDATE users SET email = :email) WHERE id = ".$_SESSION['id']);
 				$stmt->bindParam(':email', $email);
 				$stmt->execute();
 			}
 			if ($_POST['update_email']) {
-				$email = $_POST('update_email');
+				$email = $_POST['update_email'];
 				$stmt = $conn->prepare("UPDATE users SET email = :email) WHERE id = ".$_SESSION['id']);
 				$stmt->bindParam(':email', $email);
 				$stmt->execute();
@@ -266,8 +289,7 @@ try
 		}
 	}
 	header("Location: ../index.php");
- }
-catch (PDOException $e) {
+ }catch (PDOException $e) {
 	echo "PDO Connection failed: " . $e->getMessage() . "<br>";
 }
 

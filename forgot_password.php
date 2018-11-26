@@ -1,6 +1,6 @@
 <?php 
 session_start();
-$page_title = "Camagru Logon";
+$page_title = "Camagru lost passwords";
 include 'frame/head.php';
 ?>
 
@@ -20,21 +20,18 @@ include 'frame/head.php';
 
 <!-- main startss here -->
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
-	<h2>Login</h2>
+	<h2>Forgot Password</h2>
 		<div class="<?php echo $type; ?>"><?php echo $message; ?></div>
 	<form name="reg_form" action="forms/form.php" onsubmit="return validateRegForm()" method="POST">
 		<div class="form-group">
 			<label for="email">Email address</label>
-			<input required type="email" class="form-control" id="loginEmail" name="loginEmail" placeholder="Email" >
+			<input required type="email" class="form-control" id="reset_email" name="reset_email" placeholder="Email" >
 		</div>
-		<div class="form-group">
-			<label for="password">Password</label>
-			<input required type="password" class="form-control" id="loginPassword" name="loginPassword" placeholder="Password">
-		</div>
-		<button type="submit" class="btn btn-default" value="login">Submit</button>
+		
+		<button type="submit" class="btn btn-default" value="forgot_password">Submit</button>
 	</form>
 	<div class="col-xs-6 tex-left"><a href="register.php">Don't have an account? Click to register</a></div>
-	<div class="col-xs-6 text-right"><a href="./forgot_password.php">Forgot password?</a></div>
+	<div class="col-xs-6 text-right"><a href="login.php">Know your login details? Click here</a></div>
 </section>
 
 <!-- footer startss here -->
