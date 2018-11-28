@@ -49,6 +49,8 @@ catch(PDOException $e)
 /************************************/
 /*			Create UsrsTbl 	   		*/
 /************************************/
+
+// $sql = "CREATE TABLE ".$usrTB." ( id INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,  username VARCHAR(20) NOT NULL , `image` LONGTEXT NOT NULL ,  `time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,  coments TEXT NULL ,  likes TEXT NULL)"; for propper likes
 try{
 	$sql = "CREATE TABLE ".$usrTB." 
 	( 
@@ -57,7 +59,7 @@ try{
 		`image` LONGTEXT NOT NULL ,  
 		`time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,  
 		coments TEXT NULL ,  
-		likes TEXT NULL
+		likes INT NULL
 	)";
 	$conn->exec($sql);
 	$_SESSION['message'] = "Your account has been verified, you can login now<br>";

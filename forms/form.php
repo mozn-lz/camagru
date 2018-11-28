@@ -301,8 +301,56 @@ try
 			}
 		}
 	}
+
+	/********************/
+	/*	deregister		*/
+	/********************/
+	if ($_POST['delete_profile'])
+	{ // 
+		$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE email = :email");
+		$email = $_POST['reg_email'];
+		$query->bindParam(':email', $email);
+		$query->execute();
+		if ($count = $query->rowCount() == 0 )
+		{ // Find out if email already exists in database (IF USER EXISTS)
+			try {
+				// prepare sql and bind parameters
+				$stmt = $conn->prepare("INSERT INTO ".$usrsTB." 
+				(username,  firstname,  lastname,  email,  pssword,  confirm,  active) 
+				VALUES (:username, :firstname, :lastname, :email, :pssword, :confirm, :active)");
+				$username = $_POST['reg_uName'];
+				$firstname = $_POST['reg_fName'];
+				$lastname = $_POST['reg_sName'];
+				$email = $_POST['reg_email'];
+				$psword = strtoupper(hash('whirlpool' , $_POST['reg_password1']));
+				$confirm = hash(md5 ,rand());
+				$active = 0;
+
+				$stmt->bindParam(':username', $username);
+				$stmt->bindParam(':firstname', $firstname);
+				$stmt->bindParam(':lastname', $lastname);
+				$stmt->bindParam(':email', $email);
+				$stmt->bindParam(':pssword', $psword);
+				$stmt->bindParam(':confirm', $confirm);
+				$stmt->bindParam(':active', $active);
+				$stmt->execute();
+				// echo "New records created successfully";
+				$_SESSION['message'] = "Account created successfully. <br> Please check your email to confirm";
+				$_SESSION['type'] = 'success';
+				send_mail($username, $firstname, $lastname, $email, $confirm, "new user");
+				header("Location: ../index.php");
+			}
+			catch(PDOException $e) {
+				echo "Error: " . $e->getMessage() . "<br>";
+			}
+		}else {
+			$_SESSION['message'] = "User email already exists please try to login";
+			$_SESSION['type'] = 'danger';
+			header("Location: ../register.php");
+		}
+	}
 	header("Location: ../index.php");
- }catch (PDOException $e) {
+}catch (PDOException $e) {
 	echo "PDO Connection failed: " . $e->getMessage() . "<br>";
 }
 

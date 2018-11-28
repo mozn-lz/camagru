@@ -2,15 +2,15 @@
 session_start();
 $page_title = "Take selfie";
 $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
+include 'frame/head.php';
+include 'forms/init_connect.php';
 if ($sess) {
 	$username = $_SESSION['uName'];
 	$firstame = $_SESSION['fName'];
 	$surname = $_SESSION['sName'];
 	$email = $_SESSION['email'];
-	include 'frame/head.php';
-	include 'forms/init_connect.php';
 } else {
-	header("Location: login.php");
+//	header("Location: login.php");
 }
 ?>
 
@@ -30,20 +30,20 @@ if ($sess) {
 	<section class="shadow-lg p-3 mb-5 bg-white " id="main">
 		<h2>Take pic</h2>
 		<div>
-				<a href="./take_picture.php"><button type="button" class="btn btn-primary btn-lg">Take Picture</button></a>
+			<form action="./forms/form.php" method="post">
+				<button type="submit" name="delete_profile" class="btn btn-primary btn-lg">Take Picture</button>
+			</form>
 		</div>
 		<?php 
 			try {
 				$query = $conn->prepare("SELECT * FROM ".PICTABLE);
 				$query->execute();
-				// echo "Select query Executed successfully <br>";
-	
+
 				$result = $query->fetchAll();
 				$count = count($result);
-			if ($count > 0){
+				if ($count > 0){
 					echo "<br>";
 					$i = $count - 1;
-						// echo "i: $i <br>";
 					while ($i >= 0) {
 						// if (count($result[$i]['likes'] == 0) {
 						// 	echo "likes";
@@ -59,12 +59,12 @@ if ($sess) {
 								<!-- <div class='inline time'>".$result[$i]['time']."</div> -->
 								<form action='forms/user_tabe_function.php' method='POST'>
 									<div class='inline form-group coment'>
-										<input type='hidden' name='img_details' value=".$result[$i]['id'].">   <!-- Hidden line !!!!REMEMBER TO SET AS HIDDENT IN CSS -->
+										<input type='hidden' name='img_details' value=".$result[$i]['id'].">
 										<input type='text' name='comment' class='form-control' placeholder='Comment' id=''>
-										<button type='submit' name='comments' value='comments' class='btn btn-success'>Comment</button>
 									</div>
-									<!-- <div class='inline btn btn-primary likes' name='likes'>".count($result[$i]['likes'])." Likes</div> -->
-									<button type='submit' name='likes' value='likes' class='btn btn-primary'>".count($result[$i]['likes'])." Likes</button>
+									<button type='submit' name='comments' value='comments' class='btn btn-success'>Comment</button>
+									<button type='submit' name='likes' value='likes' class='btn btn-primary'>".$result[$i]['likes']." Likes</button>
+									<button type='submit' name='delete_img' value='delete_img' class='btn btn-danger'>Delete</button>
 								</form>
 								<div class='comments'></div>
 							</div>
