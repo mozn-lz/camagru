@@ -36,7 +36,7 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {		//
 		// $message = "Your account was created at " . $date;
 		$message = '
 		
-		<h2>Account accessed</h2> 
+		Account accessed
 
 		Hi '.$username.',
 
@@ -69,60 +69,73 @@ try
 	/****************************/
 	/*		reset password		*/
 	/****************************/
-	if(['reset_password']) {
-		if((trim($_POST['email']) != "") && (trim($_POST['password1']) != "") && (trim($_POST['password2']) != "")){
-			if ($_POST['password1'] == $_POST['password2']) {
-				$psword = strtoupper(hash('whirlpool' , $_POST['password1']));
-				$stmt = $conn->prepare("UPDATE ".$usrsTB. " SET pssword=$psword WHERE email = :email");
-				$stmt->bindParam(':pssword', $psword);
-				$stmt->execute();
+	if ($_POST['reset_password']) {
+		echo "reseting password<br>";
+		if((trim($_POST['reset_email']) != "") && (trim($_POST['password1']) != "") && (trim($_POST['password2']) != "")){
+			echo "reseting password:: elements found<br>";
+			if ($_POST['password1'] === $_POST['password2']) {
+			echo "Passwords maatch<br>";
+				try{
+					$email = $_POST['reset_email'];
+					$psword = strtoupper(hash('whirlpool' , $_POST['password1']));
+					$stmt = $conn->prepare("UPDATE $usrsTB SET pssword=:pssword WHERE email=:email" );
+					$stmt->bindParam(':pssword', $psword);
+					$stmt->bindParam(':email', $email);
+					$stmt->execute();
+					header("Location: ../login.php");
+				}catch(PDOException $e) {
+					echo "Forget Error: " . $e->getMessage() . "<br>";
+					header("Location: ../reset_password.php");
+				}
 			} else {
 				echo 'passwords dont match';
+				header("Location: ../reset_password.php");
 			}
 		}else {
-			echo 'password empty';
+			echo 'Password empty<br>';
+			header("Location: ../reset_password.php");
 		}
 	}
+
 	/****************************/
 	/*		forgot password		*/
 	/****************************/
 	if ($_POST['forgot_password']) {
-		if ($_POST['reset_email']) {		//	check if user is registerd/valid
+		if (trim($_POST['reset_email']) != "") {		//	check if user is registerd/valid
 			$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE email = :email");
-			$email = $_POST['forgot_password'];
+			$email = $_POST['reset_email'];
 			$query->bindParam(':email', $email);
 			$query->execute();
 
-			echo $count = $query->rowCount() . "<br>";
-			if ($count = $query->rowCount() == 1 ) 
+			if ($count = count($query) == 1 ) 
 			{	// Find out if email already exists in database (IF USER EXISTS)
-				echo $count	= $query->rowCount() . "<br>";
-				$result		= $query->fetch(PDO::FETCH_ASSOC);
+				$result = $query->fetch(PDO::FETCH_ASSOC);
 				$username	= $result['username'];
 				$firstname	= $result['firstname'];
 				$lastname	= $result['lastname'];
 				$email		= $result['email'];
 				try {
-					// prepare sql and bind parameters
-					$stmt = $conn->prepare("UPDATE ".$usrsTB. " SET confirm=$confirm WHERE email = :email");
-					$email = $_POST['email'];
 					$confirm = hash(md5 ,rand());
-
-					$stmt->bindParam(':email', $email);
+					// prepare sql and bind parameters
+					$stmt = $conn->prepare("UPDATE $usrsTB SET confirm=:confirm WHERE email=:email");
 					$stmt->bindParam(':confirm', $confirm);
+					$stmt->bindParam(':email', $email);
 					$stmt->execute();
-					// echo "New records created successfully";
+
+					echo "Please check your email successfully";
 					$_SESSION['message'] = "Account created successfully. <br> Please check your email to confirm";
 					$_SESSION['type'] = 'success';
 					send_mail($username, $firstname, $lastname, $email, $confirm, "reset_password");
 					header("Location: ../index.php");
 				}
 				catch(PDOException $e) {
-					echo "Error: " . $e->getMessage() . "<br>";
+					echo "Forget Error: " . $e->getMessage() . "<br>";
 				}
 			} else {
 				echo ("email address not found");
 			}		
+		} else {
+			echo "email seams to be emptyreset_email";
 		}
 	}
 
