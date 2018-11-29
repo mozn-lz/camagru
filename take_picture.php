@@ -13,19 +13,18 @@ if ($sess) {
 }
 ?>
 
-<section class="shadow-lg p-3 mb-5 bg-white " id="header">
-	<ul class="nav nav-pills">
-		<li role="presentation" class="active"><a href="index.php">Comagaru</a></li>
-		<li role="presentation"><a href="profile.php">Profile</a></li>
-		<?php 
-		if ($sess) 
-			echo '<li role="presentation"><a href="forms/logout.php">Logout</a></li>';
-		else
-			echo '<li role="presentation"><a href="login.php">Login</a></li>';
-		?>
-	</ul>
-</section>
-
+	<section class="shadow-lg p-3 mb-5 bg-white " id="header">
+		<ul class="nav nav-pills">
+			<li role="presentation" class="active"><a href="index.php">Comagaru</a></li>
+			<li role="presentation"><a href="profile.php">Profile</a></li>
+			<?php 
+			if ($sess) 
+				echo '<li role="presentation"><a href="forms/logout.php">Logout</a></li>';
+			else
+				echo '<li role="presentation"><a href="login.php">Login</a></li>';
+			?>
+		</ul>
+	</section>
 	
 	<section class="shadow-lg p-3 mb-5 bg-white " id="main">
 		<h2>Take pic</h2>
@@ -34,10 +33,7 @@ if ($sess) {
 				<input type="radio" name="overlay" value="#" id="none" checked="checked"> Ugly face
 				<input type="radio" name="overlay" value="res/mask1.png" id="crazy"> crazy
 				<input type="radio" name="overlay" value="res/mask2.png" id="catface"> catface
-				<input type="radio" name="overlay" value="." id="anonimus"> anonimus
-				<input type="radio" name="overlay" value="." id="cuagmire"> Cuagmire
-				<input type="radio" name="overlay" value="." id="sponge"> Sponge
-				<input type="radio" name="overlay" value="." id="classic"> Classic
+
 			</div>
 			<div id="vid_div">
 				<div>

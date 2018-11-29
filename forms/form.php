@@ -214,14 +214,14 @@ try
 					}
 					if ($result['active'] == 1) 
 					{	//start session if account verified=TRUE and usr email && password match
+						$username	= $_SESSION['uName'] = $result['username'];
+						$firstname	= $_SESSION['fName'] = $result['firstname'];
+						$lastname	= $_SESSION['sName'] = $result['lastname'];
+						$email		= $_SESSION['email'] = $result['email'];
 						$_SESSION['id'] = $result['id'];
-						$_SESSION['uName'] = $result['username'];
-						$_SESSION['fName'] = $result['firstname'];
-						$_SESSION['sName'] = $result['lastname'];
-						$_SESSION['email'] = $result['email'];
-						$_SESSION['message'] = "logged in successfully<br>";
 						$_SESSION['type'] = 'success';
-						send_mail($username, $firstname, $lastname, $email, $psword, "user login");
+						$_SESSION['message'] = "logged in successfully<br>";
+						send_mail($username, $firstname, $lastname, $email, $hash, "user login");
 						header("Location: ../index.php");
 					}
 				}elseif ($count < 1) {

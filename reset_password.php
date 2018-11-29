@@ -37,7 +37,6 @@ include 'forms/init_connect.php';
 			$query-> bindParam(':hash', $hash);
 			$query->execute();
 
-			// echo "User selection done.<br>";
 
 			$result = $query->fetchAll();
 

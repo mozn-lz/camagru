@@ -30,9 +30,9 @@ if ($sess) {
 	<section class="shadow-lg p-3 mb-5 bg-white " id="main">
 		<h2>Take pic</h2>
 		<div>
-			<form action="./forms/form.php" method="post">
+			<a href="take_picture.php">
 				<button type="submit" name="delete_profile" class="btn btn-primary btn-lg">Take Picture</button>
-			</form>
+			</a>
 		</div>
 		<?php 
 			try {
@@ -45,11 +45,6 @@ if ($sess) {
 					echo "<br>";
 					$i = $count - 1;
 					while ($i >= 0) {
-						// if (count($result[$i]['likes'] == 0) {
-						// 	echo "likes";
-						// } else {
-						// 	echo count($result[$i]['likes']);
-						// }
 						echo ("
 						<div class='display_grp col-md-3'>
 							<div class='user_pic'>

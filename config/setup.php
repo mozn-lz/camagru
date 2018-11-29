@@ -5,7 +5,7 @@ include '../forms/default.php';
 /*				Create DB	   		*/
 /************************************/
 try {
-	$conn = new PDO("mysql:host=$servername", $username, $password);
+	$conn = new PDO("mysql:host=$servername", USERNAME, PASSWORD);
 	// set the PDO error mode to exception
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$sql = "CREATE DATABASE ".$myDB;
@@ -22,7 +22,7 @@ catch(PDOException $e)
 /*			Create Table	   		*/
 /************************************/
 try {
-	$conn = new PDO("mysql:host=$servername;dbname=$myDB", $username, $password);
+	$conn = new PDO("mysql:host=$servername;dbname=$myDB", USERNAME, PASSWORD);
 	// set the PDO error mode to exception
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	// sql to create table
@@ -64,7 +64,7 @@ try{
 	$conn->exec($sql);
 	$_SESSION['message'] = "Your account has been verified, you can login now<br>";
 	$_SESSION['type'] = 'success';
-	// echo "User table ".$usrTB." created Successfully.<br>";
+	echo "User table ".$usrTB." created Successfully.<br>";
 }catch (PDOException $e){
 	echo "Errorr creating user table.<br>";
 	echo "Sql querry error: " . $e->getMessage() . "<br>";

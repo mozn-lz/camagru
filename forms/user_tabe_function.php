@@ -1,7 +1,38 @@
 <?php
-session_start();
+session_start(); 
 
 include_once 'default.php';
+function get_user($image_owner) {
+	echo "Getting user<br>";
+	echo "$image_owner<br>";
+	$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE username = :username");
+	echo "1<br>";
+	$query->bindParam(':username', $image_owner);
+	echo "1<br>";
+	$query->execute();
+	echo "1<br>";
+	$result = $query->fetchAll();
+	echo "1<br>";
+	print_r($result);
+	// return ($result[0]['email']);
+}
+function send_mail($username, $image_owner, $type) {		//	Send email to Registerd user
+	
+	echo "image_owner: $image_owner<br>";
+	$to      = get_user($image_owner);; // Send email to our user
+	$headers = 'From:noreply@comagaru.com' . "\r\n"; // Set from headers
+
+	echo 'to: '. $to;
+	if ($type == "comment") {		//	change user details
+		$subject = "New comment";
+		$message = "Someone Comented on your picture";
+	}
+	if ($type == "like") {		//	
+		$subject = "New like";
+		$message = "Someone Liked on your picture";
+	}
+	// mail($to, $subject, $message, $headers);
+}
 
 $conn = new PDO("mysql:host=".SERVERNAME.";dbname=".DBNAME."", USERNAME, PASSWORD);
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -72,6 +103,7 @@ if ($sess) {
 
 			$usr_coment = "$username:$comment";
 			$db_Comments = ($result[0]['coments']);
+			$image_user = $result[0]['username'];
 			// echo '-5. ';
 			// print_r($db_Comments);
 			// echo'<br>';
@@ -125,6 +157,7 @@ if ($sess) {
 				// echo '<br>';
 				$stmt->execute();
 				echo 'image commented<br>';
+				send_mail($username, $image_user, "comment");
 				header("Location: ../index.php");
 			}catch(PDOException $e){
 				echo ("comment error " . $e->getMessage());
@@ -156,6 +189,7 @@ if ($sess) {
 				 */
 				if ($count == 1) {
 					$likes = $result[0]['likes'];
+					$image_user = $result[0]['username'];
 					$likes++;
 					try{
 						$query = $conn->prepare("UPDATE ".PICTABLE." SET likes = :usr_like WHERE id = :img_id");
@@ -164,7 +198,9 @@ if ($sess) {
 						$query->bindParam(':img_id', $image_id);
 						echo ('7. Bind: <br>');
 						$query->execute();
-						echo 'image LIKED<br>';
+						echo '+image LIKED<br>';
+						send_mail($username, $image_user, "like");
+						echo '-image LIKED<br>';
 						header("Location: ../index.php");
 					}catch(PDOException $e){
 						echo ("+ likes error " . $e->getMessage());

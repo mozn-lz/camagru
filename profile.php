@@ -29,18 +29,16 @@ if ($sess) {
 </section>
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<div class="row">
-		<div class="col-sm-8">
+		<div class="col-xs-9">
 			<h2>Profile</h2>
 		</div>
-		<div class="col-sm-4">
+		<div class="col-xs-3">
 			<input type="hidden" name="delete_user" id="delete_user">
 			<a href="./forms/create_user.php"><button type="button" onclick="confirmation()" class="btn btn-danger btn-lg">Delete Account</button></a>
 		</div>
 	</div>
 	<?php
 	echo ("<div class=".$type.">".$message."</div>");
-	// $_SESSION['type'] = '';
-	// $_SESSION['message'] = '';
 	?>
 	<div>
 		<form action="forms/form.php" method="POST">
