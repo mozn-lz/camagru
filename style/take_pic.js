@@ -1,14 +1,15 @@
-let width = 500,
-	height = 0,
-	filter = 'none',
-	streaming = false;
+let width		= 500,
+	height		= 0,
+	filter		= 'none',
+	streaming	= false;
 
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const photos = document.getElementById('photos');
-const photoButton = document.getElementById('photo-button');
-const clearButton = document.getElementById('clear-button');
-const photoFiller = document.getElementById('photo-filler');
+const video			= document.getElementById('video');
+const canvas		= document.getElementById('canvas');
+const photos		= document.getElementById('photos');
+const photoButton	= document.getElementById('photo-button');
+const photoFiller	= document.getElementById('photo-filler');
+var uploadImage		= document.getElementById('uploadImage');
+
 
 /******************/
 /*     OVERLAY    */
@@ -122,8 +123,3 @@ function takePicture() {
 		modal.style.display = "none";
 	}
 }
-
-clearButton.addEventListener('change', function (e) {
-	photos.innerHTML = '';
-	
-});

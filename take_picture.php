@@ -38,7 +38,8 @@ if ($sess) {
 			<div id="vid_div">
 				<div>
 					<button id="photo-button" class="btn btn-dark">Take Photo</button>
-					<button id="clear-button">Clear</button>
+					<input type="file" name="uploadImage" id="uploadImage">
+					<!-- <button id="clear-button">Clear</button> -->
 				</div>
 				<div id="imgVidDiv">
 					<img id="tmpImg" src=""  alt="">
