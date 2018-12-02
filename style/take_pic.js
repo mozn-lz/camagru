@@ -3,13 +3,13 @@ let width		= 500,
 	filter		= 'none',
 	streaming	= false;
 
-const video			= document.getElementById('video');
 const canvas		= document.getElementById('canvas');
 const photos		= document.getElementById('photos');
 const photoButton	= document.getElementById('photo-button');
 const photoFiller	= document.getElementById('photo-filler');
-var uploadImage		= document.getElementById('uploadImage');
 
+var video			= document.getElementById('video');
+var uploadImage		= document.getElementById('uploadImage');
 
 /******************/
 /*     OVERLAY    */
@@ -64,6 +64,27 @@ photoButton.addEventListener('click', function (e) {
 	e.preventDefault();
 }, false);
 
+/**************************************************************************/
+// uploadImage.addEventListener('change', function (e) {
+// 	if (uploadImage.value != null) {
+// 		video = uploadImage.value;
+// 		console.log('video: ' + video + '\n');
+// 		console.log('uploadImage: ' + uploadImage+ '\n');
+// 	}
+// }, false);
+// function readFile() {
+// 	if (this.files && this.files[0]) {
+// 	  var FR= new FileReader();
+// 	  FR.addEventListener("load", function(e) {
+// 		document.getElementById("img").src       = e.target.result;
+// 		document.getElementById("b64").innerHTML = e.target.result;
+// 	  });
+// 	  FR.readAsDataURL(this.files[0]);
+// 	}
+//   }
+//   document.getElementById("inp").addEventListener("change", readFile);
+/**************************************************************************/
+
 function takePicture() {
 	// Create Canvas
 	const context = canvas.getContext('2d');
@@ -75,8 +96,10 @@ function takePicture() {
 		context.drawImage(overlay, 150, 0, 200, 200);
 
 		// Create image from canvas
-		const imgUrl = canvas.toDataURL('image/png');
+		const imgUrl = canvas.toDataURL("image/png");
 		// Create image element
+		//mj
+		console.log(imgUrl);
 		const capture = document.createElement('img');
 		capture.setAttribute('src', imgUrl);             // later
 
@@ -112,7 +135,7 @@ function takePicture() {
 	});
 	selfiePic = document.getElementById('selfie').src = imageObj1.src;
 	document.getElementById('thmb').value = selfiePic;
-	console.log("Img: " + document.getElementById('thmb').value);	
+	//mj console.log("Img: " + document.getElementById('thmb').value);	
 
 	// Get the <span> element that closes the modal
 	var span = document.getElementsByClassName("close")[0];
