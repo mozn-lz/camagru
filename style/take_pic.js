@@ -11,6 +11,23 @@ const photoFiller	= document.getElementById('photo-filler');
 var video			= document.getElementById('video');
 var uploadImage		= document.getElementById('uploadImage');
 
+uploadImage.addEventListener('change', function () {
+	console.log("1\n");
+	var fReader = new FileReader();
+	fReader.readAsDataURL(uploadImage.files[0]);
+	console.log("2\n");
+	fReader.onloadend = function(event){
+		console.log("3\n");
+		// var img = document.getElementById("yourImgTag");
+		// img.src = event.target.result;
+		console.log("4\n");
+		console.log("1. uploadImage.value: " + uploadImage);
+		console.log("2. uploadImage.FILES: " + uploadImage).files[0];
+		console.log("3. uploadImage.value: " + uploadImage).value;
+	}
+});
+
+
 /******************/
 /*     OVERLAY    */
 /******************/
@@ -65,57 +82,92 @@ photoButton.addEventListener('click', function (e) {
 }, false);
 
 /**************************************************************************/
-// uploadImage.addEventListener('change', function (e) {
-// 	if (uploadImage.value != null) {
-// 		video = uploadImage.value;
-// 		console.log('video: ' + video + '\n');
-// 		console.log('uploadImage: ' + uploadImage+ '\n');
-// 	}
-// }, false);
-// function readFile() {
-// 	if (this.files && this.files[0]) {
-// 	  var FR= new FileReader();
-// 	  FR.addEventListener("load", function(e) {
-// 		document.getElementById("img").src       = e.target.result;
-// 		document.getElementById("b64").innerHTML = e.target.result;
-// 	  });
-// 	  FR.readAsDataURL(this.files[0]);
-// 	}
-//   }
-//   document.getElementById("inp").addEventListener("change", readFile);
+
+// uploadImage.onclick = function(){
+// 	var context;
+// 	canvas.width = width;
+// 	canvas.height = height;
+// 	// Draw image of the video on the canvas
+// 	context.drawImage(uploadImage, 0, 0, width, height);
+// 	context.drawImage(overlay, 150, 0, 200, 200);
+// 	const imgUrl = canvas.toDataURL("image/png");
+// }
 /**************************************************************************/
+
+uploadImage.addEventListener( 'change', function(){
+	console.log("uploadImage.value: " + uploadImage);
+
+	// video.setAttribute('display', 'none');
+	video.style.display = "none"
+	console.log('hidden\n');
+	var nwImg  = document.createElement('img');
+	nwImg.setAttribute('src', uploadImage.value);
+	document.getElementById('imgVidDiv').appendChild(nwImg);
+});
 
 function takePicture() {
 	// Create Canvas
 	const context = canvas.getContext('2d');
 	if (width && height) {
-		canvas.width = width;
-		canvas.height = height;
-		// Draw image of the video on the canvas
-		context.drawImage(video, 0, 0, width, height);
-		context.drawImage(overlay, 150, 0, 200, 200);
+		console.log("uploadImage.value: " + uploadImage.value);
+		
+		if (uploadImage.value != null && uploadImage.value != "") {
+			canvas.width = width;
+			canvas.height = height;
+			// Draw image of the video on the canvas
+			context.drawImage(uploadImage, 0, 0, width, height);
+			context.drawImage(overlay, 150, 0, 200, 200);
 
-		// Create image from canvas
-		const imgUrl = canvas.toDataURL("image/png");
-		// Create image element
-		//mj
-		console.log(imgUrl);
-		const capture = document.createElement('img');
-		capture.setAttribute('src', imgUrl);             // later
+			// Create image from canvas
+			const imgUrl = canvas.toDataURL("image/png");
+			// Create image element
+			
+			// console.log(imgUrl);
+			const capture = document.createElement('img');
+			capture.setAttribute('src', imgUrl);             // later
 
-		var imageObj1 = new Image();
-		var imageObj2 = new Image();
-		imageObj1 = capture;
-		console.log("Obj1: " + imageObj1 + '\n');
+			var imageObj1 = new Image();
+			var imageObj2 = new Image();
+			imageObj1 = capture;
+			// console.log("Obj1: " + imageObj1 + '\n');
 
-		imageObj1.onload = function() {
-			context.drawImage(imageObj1, 0, 0, width, height);
-			imageObj2 = (overlay);
-			imageObj2.onload = function() {
-				context.drawImage(imageObj2, 0, 0, width, height);
-				var img = context.toDataURL("image/png");
-			}
-		};
+			imageObj1.onload = function() {
+				context.drawImage(imageObj1, 0, 0, width, height);
+				imageObj2 = (overlay);
+				imageObj2.onload = function() {
+					context.drawImage(imageObj2, 0, 0, width, height);
+					var img = context.toDataURL("image/png");
+				}
+			};
+		} else {
+			canvas.width = width;
+			canvas.height = height;
+			// Draw image of the video on the canvas
+			context.drawImage(video, 0, 0, width, height);
+			context.drawImage(overlay, 150, 0, 200, 200);
+	
+			// Create image from canvas
+			const imgUrl = canvas.toDataURL("image/png");
+			// Create image element
+			//mj
+			// console.log(imgUrl);
+			const capture = document.createElement('img');
+			capture.setAttribute('src', imgUrl);             // later
+	
+			var imageObj1 = new Image();
+			var imageObj2 = new Image();
+			imageObj1 = capture;
+			// console.log("Obj1: " + imageObj1 + '\n');
+	
+			imageObj1.onload = function() {
+				context.drawImage(imageObj1, 0, 0, width, height);
+				imageObj2 = (overlay);
+				imageObj2.onload = function() {
+					context.drawImage(imageObj2, 0, 0, width, height);
+					var img = context.toDataURL("image/png");
+				}
+			};
+		}
 	}
 
 	var selfiePic = document.getElementById('selfie');

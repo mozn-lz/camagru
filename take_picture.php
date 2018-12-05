@@ -38,7 +38,7 @@ if ($sess) {
 			<div id="vid_div">
 				<div>
 					<button id="photo-button" class="btn btn-success">Take Photo</button>
-					<input type="file" name="uploadImage" id="uploadImage">
+					<input type="file" name="uploadImage" id="uploadImage" accept="image/gif, image/jpeg, image/png">
 					<!-- <button id="clear-button">Clear</button> -->
 				</div>
 				<div id="imgVidDiv">
@@ -56,7 +56,7 @@ if ($sess) {
 					<div id="caption"></div>
 					<form action="forms/user_tabe_function.php" method="post">
 						<input class="hidden" type="text" id="thmb" name="thmb" value="#">
-						<button name="submit" value="cancel" type="submit">Cancel</button>
+						<button name="cancel" value="cancel" type="submit">Cancel</button>
 						<button name="submit" value="submit" type="submit">Save</button>
 					</form>
 				</div>

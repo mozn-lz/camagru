@@ -54,7 +54,7 @@ if ($sess) {
 	/**************************************/
 	/*  Submit new pictute to user table  */
 	/**************************************/
-	if ($_POST['submit'] == 'cancel') {
+	if ($_POST['cancel']) {
 		header('location: ../take_picture.php');
 	}
 
@@ -206,7 +206,7 @@ if ($sess) {
 						echo ("+ likes error " . $e->getMessage());
 					}
 					
-/*
+					/*
 					$likes = $result[0]['likes'];
 					$likes = explode(" ", $likes);
 					
@@ -250,7 +250,7 @@ if ($sess) {
 						}
 						header("Location: ../index.php");
 					}
-*/
+					*/
 				} else {		//	if there are selected images in the db
 					echo "multi-update error<br>";
 				}
@@ -310,8 +310,8 @@ if ($sess) {
 				echo ("likes error " . $e->getMessage());
 			}
 		}
+		header("Location: ../index.php");
 	}
-	header("Location: ../index.php");
 } else {
 	echo ('AUTHENTICATION ERROR.<br>');
 	header("Location: ../login.php");
