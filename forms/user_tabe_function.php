@@ -1,34 +1,33 @@
 <?php
 session_start(); 
-
+// ini_set('display_errors', 1);
 include_once 'default.php';
-$conn = new PDO("mysql:host=localhost;dbname=camagru", "root", "wethinkcode");
-$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+include 'init_connect.php';
 
-function get_user($image_owner) {
-	echo "Getting user<br>";
-	echo "Ing owner in get useremail: $image_owner<br>";
-	$stmt = $conn->prepare("SELECT * FROM users WHERE username = :usrName");
-	// $stmt = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE username = :usrName");
-	// $stmt = $pdo->prepare("SELECT * FROM users WHERE id=:id");
-	echo "1<br>";
-	$stmt->bindParam(':usrName', $image_owner);
-	echo "2<br>";
-	$stmt->execute();
-	echo "3<br>";
-	$result = $stmt->fetchAll();
-	echo "4<br>";
-	print_r($result);
-	echo "emauk: " .$result . "<br>";
-	return ($result[0]['email']);
-}
-function send_mail($username, $image_owner, $type) {		//	Send email to Registerd user
+// function get_user($image_owner) {
+// 	echo "Getting user<br>";
+// 	echo "Ing owner in get useremail: $image_owner<br>";
+// 	$stmt = $conn->prepare("SELECT * FROM users WHERE username = :usrName");
+// 	// $stmt = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE username = :usrName");
+// 	// $stmt = $pdo->prepare("SELECT * FROM users WHERE id=:id");
+// 	echo "1<br>";
+// 	$stmt->bindParam(':usrName', $image_owner);
+// 	echo "2<br>";
+// 	$stmt->execute();
+// 	echo "3<br>";
+// 	$result = $stmt->fetchAll();
+// 	echo "4<br>";
+// 	print_r($result);
+// 	echo "emauk: " .$result . "<br>";
+// 	return ($result[0]['email']);
+// }
+function send_mail($username, $image_owner_email, $type) {		//	Send email to Registerd user
 	
-	echo "image_owner(mail function): $image_owner<br>";
-	$to      = get_user($image_owner); // Send email to our user
+	// echo "image_owner(mail function): $image_owner_email<br>";
+	$to      = $image_owner_email; // Send email to our user
 	$headers = 'From:noreply@comagaru.com' . "\r\n"; // Set from headers
 
-	echo 'to: '. $to;
+	// echo 'to: '. $to;
 	if ($type == "comment") {		//	change user details
 		$subject = "New comment";
 		$message = "Someone Comented on your picture";
@@ -37,7 +36,7 @@ function send_mail($username, $image_owner, $type) {		//	Send email to Registerd
 		$subject = "New like";
 		$message = "Someone Liked on your picture";
 	}
-	// mail($to, $subject, $message, $headers);
+	mail($to, $subject, $message, $headers);
 }
 
 $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
@@ -60,11 +59,10 @@ if ($sess) {
 		if ($image) 
 		{
 			$current_time = 'CURRENT_TIMESTAMP';
-			$username = $_SESSION['uName'];
 			try{
 				$stmt = $conn->prepare("INSERT INTO " .PICTABLE." (username, image) 
 				VALUES (:uName, :imge)");
-				$stmt->bindParam(':uName', $username);
+				$stmt->bindParam(':uName', $email);
 				$stmt->bindParam(':imge', $image);
 				$stmt->execute();
 				echo 'Image uploaded<br>';
@@ -95,7 +93,7 @@ if ($sess) {
 
 			$usr_coment = "$username:$comment";
 			$db_Comments = ($result[0]['coments']);
-			$image_user = $result[0]['username'];
+			$image_user_email = $result[0]['username'];
 			if ($db_Comments == null) {
 				$db_Comments = array($result[0]['coments']);
 				$usr_coment = "$username:$comment";
@@ -103,13 +101,13 @@ if ($sess) {
 				// print_r($db_Comments);
 
 				$db_Comments =  array($usr_coment);	//		remove element from array
-				print_r($db_Comments);
+				// print_r($db_Comments);
 			} else {
-				print_r($db_Comments);
+				// print_r($db_Comments);
 				$db_Comments = json_decode($db_Comments);
-				print_r($db_Comments);
+				// print_r($db_Comments);
 				array_push($db_Comments, $usr_coment);//		remove element from array
-				print_r($db_Comments);
+				// print_r($db_Comments);
 			}
 
 			$db_Comments = json_encode($db_Comments);
@@ -119,11 +117,12 @@ if ($sess) {
 				$stmt->bindParam(':usr_coment', $db_Comments);
 				$stmt->bindParam(':img_id', $image_id);
 				$stmt->execute();
-				send_mail($username, $image_user, "comment");
+				send_mail($username, $image_user_email, "comment");
+				echo '-image comented<br>';
 				// $type		= "success";
 				// $message	= "s";
 				// header("Location: login.php?$type&$message");
-				header("Location: ../index.php");
+				// header("Location: ../index.php");
 			}catch(PDOException $e){
 				echo ("comment error " . $e->getMessage());
 			}
@@ -149,16 +148,16 @@ if ($sess) {
 				 */
 				if ($count == 1) {
 					$likes = $result[0]['likes'];
-					$image_user = $result[0]['username'];
+					$image_user_email = $result[0]['username'];
 					$likes++;
 					try{
 						$query = $conn->prepare("UPDATE ".PICTABLE." SET likes = :usr_like WHERE id = :img_id");
 						$query->bindParam(':usr_like', $likes);
 						$query->bindParam(':img_id', $image_id);
 						$query->execute();
-						send_mail($username, $image_user, "like");
+						send_mail($username, $image_user_email, "like");
 						echo '-image LIKED<br>';
-						header("Location: ../index.php");
+						// header("Location: ../index.php");
 					}catch(PDOException $e){
 						echo ("+ likes error " . $e->getMessage());
 					}
@@ -276,7 +275,7 @@ if ($sess) {
 				echo ("likes error " . $e->getMessage());
 			}
 		}
-		header("Location: ../index.php");
+		// header("Location: ../index.php");
 	}
 } else {
 	echo ('AUTHENTICATION ERROR.<br>');
