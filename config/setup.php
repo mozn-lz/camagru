@@ -2,23 +2,6 @@
 include '../forms/default.php';
 
 /************************************/
-/*				Create DB	   		*/
-/************************************/
-try {
-	$conn = new PDO("mysql:host=$servername", USERNAME, PASSWORD);
-	// set the PDO error mode to exception
-	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$sql = "CREATE DATABASE ".$myDB;
-	// use exec() because no results are returned
-	$conn->exec($sql);
-	echo "Database created successfully<br>";
-}
-catch(PDOException $e)
-{
-	echo $sql . "<br>" . $e->getMessage();
-}
-
-/************************************/
 /*			Create Table	   		*/
 /************************************/
 try {
@@ -32,19 +15,18 @@ try {
 	firstname VARCHAR(30) NOT NULL,
 	lastname VARCHAR(30) NOT NULL,
 	email VARCHAR(50) NOT NULL,
+	notification TINYINT(1) NOT NULL DEFAULT '1',
 	pssword VARCHAR(255) NOT NULL , 
 	confirm VARCHAR(255) NOT NULL , 
 	active TINYINT(1) NOT NULL
 	)";
 	// use exec() because no results are returned
 	$conn->exec($sql);
-	echo "Table ".$usrsTB." created successfully";
- }
-catch(PDOException $e)
-{
-	echo $sql . "<br>" . $e->getMessage();
+	echo "Table ".$usrsTB." created successfully<br>";
 }
-
+catch(PDOException $e) {
+	echo $sql . $e->getMessage();
+}
 
 /************************************/
 /*			Create UsrsTbl 	   		*/
@@ -65,9 +47,10 @@ try{
 	$_SESSION['message'] = "Your account has been verified, you can login now<br>";
 	$_SESSION['type'] = 'success';
 	echo "User table ".$usrTB." created Successfully.<br>";
-}catch (PDOException $e){
+}catch (PDOException $e) {
 	echo "Errorr creating user table.<br>";
 	echo "Sql querry error: " . $e->getMessage() . "<br>";
 }
 $conn = null;
+header("Location: ../login.php");
 ?>

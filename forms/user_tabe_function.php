@@ -2,24 +2,30 @@
 session_start(); 
 
 include_once 'default.php';
+$conn = new PDO("mysql:host=localhost;dbname=camagru", "root", "wethinkcode");
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 function get_user($image_owner) {
 	echo "Getting user<br>";
-	echo "$image_owner<br>";
-	$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE username = :username");
+	echo "Ing owner in get useremail: $image_owner<br>";
+	$stmt = $conn->prepare("SELECT * FROM users WHERE username = :usrName");
+	// $stmt = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE username = :usrName");
+	// $stmt = $pdo->prepare("SELECT * FROM users WHERE id=:id");
 	echo "1<br>";
-	$query->bindParam(':username', $image_owner);
-	echo "1<br>";
-	$query->execute();
-	echo "1<br>";
-	$result = $query->fetchAll();
-	echo "1<br>";
+	$stmt->bindParam(':usrName', $image_owner);
+	echo "2<br>";
+	$stmt->execute();
+	echo "3<br>";
+	$result = $stmt->fetchAll();
+	echo "4<br>";
 	print_r($result);
-	// return ($result[0]['email']);
+	echo "emauk: " .$result . "<br>";
+	return ($result[0]['email']);
 }
 function send_mail($username, $image_owner, $type) {		//	Send email to Registerd user
 	
-	echo "image_owner: $image_owner<br>";
-	$to      = get_user($image_owner);; // Send email to our user
+	echo "image_owner(mail function): $image_owner<br>";
+	$to      = get_user($image_owner); // Send email to our user
 	$headers = 'From:noreply@comagaru.com' . "\r\n"; // Set from headers
 
 	echo 'to: '. $to;
@@ -34,23 +40,13 @@ function send_mail($username, $image_owner, $type) {		//	Send email to Registerd
 	// mail($to, $subject, $message, $headers);
 }
 
-$conn = new PDO("mysql:host=".SERVERNAME.";dbname=".DBNAME."", USERNAME, PASSWORD);
-$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-// echo('Conection established!<br>');
-
 $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
-if ($sess) {	
-	// $usrTB		= $_SESSION['uName'];
+if ($sess) {
 	$user_id	= $_SESSION['id'];
 	$username	= $_SESSION['uName'];
 	$firstame	= $_SESSION['fName'];
 	$surname	= $_SESSION['sName'];
 	$email		= $_SESSION['email'];
-	echo "user_id: $user_id <br>";
-	echo "username: $username <br>";
-	echo "firstame: $firstame <br>";
-	echo "surname: $surname <br>";
-	echo "email: $email <br>";
 	/**************************************/
 	/*  Submit new pictute to user table  */
 	/**************************************/
@@ -72,7 +68,10 @@ if ($sess) {
 				$stmt->bindParam(':imge', $image);
 				$stmt->execute();
 				echo 'Image uploaded<br>';
-				header('location: ../index.php');
+				$type		="success";
+				$message	="Your image was successfully saved<br>";
+				header("Location: ../index.php?$type&$message");
+				// header('location: ../index.php');
 			}catch(PDOException $e){
 				echo "Insertion error :" . $e->getMessage() . "<br>";
 			}
@@ -85,10 +84,6 @@ if ($sess) {
 	/**************************************/
 	if ($_POST['comments'] || $_POST['likes'] || $_POST['delete_img'])
 	{
-		echo "comments: " . $_POST['comments'] . "<br>";
-		echo "likes: " . $_POST['likes'] . "<br>";
-		echo "delete_img: " . $_POST['delete_img'] . "<br>";
-		echo '<h1>comments and likes activated</h1> <br>';
 		$image_id = $_POST['img_details'];
 		$comment = trim($_POST['comment']);
 		if ($comment != '' && $image_id) 
@@ -97,77 +92,42 @@ if ($sess) {
 			$stmt->bindParam(':img_id', $image_id);
 			$stmt->execute();
 			$result = $stmt->fetchAll();
-			// $db_Comments = array('Mk:user coment', 'Mk:user coment2');
-
-			// $db_Comments = array($result[0]['coments']);
 
 			$usr_coment = "$username:$comment";
 			$db_Comments = ($result[0]['coments']);
 			$image_user = $result[0]['username'];
-			// echo '-5. ';
-			// print_r($db_Comments);
-			// echo'<br>';
-
-						// explode(" ",$comment);		//		create array from string
 			if ($db_Comments == null) {
 				$db_Comments = array($result[0]['coments']);
 				$usr_coment = "$username:$comment";
 
-				echo '-4. ';
-				print_r($db_Comments);
-				echo'<br>';
+				// print_r($db_Comments);
+
 				$db_Comments =  array($usr_coment);	//		remove element from array
-				echo '-3. ';
 				print_r($db_Comments);
-				echo'<br>';
 			} else {
-				echo '-2. ';
 				print_r($db_Comments);
-				echo'<br>';
 				$db_Comments = json_decode($db_Comments);
-				echo '-1.5. ';
 				print_r($db_Comments);
-				echo'<br>';
 				array_push($db_Comments, $usr_coment);//		remove element from array
-				// $comment = implode(" ",$comment);		//		create string from array
-				echo '-1. ';
 				print_r($db_Comments);
-				echo'<br>';
 			}
-			
-			echo '0. db_Comment: ';
-			print_r($db_Comments);
-			echo '<br>';
 
 			$db_Comments = json_encode($db_Comments);
 			
-			echo '1. Json db_Comment: ' . $db_Comments . '<br>';
-			// echo '<h2>comments reactivated '.$usr_coment.'  on '.$image_id.'</h2> <br>';
 			try{
 				$stmt = $conn->prepare("UPDATE ".PICTABLE." SET coments = :usr_coment WHERE id = :img_id");
-									//   ("UPDATE ".PICTABLE." SET coments = :usr_coment WHERE id = :img_id");
-				echo "2. db_Comments: " . $db_Comments . "<br>";
-				echo "3. image_id: " . $image_id . "<br>";
 				$stmt->bindParam(':usr_coment', $db_Comments);
 				$stmt->bindParam(':img_id', $image_id);
-				echo '<br>';
-				echo '<br>';
-				// echo 'stmt: ';
-				// print_r($stmt);
-				// echo '<br>';
 				$stmt->execute();
-				echo 'image commented<br>';
 				send_mail($username, $image_user, "comment");
+				// $type		= "success";
+				// $message	= "s";
+				// header("Location: login.php?$type&$message");
 				header("Location: ../index.php");
 			}catch(PDOException $e){
 				echo ("comment error " . $e->getMessage());
 			}
 		}
-		// else{
-		// 	echo "Comment error: comment or username not found<br>";
-		// }
-		
-		
 		
 		/***********************************/
 		/*               LIKES             */
@@ -193,12 +153,9 @@ if ($sess) {
 					$likes++;
 					try{
 						$query = $conn->prepare("UPDATE ".PICTABLE." SET likes = :usr_like WHERE id = :img_id");
-						echo ('6. prepared<br>');
 						$query->bindParam(':usr_like', $likes);
 						$query->bindParam(':img_id', $image_id);
-						echo ('7. Bind: <br>');
 						$query->execute();
-						echo '+image LIKED<br>';
 						send_mail($username, $image_user, "like");
 						echo '-image LIKED<br>';
 						header("Location: ../index.php");
@@ -292,19 +249,28 @@ if ($sess) {
 							echo ('7. Bind: <br>');
 							$query->execute();
 							echo 'image DELETED<br>';
-							header("Location: ../index.php");
+							$type		= "sussess";
+							$message	= "Image successfully deleted<br>";
+							header("Location: ../index.php?$type&$message");
+							// header("Location: ../index.php");
 						}catch(PDOException $e){
 							echo ("Delete error " . $e->getMessage() . "<br>");
-							header("Location: ../index.php");
+							$type		= "danger";
+							$message	= "Error deliting image<br>";
+							header("Location: ../index.php?$type&$message");
+							// header("Location: ../index.php");
 						}
 						// header("Location: ../index.php");
 					}else {			//		if string is present in array
-						echo "It doesnt look like this image is yours.<br>You cant delete images that are not yours";
-						header("Location: ../index.php");
+						$type		= "Danger";
+						$message	= "It doesnt look like this image is yours.<br>You cant delete images that are not yours";
+						header("Location: ../index.php?$type&$message");
+						// header("Location: ../index.php");
 					}
 				} else {		//	if there are selected images in the db
 					echo "multi-update error<br>";
-					header("Location: ../index.php");
+					header("Location: ../index.php?$type&$message");
+					// header("Location: ../index.php");
 				}
 			}catch(PDOException $e){
 				echo ("likes error " . $e->getMessage());

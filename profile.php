@@ -7,11 +7,17 @@ if ($sess) {
 	$firstame = $_SESSION['fName'];
 	$surname = $_SESSION['sName'];
 	$email = $_SESSION['email'];
+	if ($_SESSION['notify'] == 1) {
+		$notify = 1;
+	} else {
+		$notify = 0;
+	}
 	include 'frame/head.php';
 } else {
-	$_SESSION['message'] = "Please login/register to access that page<br>";
-	$_SESSION['type'] = "danger";
-	header("Location: login.php");
+	$type		= "danger";
+	$message	= "Please login/register to access that page<br>";
+	header("Location: login.php?$type=$message");
+	// header("Location: login.php");
 }
 ?>
 
@@ -29,35 +35,64 @@ if ($sess) {
 </section>
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<div class="row">
-		<div class="col-xs-9">
+		<div class="col-sm-6">
 			<h2>Profile</h2>
 		</div>
-		<div class="col-xs-3">
+		<div class="col-sm-2">
+			<input type="hidden" name="delete_user" id="delete_user">
+			<a href="./forgot_password.php"><button type="submit" class="btn btn-primary" value="updte">Change Password</button></a>
+		</div>
+		<div class="col-sm-1"></div>
+		<div class="col-sm-3">
 			<input type="hidden" name="delete_user" id="delete_user">
 			<a href="./forms/create_user.php"><button type="button" onclick="confirmation()" class="btn btn-danger btn-lg">Delete Account</button></a>
 		</div>
 	</div>
+	<?php include 'frame/messages.php'?>
 	<?php
-	echo ("<div class=".$type.">".$message."</div>");
+	// echo ("<div class=".$type.">".$message."</div>");
 	?>
 	<div>
 		<form action="forms/form.php" method="POST">
 			<div class="form-row">
 				<div class="form-group col-sm-6">
 					<label for="userName">First Name</label>
-					<input type="text" class="form-control" name="fname" <?php echo "value=".$firstame ?> placeholder="First Name">
+					<input type="text" class="form-control" name="update_fName" placeholder="First Name" <?php echo "value=".$firstame?> placeholder="First Name">
 				</div>
 				<div class="form-group col-sm-6">
 					<label for="userName">Last Name</label>
-					<input type="text" class="form-control" name="sname" <?php echo "value=".$surname ?> placeholder="Last Name">
+					<input type="text" class="form-control" name="update_lName" placeholder="Last Name" <?php echo "value=".$surname?> placeholder="Last Name">
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-sm-6">
+					<label for="userName">User Name</label>
+					<input type="text" class="form-control" name="update_uName" placeholder="First Name" <?php echo "value=".$username?> placeholder="First Name">
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="Email">Email address</label>
+					<input type="email" class="form-control" name="update_email" placeholder="Email" <?php echo "value=".$email ?> placeholder="Email">
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="Email">Email address</label>
-				<input type="email" class="form-control" name="email" <?php echo "value=".$email ?> placeholder="Email">
+				<label for="notifications">Email Notifications</label> <br>
+				<select class="form-control" name="update_notification">
+					<?php
+					if ($notify == 1) {
+						echo '<option value="1" selected>Send notifications</option>';
+						echo '<option value="0">Don\'t send notifications</option>';
+					} 
+					if ($notify == 0) {
+						echo '<option value="1" >Send notifications</option>';
+						echo '<option value="0" selected>Don\'t send notifications</option>';
+					}
+					?>
+				</select>
 			</div>
-		<button type="submit" class="btn btn-default" value="updte">Save</button>
-	</form>
+			<div class="form-group">
+				<button type="submit" class="btn btn-success" value="updte">Update</button>
+			</div>
+		</form>
 	</div>
 </section>
 <section class="shadow-lg p-3 mb-5 bg-white " id="footer">

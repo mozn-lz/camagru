@@ -5,10 +5,10 @@ $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['
 include 'frame/head.php';
 include 'forms/init_connect.php';
 if ($sess) {
-	$username = $_SESSION['uName'];
-	$firstame = $_SESSION['fName'];
-	$surname = $_SESSION['sName'];
-	$email = $_SESSION['email'];
+	$username	= $_SESSION['uName'];
+	$firstame	= $_SESSION['fName'];
+	$surname	= $_SESSION['sName'];
+	$email		= $_SESSION['email'];
 } else {
 //	header("Location: login.php");
 }
@@ -29,6 +29,7 @@ if ($sess) {
 
 	<section class="shadow-lg p-3 mb-5 bg-white " id="main">
 		<h2>Take pic</h2>
+		<?php include 'frame/messages.php'?>
 		<div>
 			<a href="take_picture.php">
 				<button type="submit" name="delete_profile" class="btn btn-primary btn-lg">Take Picture</button>
@@ -51,7 +52,6 @@ if ($sess) {
 								<img src=".$result[$i]['image']." alt=''>
 							</div>
 							<div class='user_picuser_pic'>
-								<!-- <div class='inline time'>".$result[$i]['time']."</div> -->
 								<form action='forms/user_tabe_function.php' method='POST'>
 									<div class='inline form-group coment'>
 										<input type='hidden' name='img_details' value=".$result[$i]['id'].">
@@ -61,18 +61,17 @@ if ($sess) {
 									<button type='submit' name='likes' value='likes' class='btn btn-primary'>".$result[$i]['likes']." Likes</button>
 									<button type='submit' name='delete_img' value='delete_img' class='btn btn-danger'>Delete</button>
 								</form>
-								<div class='comments'></div>
+								<div class='comments'>".$result[$i]['coments']."</div>
 							</div>
 						</div>");
 						$i--;
 					}
 				}
 				else {
-					echo"This is eemarassing... It loks like your our very first user <br>
-					Click on the take picture to get started taking funny pics
-					";
-					$_SESSION['message'] = "It looks like your account has been verified. Please try to login, or contat our admin at email@email.mail<br>";
-					$_SESSION['type'] = 'danger';
+					echo"This is eemarassing... It looks like user no users and posted any pictures yet.<br>
+					Click on the take picture to be the first.";
+					// $_SESSION['message'] = "It looks like your account has been verified. Please try to login, or contat our admin at email@email.mail<br>";
+					// $_SESSION['type'] = 'danger';
 				}
 			}catch (PDOException $e){
 				echo "Sql querry error: " . $e->getMessage() . "<br>";

@@ -70,30 +70,56 @@ try
 	/*		reset password		*/
 	/****************************/
 	if ($_POST['reset_password']) {
+		$_POST['notification'] == 'notify';
 		echo "reseting password<br>";
 		if((trim($_POST['reset_email']) != "") && (trim($_POST['password1']) != "") && (trim($_POST['password2']) != "")){
 			echo "reseting password:: elements found<br>";
 			if ($_POST['password1'] === $_POST['password2']) {
-			echo "Passwords maatch<br>";
-				try{
-					$email = $_POST['reset_email'];
-					$psword = strtoupper(hash('whirlpool' , $_POST['password1']));
-					$stmt = $conn->prepare("UPDATE $usrsTB SET pssword=:pssword WHERE email=:email" );
-					$stmt->bindParam(':pssword', $psword);
-					$stmt->bindParam(':email', $email);
-					$stmt->execute();
-					header("Location: ../login.php");
-				}catch(PDOException $e) {
-					echo "Forget Error: " . $e->getMessage() . "<br>";
-					header("Location: ../reset_password.php");
+				echo "Passwords maatch<br>";
+				if (strlen($_POST["password"]) <= '8') {
+					$passwordErr = "Your Password Must Contain At Least 8 Characters!";
+				}
+				elseif(!preg_match("#[0-9]+#",$password)) {
+					$passwordErr = "Your Password Must Contain At Least 1 Number!";
+				}
+				elseif(!preg_match("#[A-Z]+#",$password)) {
+					$passwordErr = "Your Password Must Contain At Least 1 Capital Letter!";
+				}
+				elseif(!preg_match("#[a-z]+#",$password)) {
+					$passwordErr = "Your Password Must Contain At Least 1 Lowercase Letter!";
+				}else{
+					try{
+						$email = $_POST['reset_email'];
+						$psword = strtoupper(hash('whirlpool' , $_POST['password1']));
+						$stmt = $conn->prepare("UPDATE $usrsTB SET pssword=:pssword WHERE email=:email" );
+						$stmt->bindParam(':pssword', $psword);
+						$stmt->bindParam(':email', $email);
+						$stmt->execute();
+						$type		= "success";
+						$message	= "Password reset was successfull.<br>Please login";
+						header("Location: ../login.php?$type=$message");
+						// header("Location: ../login.php");
+					}catch(PDOException $e) {
+						echo "Forget Error: " . $e->getMessage() . "<br>";
+						$type		= "danger";
+						$message	= "There was an error resetign your password.<br>Try again";
+						header("Location: ../reset_password.php?$type=$message");
+						// header("Location: ../reset_password.php");
+					}
 				}
 			} else {
 				echo 'passwords dont match';
-				header("Location: ../reset_password.php");
+				$type		= "danger";
+				$message	= "Your passwords dont match<br>";
+				header("Location: ../reset_password.php?$type=$message");
+					// header("Location: ../reset_password.php");
 			}
 		}else {
 			echo 'Password empty<br>';
-			header("Location: ../reset_password.php");
+			$type		= "danger";
+			$message	= "Looks like one of your passwords is missing...<br>Try again...you might have to go back to yout email link<br>";
+			header("Location: ../reset_password.php?$type=$message");
+			// header("Location: ../reset_password.php");
 		}
 	}
 
@@ -123,65 +149,132 @@ try
 					$stmt->execute();
 
 					echo "Please check your email successfully";
-					$_SESSION['message'] = "Account created successfully. <br> Please check your email to confirm";
-					$_SESSION['type'] = 'success';
+					// $_SESSION['message'] = "Account created successfully. <br> Please check your email to confirm";
+					// $_SESSION['type'] = 'success';
 					send_mail($username, $firstname, $lastname, $email, $confirm, "reset_password");
-					header("Location: ../index.php");
+					$type		= "success";
+					$message	= "Everthing looks good, check your email<br>";
+					header("Location: ../fotgot_password.php?$type=$message");
+					// header("Location: ./logout.php");
 				}
 				catch(PDOException $e) {
 					echo "Forget Error: " . $e->getMessage() . "<br>";
 				}
 			} else {
 				echo ("email address not found");
+				$type		= "caution";
+				$message	= "Either you entered the wrong email or you dont have an account with us.<br>We cant find your email address<br>";
+				header("Location: ../fotgot_password.php?$type=$message");
 			}		
 		} else {
-			echo "email seams to be emptyreset_email";
+			echo "Your email seams to be empty";
+			$type		= "danger";
+			$message	= "Your email seams to be empty<br>";
+			header("Location: ../fotgot_password.php?$type=$message");
 		}
 	}
 
 	/********************/
-	/*		updte		*/
+	/*		upadte		*/
 	/********************/
 	if ( ($_POST['update_email']) || ($_POST['update_lName']) || ($_POST['update_fName']) || ($_POST['update_uName']) )
 	{
 		if(isset($_SESSION['id']))
 		{
-			if ($_POST['update_uName']) {
-				$uName = $_POST['update_uName'];
-				$stmt = $conn->prepare("UPDATE users SET email = :email) WHERE id = ".$_SESSION['id']);
-				$stmt->bindParam(':email', $email);
-				$stmt->execute();
+			$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE id = :id");
+			$id = $_SESSION['id'];
+			$query->bindParam(':id', $id);
+			$query->execute();
+
+			$result = $query->fetch(PDO::FETCH_ASSOC);
+			$username	= $result['username'];
+			$firstname	= $result['firstname'];
+			$lastname	= $result['lastname'];
+			$email		= $result['email'];
+
+			$update_uName			= $_POST['update_uName'];
+			$update_fName			= $_POST['update_fName'];
+			$update_lName			= $_POST['update_lName'];
+			$update_email			= $_POST['update_email'];
+			$update_notification	= $_POST['update_notification'];
+
+			if (($update_uName != "") && ($update_uName != null) && ($update_uName != $result['username'])) {
+				try{
+					$stmt = $conn->prepare("UPDATE ".$usrsTB." SET username = :newUsrName WHERE id =:id");
+					$stmt->bindParam(':newUsrName', $update_uName);
+					$stmt->bindParam(':id', $_SESSION['id']);
+					$stmt->execute();
+					/****************************************** */
+					$stmt = $conn->prepare("SELECT * FROM ".$usrTB." WHERE username = :username");
+					$stmt->bindParam(':username', $_SESSION['uName']);
+					$stmt->execute();
+					$result = $stmt->fetchAll();
+					if (count($result) > 0) {
+						$stmt = $conn->prepare("UPDATE ". $usrTB." SET username = :newUser WHERE username = :oldUser");
+						$stmt->bindParam(':newUser', $update_uName);
+						$stmt->bindParam(':oldUser', $_SESSION['uName']);
+						$stmt->execute();
+						echo "username changed in all tables<br>";
+					} 
+					/****************************************** */
+					$_SESSION['uName'] = $update_uName;
+				}catch(PDOException $e){
+					echo "Update querry error: " . $e->get_Message() . "<br>";
+				}
 			}
-			if ($_POST['update_fName']) {
-				$fName = $_POST['update_fName'];
-				$stmt = $conn->prepare("UPDATE users SET email = :email) WHERE id = ".$_SESSION['id']);
-				$stmt->bindParam(':email', $email);
-				$stmt->execute();
+			if (($update_fName != "") && ($update_fName != null) && ($update_fName != $result['firstname'])) {
+				try{
+					echo "update fName<br>From ".$result['firstname']." to ".$update_fName;
+					$stmt = $conn->prepare("UPDATE users SET firstname = :update_fName WHERE id = :id");
+					$stmt->bindParam(':update_fName', $update_fName);
+					$stmt->bindParam(':id', $_SESSION['id']);
+					$stmt->execute();
+					$_SESSION['fName'] = $update_fName;
+				}catch(PDOException $e){
+					echo "Update querry error: " . $e->get_Message() . "<br>";
+				}
 			}
-			if ($_POST['update_lName']) {
-				$lName = $_POST['update_lName'];
-				$stmt = $conn->prepare("UPDATE users SET email = :email) WHERE id = ".$_SESSION['id']);
-				$stmt->bindParam(':email', $email);
-				$stmt->execute();
+			if (($update_lName != "") && ($update_lName != null) && ($update_lName != $result['lastname'])) {
+				try{
+					echo "update lName<br>From ".$result['lastname']." to ".$update_lName;
+					$stmt = $conn->prepare("UPDATE users SET lastname = :update_lName WHERE id = :id");
+					$stmt->bindParam(':update_lName', $update_lName);
+					$stmt->bindParam(':id', $_SESSION['id']);
+					$stmt->execute();
+					$_SESSION['lName'] = $update_lName;
+				}catch(PDOException $e){
+					echo "Update querry error: " . $e->get_Message() . "<br>";
+				}
 			}
-			if ($_POST['update_email']) {
-				$email = $_POST['update_email'];
-				$stmt = $conn->prepare("UPDATE users SET email = :email) WHERE id = ".$_SESSION['id']);
-				$stmt->bindParam(':email', $email);
-				$stmt->execute();
+			if (($update_email != "") && ($update_email != null) && ($update_email != $result['email'])) {
+				try{
+					echo "update email<br>From ".$result['email']." to ".$update_email;
+					$stmt = $conn->prepare("UPDATE users SET email = :update_email WHERE id = :id");
+					$stmt->bindParam(':update_email', $update_email);
+					$stmt->bindParam(':id', $_SESSION['id']);
+					$stmt->execute();
+					$_SESSION['email'] = $update_email;
+				}catch(PDOException $e){
+					echo "Update querry error: " . $e->get_Message() . "<br>";
+				}
 			}
-			(condition) ? a : b ;
-			$email = $_POST['email'];
-			$paswd = $_POST['password'];
-			$stmt = $conn->prepare("UPDATE users SET (email, paswd) VALUES (:email, :paswd)");
-			$stmt->bindparam(':email', $email);
-			$stmt->bindparam(':paswd', $paswd);
-			if ($stmt->execute()) {
-				send_mail($email, "user details");
-				echo "New record created successfully";
-			} else {
-				echo "Unable to create record";
+			echo "<br>Notification update: ". $update_notification . "<br>";
+			if (($update_notification == 1) || ($update_notification == 0)) {
+				try{
+					echo "update notification<br>From ".$result['notification']." to ".$update_notification;
+					$stmt = $conn->prepare("UPDATE users SET `notification` = :update_notification WHERE id = :id");
+					$stmt->bindParam(':update_notification', $update_notification);
+					$stmt->bindParam(':id', $_SESSION['id']);
+					$stmt->execute();
+					$_SESSION['notification'] = $update_notification;
+				}catch(PDOException $e){
+					echo "Update querry error: " . $e->get_Message() . "<br>";
+				}
 			}
+			$type		= "Success";
+			$message	= "Your change has been implemented<br>";
+			header("Location: ../profile.php?$type=$message");
+			// header("Location: ../profile.php");
 		}
 	}
 
@@ -208,9 +301,10 @@ try
 					$result = $stmt->fetch(PDO::FETCH_ASSOC);
 					if ($result['active'] == 0)
 					{	//	check if account has been verified
-						$_SESSION['message'] = "It seams your account has not been verified yet.<br>Please check your email for verification details.<br>";
-						$_SESSION['type'] = 'danger';
-						header("Location: ../login.php");
+						$message = "It seams your account has not been verified yet.<br>Please check your email for verification details.<br>";
+						$type = 'danger';
+						header("Location: ../login.php?$type=$message");
+						// header("Location: ../login.php");
 					}
 					if ($result['active'] == 1) 
 					{	//start session if account verified=TRUE and usr email && password match
@@ -218,30 +312,38 @@ try
 						$firstname	= $_SESSION['fName'] = $result['firstname'];
 						$lastname	= $_SESSION['sName'] = $result['lastname'];
 						$email		= $_SESSION['email'] = $result['email'];
+						$_SESSION['notify'] = $result['notification'];
 						$_SESSION['id'] = $result['id'];
-						$_SESSION['type'] = 'success';
-						$_SESSION['message'] = "logged in successfully<br>";
+						$type = 'success';
+						$message = "logged in successfully<br>";
 						send_mail($username, $firstname, $lastname, $email, $hash, "user login");
-						header("Location: ../index.php");
+						header("Location: ../index.php?$type=$message");
+						// header("Location: ../index.php");
 					}
 				}elseif ($count < 1) {
-					$_SESSION['message'] = 'Incorrect email or password<br>';
-					$_SESSION['type'] = 'danger';
-					header("Location: ../login.php");
+					$message = 'Incorrect email or password<br> ...or you dont have an account<br>';
+					$type = 'danger';
+					header("Location: ../login.php?$type=$message");
+					// header("Location: ../login.php");
 				}elseif ($count > 1) {
-					$_SESSION['message'] = "multiple identity chrisis<br>Relax, a psychologist has been called<br>";
-					$_SESSION['type'] = 'danger';
-					header("Location: ../login.php");
+					$message = "multiple identity chrisis<br>Relax, a psychologist has been called<br>";
+					$type = 'danger';
+						header("Location: ../login.php?$type=$message");
+					// header("Location: ../login.php");
 				}else{
-					$_SESSION['message'] = "We ran out of errors... who knew, we sent an admin to fix it.<br>";
-					$_SESSION['type'] = 'danger';
-					header("Location: ../login.php");
+					$message = "We ran out of errors... who knew, we sent an admin to fix it.<br>";
+					$type = 'danger';
+						header("Location: ../login.php?$type=$message");
+						// header("Location: ../login.php");
 				}
 			}
 			catch(PDOException $e) {
 				echo "Login error: " . $e->getMessage() . "<br>";
 			}
 		}
+		$message = "We ran out of errors... who knew, we sent an admin to fix it.<br>";
+		$type = 'danger';
+			header("Location: ../login.php?$type=$message");
 	}
 
 	/********************/
@@ -281,23 +383,28 @@ try
 						$stmt->bindParam(':active', $active);
 						$stmt->execute();
 						// echo "New records created successfully";
-						$_SESSION['message'] = "Account created successfully. <br> Please check your email to confirm";
-						$_SESSION['type'] = 'success';
+						// $_SESSION['message'] = "Account created successfully. <br> Please check your email to confirm";
+						// $_SESSION['type'] = 'success';
 						send_mail($username, $firstname, $lastname, $email, $confirm, "new user");
-						header("Location: ../index.php");
+						$message = "Just 1 more step befor you start, Please check you email and click on the link.<br>";
+						$type = 'success';
+						header("Location: ../login.php?$type=$message");
+						// header("Location: ../login.php");
 					}
 					catch(PDOException $e) {
 						echo "Error: " . $e->getMessage() . "<br>";
 					}
 				}else {
-					$_SESSION['message'] = "User email already exists please try to login";
-					$_SESSION['type'] = 'danger';
-					header("Location: ../register.php");
+					$message = "User email already exists please try to login";
+					$type = 'danger';
+						header("Location: ../register.php?$type=$message");
+					// header("Location: ../register.php");
 				}
 			}else{
-				$_SESSION['message'] = "Passwords don't match";
-				$_SESSION['type'] = 'danger';
-				header("Location: ../register.php");
+				$message = "Passwords don't match";
+				$type = 'danger';
+				header("Location: ../register.php?$type=$message");
+				// header("Location: ../register.php");
 			}
 		}
 	}
@@ -335,21 +442,23 @@ try
 				$stmt->bindParam(':active', $active);
 				$stmt->execute();
 				// echo "New records created successfully";
-				$_SESSION['message'] = "Account created successfully. <br> Please check your email to confirm";
-				$_SESSION['type'] = 'success';
+				$message = "Account created successfully. <br> Please check your email to confirm";
+				$type = 'success';
 				send_mail($username, $firstname, $lastname, $email, $confirm, "new user");
-				header("Location: ../index.php");
+				header("Location: ../index.php?$type=$message");
+				// header("Location: ../index.php");
 			}
 			catch(PDOException $e) {
 				echo "Error: " . $e->getMessage() . "<br>";
 			}
 		}else {
-			$_SESSION['message'] = "User email already exists please try to login";
-			$_SESSION['type'] = 'danger';
-			header("Location: ../register.php");
+			$message = "Do you have an account? The syste mdoesnt think you do..<br>";
+			$type = 'caution';
+				header("Location: ../register.php?$type=$message");
+			// header("Location: ../register.php");
 		}
 	}
-	header("Location: ../index.php");
+	// header("Location: ../index.php");
 }catch (PDOException $e) {
 	echo "PDO Connection failed: " . $e->getMessage() . "<br>";
 }

@@ -2,6 +2,14 @@
 session_start();
 $page_title = "Camagru Logon";
 include 'frame/head.php';
+$sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
+if ($sess) {
+	$username	= $_SESSION['uName'];
+	$firstame	= $_SESSION['fName'];
+	$surname	= $_SESSION['sName'];
+	$email		= $_SESSION['email'];
+	header("Location: index.php");
+}
 ?>
 
 <!-- header startss here -->
@@ -21,7 +29,7 @@ include 'frame/head.php';
 <!-- main startss here -->
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<h2>Login</h2>
-		<div class="<?php echo $type; ?>"><?php echo $message; ?></div>
+	<?php include 'frame/messages.php'?>
 	<form name="reg_form" action="forms/form.php" onsubmit="return validateRegForm()" method="POST">
 		<div class="form-group">
 			<label for="email">Email address</label>

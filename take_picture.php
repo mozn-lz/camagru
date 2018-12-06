@@ -9,7 +9,10 @@ if ($sess) {
 	$email = $_SESSION['email'];
 	include 'frame/head.php';
 } else {
-	header("Location: login.php");
+	$type		= "danger";
+	$message	= "Plese login first<br>";
+	header("Location: login.php?$type=$message");
+	// header("Location: login.php");
 }
 ?>
 
@@ -28,6 +31,7 @@ if ($sess) {
 	
 	<section class="shadow-lg p-3 mb-5 bg-white " id="main">
 		<h2>Take pic</h2>
+		<?php include 'frame/messages.php'?>
 		<div class="top-container">
 			<div id="overlay-options">
 				<input type="radio" name="overlay" value="#" id="none" checked="checked"> Ugly face

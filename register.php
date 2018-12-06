@@ -17,11 +17,7 @@ include 'frame/head.php';
 </section>
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<h2>Registration</h2>
-	<?php
-	echo ("<div class=".$type.">".$message."</div>");
-	// $_SESSION['type'] = "";
-	// $_SESSION['message'] = "";
-	?>
+	<?php include 'frame/messages.php'?>
 	<form name="reg_form" action="forms/form.php" onsubmit="return validateRegForm()" method="POST">
 		<div class="form-row">
 			<div class="form-group col-sm-6">

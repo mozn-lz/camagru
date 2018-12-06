@@ -22,7 +22,7 @@ include 'forms/init_connect.php';
 <!-- main startss here -->
 <section class="shadow-lg p-3 mb-5 bg-white " id="main">
 	<h2>Login</h2>
-		<div class="<?php echo $type; ?>"><?php echo $message; ?></div>
+	<?php include 'frame/messages.php'?>
 	<?php
 	if(isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['hash']) && !empty($_GET['hash'])){
 		// Verify
@@ -51,9 +51,10 @@ include 'forms/init_connect.php';
 			echo "Sql querry error: " . $e->getMessage() . "<br>";
 		}
 	}else {
-		$_SESSION['message'] = "It seams you were on a 'reset password' page. <br>If you were trying to change your email address, please click on your email link again<br>";
-		$_SESSION['type'] = 'danger';
-		header("Location: index.php");
+		$message = "It seams you were on a 'reset password' page. <br>If you were trying to change your email address, please click on your email link again<br>";
+		$type = 'danger';
+		header("Location: index.php?$type=$message");
+		// header("Location: index.php");
 	}
 	?>
 	<form name="reg_form" action="forms/form.php" onsubmit="return validateRegForm()" method="POST">

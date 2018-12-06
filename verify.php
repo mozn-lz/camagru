@@ -43,8 +43,9 @@ include 'forms/init_connect.php';
 				$email		= $result[0]['email'];
 			}
 			else {
-				$_SESSION['message'] = "It looks like your account has been verified. Please try to login, or contat our admin at email@email.mail<br>";
-				$_SESSION['type'] = 'danger';
+				$type		= 'danger';
+				$message	= "It looks like your account was verified before. Please try to login, or contat our admin at email@email.mail<br>";
+				header("Location: login.php?$type=$message");
 			}
 		}catch (PDOException $e){
 			echo "Sql querry error: " . $e->getMessage() . "<br>";
@@ -58,22 +59,25 @@ include 'forms/init_connect.php';
 				$stmt->bindParam(':hash', $hash);
 				$stmt->execute();
 
-				$_SESSION['type'] = "success";
-				$_SESSION['message'] = "Your account has been verified";
+				$type = "success";
+				$message = "Your account has been verified";
+				header("Location: login.php?$type=$message");
 			}catch (PDOException $e){
 				echo "Errorr creating user Data.<br>";
 				echo "Sql querry error: " . $e->getMessage() . "<br>";
 			}
 			header("Location: login.php");
 		} else {
-			$_SESSION['message'] = "It looks like your account has already been verified. <br>Please try to login, or contat our admin at email@email.mail<br>";
-			$_SESSION['type'] = 'caution';
-			header("Location: login.php");
+			$type		= 'caution';
+			$message	= "It looks like your account has already been verified. <br>Please try to login, or contat our admin at email@email.mail<br>";
+			header("Location: login.php?$type=$message");
+				// header("Location: login.php");
 		}
 	}else{
-		$_SESSION['message'] = "Something went wrong, Don't worry you are safe now<br>";
-		$_SESSION['type'] = 'caution';
-		header("location: login.php");
+		$type = 'caution';
+		$message = "Something went wrong, Don't worry you are safe now<br>";
+		header("Location: login.php?$type=$message");
+			// header("location: login.php");
 	}
 	?>
 </section>
