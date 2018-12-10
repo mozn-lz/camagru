@@ -341,9 +341,9 @@ try
 				echo "Login error: " . $e->getMessage() . "<br>";
 			}
 		}
-		$message = "We ran out of errors... who knew, we sent an admin to fix it.<br>";
-		$type = 'danger';
-			header("Location: ../login.php?$type=$message");
+		// $message = "It looks like you didn't enter your email or password.<br>";
+		// $type = 'danger';
+		// 	header("Location: ../login.php?$type=$message");
 	}
 
 	/********************/

@@ -42,7 +42,8 @@ if ($sess) {
 			<div id="vid_div">
 				<div>
 					<button id="photo-button" class="btn btn-success">Take Photo</button>
-					<input type="file" name="uploadImage" id="uploadImage" accept="image/gif, image/jpeg, image/png">
+					<!-- <input type="file" name="uploadImage" id="uploadImage" accept="image/gif, image/jpeg, image/png"> -->
+					<input type="file" onchange="encodeImageFileAsURL(this)" />
 					<!-- <button id="clear-button">Clear</button> -->
 				</div>
 				<div id="imgVidDiv">

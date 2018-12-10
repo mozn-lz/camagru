@@ -37,7 +37,7 @@ try{
 	$sql = "CREATE TABLE ".$usrTB." 
 	( 
 		id INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,  
-		username VARCHAR(20) NOT NULL , 
+		username VARCHAR(50) NOT NULL , 
 		`image` LONGTEXT NOT NULL ,  
 		`time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,  
 		coments TEXT NULL ,  

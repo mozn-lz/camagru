@@ -9,24 +9,7 @@ const photoButton	= document.getElementById('photo-button');
 const photoFiller	= document.getElementById('photo-filler');
 
 var video			= document.getElementById('video');
-var uploadImage		= document.getElementById('uploadImage');
-
-uploadImage.addEventListener('change', function () {
-	console.log("1\n");
-	var fReader = new FileReader();
-	fReader.readAsDataURL(uploadImage.files[0]);
-	console.log("2\n");
-	fReader.onloadend = function(event){
-		console.log("3\n");
-		// var img = document.getElementById("yourImgTag");
-		// img.src = event.target.result;
-		console.log("4\n");
-		console.log("1. uploadImage.value: " + uploadImage);
-		console.log("2. uploadImage.FILES: " + uploadImage).files[0];
-		console.log("3. uploadImage.value: " + uploadImage).value;
-	}
-});
-
+// var uploadImage		= document.getElementById('uploadImage');
 
 /******************/
 /*     OVERLAY    */
@@ -94,43 +77,53 @@ photoButton.addEventListener('click', function (e) {
 // }
 /**************************************************************************/
 
-uploadImage.addEventListener( 'change', function(){
-	console.log("uploadImage.value: " + uploadImage);
+/*****************************************************************/
+/*							Upload image						 */
+/*****************************************************************/
+var file;
+var reader;
+function encodeImageFileAsURL(element) {
+	file = element.files[0];
+	reader = new FileReader();
+	reader.onloadend = function() {
+		video.style.visibility = "hidden";
+		// console.log('RESULT', reader.result);
+		var upload = reader.result;
+		var uploadImage = document.createElement("img");
+		uploadImage.src = reader.result;
+		uploadImage.id = "uploadImage";
+		document.getElementById('vid_div').appendChild(img);
 
-	// video.setAttribute('display', 'none');
-	video.style.display = "none"
-	console.log('hidden\n');
-	var nwImg  = document.createElement('img');
-	nwImg.setAttribute('src', uploadImage.value);
-	document.getElementById('imgVidDiv').appendChild(nwImg);
-});
-
+// var uploadImage		= document.getElementById('uploadImage');
+	}
+	reader.readAsDataURL(file);
+}
+/*****************************************************************/
 function takePicture() {
 	// Create Canvas
 	const context = canvas.getContext('2d');
 	if (width && height) {
-		console.log("uploadImage.value: " + uploadImage.value);
-		
-		if (uploadImage.value != null && uploadImage.value != "") {
+		if (video.style.visibility != "hidden") 
+		{
 			canvas.width = width;
 			canvas.height = height;
 			// Draw image of the video on the canvas
-			context.drawImage(uploadImage, 0, 0, width, height);
+			context.drawImage(video, 0, 0, width, height);
 			context.drawImage(overlay, 150, 0, 200, 200);
-
+			
 			// Create image from canvas
 			const imgUrl = canvas.toDataURL("image/png");
 			// Create image element
-			
+			//mj
 			// console.log(imgUrl);
 			const capture = document.createElement('img');
 			capture.setAttribute('src', imgUrl);             // later
-
+			
 			var imageObj1 = new Image();
 			var imageObj2 = new Image();
 			imageObj1 = capture;
 			// console.log("Obj1: " + imageObj1 + '\n');
-
+			
 			imageObj1.onload = function() {
 				context.drawImage(imageObj1, 0, 0, width, height);
 				imageObj2 = (overlay);
@@ -139,26 +132,30 @@ function takePicture() {
 					var img = context.toDataURL("image/png");
 				}
 			};
-		} else {
+		}
+		if (video.style.visibility == "hidden") 
+		{
+			console.log("1. uploadImage.src: " + uploadImage);
 			canvas.width = width;
 			canvas.height = height;
 			// Draw image of the video on the canvas
-			context.drawImage(video, 0, 0, width, height);
+			console.log("uploadImage:> "+ uploadImage + "\n");
+			console.log("overlay:> "+ overlay + "\n");
+			context.drawImage(uploadImage, 0, 0, width, height);
 			context.drawImage(overlay, 150, 0, 200, 200);
-	
+
 			// Create image from canvas
 			const imgUrl = canvas.toDataURL("image/png");
 			// Create image element
-			//mj
-			// console.log(imgUrl);
+			
 			const capture = document.createElement('img');
 			capture.setAttribute('src', imgUrl);             // later
-	
+
 			var imageObj1 = new Image();
 			var imageObj2 = new Image();
 			imageObj1 = capture;
-			// console.log("Obj1: " + imageObj1 + '\n');
-	
+			console.log("Obj1: " + imageObj1 + '\n');
+
 			imageObj1.onload = function() {
 				context.drawImage(imageObj1, 0, 0, width, height);
 				imageObj2 = (overlay);
