@@ -92,7 +92,7 @@ function encodeImageFileAsURL(element) {
 		var uploadImage = document.createElement("img");
 		uploadImage.src = reader.result;
 		uploadImage.id = "uploadImage";
-		document.getElementById('vid_div').appendChild(img);
+		document.getElementById('vid_div').appendChild(uploadImage);
 
 // var uploadImage		= document.getElementById('uploadImage');
 	}
