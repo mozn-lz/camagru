@@ -63,6 +63,16 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {		//
 
 try
 {
+	function passwd_check($passwd){
+		$uppercase = preg_match('@[A-Z]@', $passwd);
+		$lowercase = preg_match('@[a-z]@', $passwd);
+		$number    = preg_match('@[0-9]@', $passwd);
+
+		if(!$uppercase || !$lowercase || !$number || strlen($passwd) < 8) {
+			return (false);
+		}
+		return (true);
+	}
 	//	conect to database  to be able to execute CRUD opperations
 	$conn = new PDO("mysql:host=".SERVERNAME.";dbname=".DBNAME."", USERNAME, PASSWORD);
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -74,43 +84,30 @@ try
 		echo "reseting password<br>";
 		if((trim($_POST['reset_email']) != "") && (trim($_POST['password1']) != "") && (trim($_POST['password2']) != "")){
 			echo "reseting password:: elements found<br>";
-			if ($_POST['password1'] === $_POST['password2']) {
+			if (($_POST['password1'] === $_POST['password2']) && passwd_check($_POST['password1'])) {
 				echo "Passwords maatch<br>";
-				if (strlen($_POST["password"]) <= '8') {
-					$passwordErr = "Your Password Must Contain At Least 8 Characters!";
-				}
-				elseif(!preg_match("#[0-9]+#",$password)) {
-					$passwordErr = "Your Password Must Contain At Least 1 Number!";
-				}
-				elseif(!preg_match("#[A-Z]+#",$password)) {
-					$passwordErr = "Your Password Must Contain At Least 1 Capital Letter!";
-				}
-				elseif(!preg_match("#[a-z]+#",$password)) {
-					$passwordErr = "Your Password Must Contain At Least 1 Lowercase Letter!";
-				}else{
-					try{
-						$email = $_POST['reset_email'];
-						$psword = strtoupper(hash('whirlpool' , $_POST['password1']));
-						$stmt = $conn->prepare("UPDATE $usrsTB SET pssword=:pssword WHERE email=:email" );
-						$stmt->bindParam(':pssword', $psword);
-						$stmt->bindParam(':email', $email);
-						$stmt->execute();
-						$type		= "success";
-						$message	= "Password reset was successfull.<br>Please login";
-						header("Location: ../login.php?$type=$message");
-						// header("Location: ../login.php");
-					}catch(PDOException $e) {
-						echo "Forget Error: " . $e->getMessage() . "<br>";
-						$type		= "danger";
-						$message	= "There was an error resetign your password.<br>Try again";
-						header("Location: ../reset_password.php?$type=$message");
-						// header("Location: ../reset_password.php");
-					}
+				try{
+					$email = $_POST['reset_email'];
+					$psword = strtoupper(hash('whirlpool' , $_POST['password1']));
+					$stmt = $conn->prepare("UPDATE $usrsTB SET pssword=:pssword WHERE email=:email" );
+					$stmt->bindParam(':pssword', $psword);
+					$stmt->bindParam(':email', $email);
+					$stmt->execute();
+					$type		= "success";
+					$message	= "Password reset was successfull.<br>Please login";
+					header("Location: ../login.php?$type=$message");
+					// header("Location: ../login.php");
+				}catch(PDOException $e) {
+					echo "Forget Error: " . $e->getMessage() . "<br>";
+					$type		= "danger";
+					$message	= "There was an error resetign your password.<br>Try again";
+					header("Location: ../reset_password.php?$type=$message");
+					// header("Location: ../reset_password.php");
 				}
 			} else {
 				echo 'passwords dont match';
 				$type		= "danger";
-				$message	= "Your passwords dont match<br>";
+				$message	= "Your passwords should match<br>Be 8 charecters long<br>Contain an uppercase letter<br>Contain a lowercase letter<br>Contain a number";
 				header("Location: ../reset_password.php?$type=$message");
 					// header("Location: ../reset_password.php");
 			}
@@ -353,7 +350,7 @@ try
 	{ // Check if ita the right form and if form elemsnts exist
 		if ( (trim($_POST['reg_uName']) != "") && (trim($_POST['reg_fName']) != "") && (trim($_POST['reg_sName']) != "") && (trim($_POST['reg_email']) != "") && (trim($_POST['reg_password1']) != "") && (trim($_POST['reg_password2']) != "") )
 		{ // Check if form elements arent empty
-			if ((trim($_POST['reg_password1'])) === (trim($_POST['reg_password2'])))
+			if ((trim($_POST['reg_password1'])) === (trim($_POST['reg_password2'])) && (passwd_check($_POST['reg_password1'])))
 			{	// checks is passowrds match 'case sensetive'
 				$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE email = :email");
 				$email = $_POST['reg_email'];
@@ -389,7 +386,6 @@ try
 						$message = "Just 1 more step befor you start, Please check you email and click on the link.<br>";
 						$type = 'success';
 						header("Location: ../login.php?$type=$message");
-						// header("Location: ../login.php");
 					}
 					catch(PDOException $e) {
 						echo "Error: " . $e->getMessage() . "<br>";
@@ -398,13 +394,12 @@ try
 					$message = "User email already exists please try to login";
 					$type = 'danger';
 						header("Location: ../register.php?$type=$message");
-					// header("Location: ../register.php");
 				}
 			}else{
-				$message = "Passwords don't match";
-				$type = 'danger';
+				$type		= "danger";
+				$message	= "Your passwords should match<br>Be 8 charecters long<br>Contain an uppercase letter<br>Contain a lowercase letter<br>Contain a number";
+				echo "failed<br>";
 				header("Location: ../register.php?$type=$message");
-				// header("Location: ../register.php");
 			}
 		}
 	}

@@ -4,23 +4,6 @@ session_start();
 include_once 'default.php';
 include 'init_connect.php';
 
-// function get_user($image_owner) {
-// 	echo "Getting user<br>";
-// 	echo "Ing owner in get useremail: $image_owner<br>";
-// 	$stmt = $conn->prepare("SELECT * FROM users WHERE username = :usrName");
-// 	// $stmt = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE username = :usrName");
-// 	// $stmt = $pdo->prepare("SELECT * FROM users WHERE id=:id");
-// 	echo "1<br>";
-// 	$stmt->bindParam(':usrName', $image_owner);
-// 	echo "2<br>";
-// 	$stmt->execute();
-// 	echo "3<br>";
-// 	$result = $stmt->fetchAll();
-// 	echo "4<br>";
-// 	print_r($result);
-// 	echo "emauk: " .$result . "<br>";
-// 	return ($result[0]['email']);
-// }
 function send_mail($username, $image_owner_email, $type) {		//	Send email to Registerd user
 	
 	// echo "image_owner(mail function): $image_owner_email<br>";
@@ -69,13 +52,11 @@ if ($sess) {
 				$type		="success";
 				$message	="Your image was successfully saved<br>";
 				header("Location: ../index.php?$type&$message");
-				// header('location: ../index.php');
 			}catch(PDOException $e){
 				echo "Insertion error :" . $e->getMessage() . "<br>";
 			}
 		}
 	}
-
 
 	/**************************************/
 	/*               Comments             */
@@ -97,17 +78,10 @@ if ($sess) {
 			if ($db_Comments == null) {
 				$db_Comments = array($result[0]['coments']);
 				$usr_coment = "$username:$comment";
-
-				// print_r($db_Comments);
-
 				$db_Comments =  array($usr_coment);	//		remove element from array
-				// print_r($db_Comments);
 			} else {
-				// print_r($db_Comments);
 				$db_Comments = json_decode($db_Comments);
-				// print_r($db_Comments);
 				array_push($db_Comments, $usr_coment);//		remove element from array
-				// print_r($db_Comments);
 			}
 
 			$db_Comments = json_encode($db_Comments);
@@ -118,13 +92,13 @@ if ($sess) {
 				$stmt->bindParam(':img_id', $image_id);
 				$stmt->execute();
 				send_mail($username, $image_user_email, "comment");
-				echo '-image comented<br>';
-				// $type		= "success";
-				// $message	= "s";
-				// header("Location: login.php?$type&$message");
-				// header("Location: ../index.php");
+				$message = "Image commented.<br>";
+				$type = 'success';
+				header("Location: ../index.php?$type=$message");
 			}catch(PDOException $e){
-				echo ("comment error " . $e->getMessage());
+				$message = $e->getMessage();
+				$type = 'caution';
+				header("Location: ../index.php?$type=$message");
 			}
 		}
 		
@@ -156,59 +130,18 @@ if ($sess) {
 						$query->bindParam(':img_id', $image_id);
 						$query->execute();
 						send_mail($username, $image_user_email, "like");
-						echo '-image LIKED<br>';
-						// header("Location: ../index.php");
+						$message = "Picture  liked.<br>";
+						$type = 'success';
+						header("Location: ../index.php?$type=$message");
 					}catch(PDOException $e){
-						echo ("+ likes error " . $e->getMessage());
+						$message =  $e->getMessage();
+						$type = 'success';
+						header("Location: ../index.php?$type=$message");
 					}
-					
-					/*
-					$likes = $result[0]['likes'];
-					$likes = explode(" ", $likes);
-					
-					if (($key = array_search($user_id, $likes)) == false) {		//		if string is present in array
-						// explode(" ",$likes);		//		create array from string
-						array_push($likes, $user_id);//		remove element from array
-						$likes = implode(" ",$likes);		//		create string from array
-						
-						try{
-							$query = $conn->prepare("UPDATE ".PICTABLE." SET likes = :usr_like WHERE id = :img_id");
-							echo ('6. prepared<br>');
-							$query->bindParam(':usr_like', $likes);
-							$query->bindParam(':img_id', $image_id);
-							echo ('7. Bind: <br>');
-							$query->execute();
-							echo 'image LIKED<br>';
-							header("Location: ../index.php");
-						}catch(PDOException $e){
-							echo ("+ likes error " . $e->getMessage());
-						}
-						header("Location: ../index.php");
-					}else {			//		if string is present in array
-						try{
-							unset($likes[$user_id]);		//		remove element from array
-							$likes = implode(" ",$likes);		//		create string from array
-							if (trim($likes) == "") {
-								$likes = NULL;
-							}
-							
-							echo "key: ".array_search($user_id, $likes) ."<br>";
-							$stmt = $conn->prepare("UPDATE ".PICTABLE." SET likes = :usr_like WHERE id = :img_id");
-							echo ('4. prepared<br>');
-							$stmt->bindParam(':usr_like', $likes);
-							$stmt->bindParam(':img_id', $image_id);
-							echo ('5. Bind: <br>');
-							$stmt->execute();
-							header("Location: ../index.php");
-							echo 'image unLIKED<br>';
-						}catch(PDOException $e){
-							echo ("- unlikes error " . $e->getMessage());
-						}
-						header("Location: ../index.php");
-					}
-					*/
 				} else {		//	if there are selected images in the db
-					echo "multi-update error<br>";
+					$message = "Like...ing error.<br>";
+					$type = 'caution';
+					header("Location: ../index.php?$type=$message");
 				}
 			}catch(PDOException $e){
 				echo ("likes error " . $e->getMessage());
@@ -251,25 +184,21 @@ if ($sess) {
 							$type		= "sussess";
 							$message	= "Image successfully deleted<br>";
 							header("Location: ../index.php?$type&$message");
-							// header("Location: ../index.php");
 						}catch(PDOException $e){
 							echo ("Delete error " . $e->getMessage() . "<br>");
 							$type		= "danger";
 							$message	= "Error deliting image<br>";
 							header("Location: ../index.php?$type&$message");
-							// header("Location: ../index.php");
 						}
-						// header("Location: ../index.php");
 					}else {			//		if string is present in array
 						$type		= "Danger";
 						$message	= "It doesnt look like this image is yours.<br>You cant delete images that are not yours";
 						header("Location: ../index.php?$type&$message");
-						// header("Location: ../index.php");
 					}
 				} else {		//	if there are selected images in the db
-					echo "multi-update error<br>";
-					header("Location: ../index.php?$type&$message");
-					// header("Location: ../index.php");
+					$message = "multi-update error.<br>";
+					$type = 'caution';
+					header("Location: ../index.php?$type=$message");
 				}
 			}catch(PDOException $e){
 				echo ("likes error " . $e->getMessage());
@@ -278,8 +207,9 @@ if ($sess) {
 		// header("Location: ../index.php");
 	}
 } else {
-	echo ('AUTHENTICATION ERROR.<br>');
-	header("Location: ../login.php");
+	$message = "Image was deleted.<br>";
+	$type = 'success';
+	header("Location: ../index.php?$type=$message");
 }
 
 $conn = null;
