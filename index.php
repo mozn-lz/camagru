@@ -44,6 +44,8 @@ if ($sess) {
 				$count = count($result);
 				if ($count > 0){
 					echo "<br>";
+					echo "<h4>Your Previous pictures</h4>";
+					echo "<br>";
 					$i = $count - 1;
 					while ($i >= 0) {
 						echo ("

@@ -7,6 +7,7 @@ if ($sess) {
 	$firstame = $_SESSION['fName'];
 	$surname = $_SESSION['sName'];
 	$email = $_SESSION['email'];
+	include 'forms/init_connect.php';
 	include 'frame/head.php';
 } else {
 	$type		= "danger";
@@ -39,17 +40,43 @@ if ($sess) {
 				<input type="radio" name="overlay" value="res/mask2.png" id="catface"> catface
 
 			</div>
-			<div id="vid_div">
-				<div>
-					<button id="photo-button" class="btn btn-success">Take Photo</button>
-					<!-- <input type="file" name="uploadImage" id="uploadImage" accept="image/gif, image/jpeg, image/png"> -->
-					<input type="file" onchange="encodeImageFileAsURL(this)" />
-					<!-- <button id="clear-button">Clear</button> -->
+			<div class="row">
+				<div class="col-sm-6" id="vid_div">
+					<div>
+						<button id="photo-button" class="btn btn-success">Take Photo</button>
+						<!-- <input type="file" name="uploadImage" id="uploadImage" accept="image/gif, image/jpeg, image/png"> -->
+						<input type="file" onchange="encodeImageFileAsURL(this)" />
+						<!-- <button id="clear-button">Clear</button> -->
+					</div>
+					<div id="imgVidDiv">
+						<img id="tmpImg" src=""  alt="">
+						<video id="video">Stream broken...</video>
+					</div>	
 				</div>
-				<div id="imgVidDiv">
-					<img id="tmpImg" src=""  alt="">
-					<video id="video">Stream broken...</video>
-				</div>	
+				<div class="col-sm-6">
+					<?php
+					$stmt = $conn->prepare("SELECT * FROM ".PICTABLE." WHERE username = :username");
+					$stmt->bindParam(':username', $_SESSION['email']);
+					$stmt->execute();
+					$result = $stmt->fetchAll();
+					// print_r($result);
+					$count = count($result);
+					if ($count > 0){
+						echo "<br>";
+						$i = $count - 1;
+						while ($i >= 0) {
+							echo ("
+							<div class='display_grp col-md-3'>
+								<div class='user_pic'>
+									<img src=".$result[$i]['image']." alt=''>
+								</div>
+							</div>");
+							$i--;
+						}
+					}
+
+					?>
+				</div>
 			</div>
 			<div id="photos">
 				<img id="selfie" src="" alt="" style="width:100%;max-width:300px">

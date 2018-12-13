@@ -58,7 +58,9 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {		//
 	   http://127.0.0.1:8080/camagru/reset_password.php?email='.$email.'&hash='.$hash.'
 	   '; // Our message above including the link
 	}
-	mail($to, $subject, $message, $headers);
+	if ($_SESSION['notify'] == 1){
+		mail($to, $subject, $message, $headers);
+	}
 }
 
 try
@@ -409,43 +411,42 @@ try
 	/********************/
 	if ($_POST['delete_profile'])
 	{ // 
-		$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE email = :email");
-		$email = $_POST['reg_email'];
-		$query->bindParam(':email', $email);
-		$query->execute();
-		if ($count = $query->rowCount() == 0 )
-		{ // Find out if email already exists in database (IF USER EXISTS)
-			try {
-				// prepare sql and bind parameters
-				$stmt = $conn->prepare("INSERT INTO ".$usrsTB." 
-				(username,  firstname,  lastname,  email,  pssword,  confirm,  active) 
-				VALUES (:username, :firstname, :lastname, :email, :pssword, :confirm, :active)");
-				$username = $_POST['reg_uName'];
-				$firstname = $_POST['reg_fName'];
-				$lastname = $_POST['reg_sName'];
-				$email = $_POST['reg_email'];
-				$psword = strtoupper(hash('whirlpool' , $_POST['reg_password1']));
-				$confirm = hash(md5 ,rand());
-				$active = 0;
+		if(isset($_SESSION['id']))
+		{
+			$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE id = :id");
+			$id = $_SESSION['id'];
+			$query->bindParam(':id', $id);
+			$query->execute();
 
-				$stmt->bindParam(':username', $username);
-				$stmt->bindParam(':firstname', $firstname);
-				$stmt->bindParam(':lastname', $lastname);
-				$stmt->bindParam(':email', $email);
-				$stmt->bindParam(':pssword', $psword);
-				$stmt->bindParam(':confirm', $confirm);
-				$stmt->bindParam(':active', $active);
+			$result = $query->fetch(PDO::FETCH_ASSOC);
+			$username	= $result['username'];
+			$firstname	= $result['firstname'];
+			$lastname	= $result['lastname'];
+			$email		= $result['email'];
+		}
+		
+		if ($count = $stmt->rowCount() == 0)
+		{ // Find out if email already exists in database (IF USER EXISTS)
+			try{
+				$stmt = $conn->prepare("DELETE * FROM ".$PICTABLE." WHERE username = :user_email");
+				$stmt->bindParam(':user_email', $_SESSION['email']);
 				$stmt->execute();
-				// echo "New records created successfully";
-				$message = "Account created successfully. <br> Please check your email to confirm";
-				$type = 'success';
-				send_mail($username, $firstname, $lastname, $email, $confirm, "new user");
-				header("Location: ../index.php?$type=$message");
-				// header("Location: ../index.php");
 			}
 			catch(PDOException $e) {
 				echo "Error: " . $e->getMessage() . "<br>";
 			}
+			try {
+			$stmt = $conn->prepare("DELETE FROM ".$usrsTB." WHERE id = :user_id");
+			$stmt->bindParam(':user_id', $_SESSION['id']);
+			$stmt->execute();
+			}
+			catch(PDOException $e) {
+				echo "Error: " . $e->getMessage() . "<br>";
+			}
+			$message = "Account created successfully. <br> Please check your email to confirm";
+			$type = 'success';
+			send_mail($username, $firstname, $lastname, $email, $confirm, "new user");
+			header("Location: ../index.php?$type=$message");
 		}else {
 			$message = "Do you have an account? The syste mdoesnt think you do..<br>";
 			$type = 'caution';

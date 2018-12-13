@@ -45,7 +45,11 @@ if ($sess) {
 		<div class="col-sm-1"></div>
 		<div class="col-sm-3">
 			<input type="hidden" name="delete_user" id="delete_user">
-			<a href="./forms/create_user.php"><button type="button" onclick="confirmation()" class="btn btn-danger btn-lg">Delete Account</button></a>
+			<form action="" method="post">
+				<a href="./forms/create_user.php"><button type="button" onclick="confirmation()" class="btn btn-danger btn-lg">Delete Account</button></a>
+				<input type="hidden" name="delete_profile">
+				
+			</form>
 		</div>
 	</div>
 	<?php include 'frame/messages.php'?>

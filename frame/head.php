@@ -21,5 +21,5 @@
 <?php 
 $type = $_SESSION['type'];
 $message = $_SESSION['message'];
-include 'frame/qm.php'; 
+// include 'frame/qm.php'; 
 ?>

@@ -9,7 +9,7 @@ function send_mail($username, $image_owner_email, $type) {		//	Send email to Reg
 	// echo "image_owner(mail function): $image_owner_email<br>";
 	$to      = $image_owner_email; // Send email to our user
 	$headers = 'From:noreply@comagaru.com' . "\r\n"; // Set from headers
-
+	
 	// echo 'to: '. $to;
 	if ($type == "comment") {		//	change user details
 		$subject = "New comment";
@@ -19,7 +19,9 @@ function send_mail($username, $image_owner_email, $type) {		//	Send email to Reg
 		$subject = "New like";
 		$message = "Someone Liked on your picture";
 	}
-	mail($to, $subject, $message, $headers);
+	if ($_SESSION['notify'] == 1){
+		mail($to, $subject, $message, $headers);
+	}
 }
 
 $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
