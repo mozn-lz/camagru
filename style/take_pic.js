@@ -31,6 +31,20 @@ catface.addEventListener('change', function (e) {
 	overlay.src=catface.value;
 }, false);
 
+var back = document.getElementById('overlay2');
+var overlay2 = document.getElementById('tmpImg2');
+back.addEventListener('change', function (e) {
+	if (back.checked == true) {
+		overlay2.style.visibility = "visible";
+		overlay2.src=back.value;
+		console.log(overlay2.src);
+	} else if (back.checked == false) {
+		overlay2.style.visibility = "hidden";
+		overlay2.src='';
+		console.log(overlay2.src);
+	}
+}, false);
+
 /*--------------------------------------------End Overlay---------------------------------*/
 
 /************************/
@@ -92,6 +106,7 @@ function encodeImageFileAsURL(element) {
 		var uploadImage = document.createElement("img");
 		uploadImage.src = reader.result;
 		uploadImage.id = "uploadImage";
+		uploadImage.width = "350";
 		document.getElementById('vid_div').appendChild(uploadImage);
 
 // var uploadImage		= document.getElementById('uploadImage');
@@ -99,17 +114,23 @@ function encodeImageFileAsURL(element) {
 	reader.readAsDataURL(file);
 }
 /*****************************************************************/
+
+
+/*****************************************************************/
+/*							Take picture						 */
+/*****************************************************************/
 function takePicture() {
 	// Create Canvas
 	const context = canvas.getContext('2d');
 	if (width && height) {
+		canvas.width = width;
+		canvas.height = height;
 		if (video.style.visibility != "hidden") 
 		{
-			canvas.width = width;
-			canvas.height = height;
 			// Draw image of the video on the canvas
 			context.drawImage(video, 0, 0, width, height);
 			context.drawImage(overlay, 150, 0, 200, 200);
+			context.drawImage(overlay2, 150, 0, 200, 200);
 			
 			// Create image from canvas
 			const imgUrl = canvas.toDataURL("image/png");
@@ -118,31 +139,35 @@ function takePicture() {
 			// console.log(imgUrl);
 			const capture = document.createElement('img');
 			capture.setAttribute('src', imgUrl);             // later
-			
+
 			var imageObj1 = new Image();
 			var imageObj2 = new Image();
+			var imageObj3 = new Image();
 			imageObj1 = capture;
+			imageObj2 = (overlay);
+			imageObj3 = (overlay2);
 			// console.log("Obj1: " + imageObj1 + '\n');
 			
 			imageObj1.onload = function() {
 				context.drawImage(imageObj1, 0, 0, width, height);
-				imageObj2 = (overlay);
 				imageObj2.onload = function() {
 					context.drawImage(imageObj2, 0, 0, width, height);
-					var img = context.toDataURL("image/png");
+					imageObj3.onload = function() {
+						context.drawImage(imageObj3, 0, 0, width, height);
+						var img = context.toDataURL("image/png");
+					}
 				}
 			};
 		}
 		if (video.style.visibility == "hidden") 
 		{
 			console.log("1. uploadImage.src: " + uploadImage);
-			canvas.width = width;
-			canvas.height = height;
 			// Draw image of the video on the canvas
 			console.log("uploadImage:> "+ uploadImage + "\n");
 			console.log("overlay:> "+ overlay + "\n");
 			context.drawImage(uploadImage, 0, 0, width, height);
 			context.drawImage(overlay, 150, 0, 200, 200);
+			context.drawImage(overlay2, 150, 0, 200, 200);
 
 			// Create image from canvas
 			const imgUrl = canvas.toDataURL("image/png");
@@ -153,15 +178,18 @@ function takePicture() {
 
 			var imageObj1 = new Image();
 			var imageObj2 = new Image();
+			var imageObj3 = new Image();
 			imageObj1 = capture;
-			console.log("Obj1: " + imageObj1 + '\n');
-
+			imageObj2 = (overlay);
+			imageObj3 = (overlay2);
 			imageObj1.onload = function() {
 				context.drawImage(imageObj1, 0, 0, width, height);
-				imageObj2 = (overlay);
 				imageObj2.onload = function() {
 					context.drawImage(imageObj2, 0, 0, width, height);
-					var img = context.toDataURL("image/png");
+					imageObj3.onload = function() {
+						context.drawImage(imageObj3, 0, 0, width, height);
+						var img = context.toDataURL("image/png");
+					}
 				}
 			};
 		}

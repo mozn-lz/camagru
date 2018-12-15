@@ -30,9 +30,9 @@ include 'forms/init_connect.php';
 			// echo "0. Selceting user.<br>";
 			$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE email = :email AND confirm = :hash");
 			$email = ($_GET['email']); // Set email variable
-			echo "email" . $email . "<br>";
+			// echo "email" . $email . "<br>";
 			$hash = ($_GET['hash']); // Set hash variable
-			echo "hash" . $hash . "<br>";
+			// echo "hash" . $hash . "<br>";
 			$query-> bindParam(':email', $email);
 			$query-> bindParam(':hash', $hash);
 			$query->execute();
@@ -51,7 +51,7 @@ include 'forms/init_connect.php';
 			echo "Sql querry error: " . $e->getMessage() . "<br>";
 		}
 	}else {
-		$message = "It seams you were on a 'reset password' page. <br>If you were trying to change your email address, please click on your email link again<br>";
+		$message = "It's Possible you had a weak password<br>Make sure to have 8 charecters<br>min: 1 UPPER CASE, lowercase, and NUMBER<br>";
 		$type = 'danger';
 		header("Location: index.php?$type=$message");
 		// header("Location: index.php");

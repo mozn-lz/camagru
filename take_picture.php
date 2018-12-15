@@ -38,22 +38,23 @@ if ($sess) {
 				<input type="radio" name="overlay" value="#" id="none" checked="checked"> Ugly face
 				<input type="radio" name="overlay" value="res/mask1.png" id="crazy"> crazy
 				<input type="radio" name="overlay" value="res/mask2.png" id="catface"> catface
-
 			</div>
-			<div class="row">
-				<div class="col-sm-6" id="vid_div">
+			<div>
+				<input type="checkbox" name="overlay2" value="./res/waterDrop.png" id="overlay2"> Rain
+			</div>
+			<div class="">
+				<div class="" id="vid_div">
 					<div>
 						<button id="photo-button" class="btn btn-success">Take Photo</button>
-						<!-- <input type="file" name="uploadImage" id="uploadImage" accept="image/gif, image/jpeg, image/png"> -->
 						<input type="file" onchange="encodeImageFileAsURL(this)" />
-						<!-- <button id="clear-button">Clear</button> -->
 					</div>
 					<div id="imgVidDiv">
 						<img id="tmpImg" src=""  alt="">
+						<img id="tmpImg2" src=""  alt="">
 						<video id="video">Stream broken...</video>
 					</div>	
 				</div>
-				<div class="col-sm-6">
+				<div class="float-left padding-400">
 					<?php
 					$stmt = $conn->prepare("SELECT * FROM ".PICTABLE." WHERE username = :username");
 					$stmt->bindParam(':username', $_SESSION['email']);

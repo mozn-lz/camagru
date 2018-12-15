@@ -29,6 +29,12 @@ section{
 .hidden {
     display: none;
 }
+.float-left{
+    float: left;
+}
+.padding-400{
+    padding-top: 400px;
+}
 
 /****************************************/
 /*		EVERYTHING header IN HERE	   	*/
@@ -103,6 +109,14 @@ img{
 
     /* min-height:40px; */
     z-index:300000;
+}
+#tmpImg2 {
+    width:350px;
+	position:absolute;
+	padding-left: 125px;
+
+    /* min-height:40px; */
+    /* z-index:300000; */
 }
 #video{
 	position:absolute;

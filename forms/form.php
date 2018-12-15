@@ -58,9 +58,7 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {		//
 	   http://127.0.0.1:8080/camagru/reset_password.php?email='.$email.'&hash='.$hash.'
 	   '; // Our message above including the link
 	}
-	if ($_SESSION['notify'] == 1){
 		mail($to, $subject, $message, $headers);
-	}
 }
 
 try
@@ -153,7 +151,7 @@ try
 					send_mail($username, $firstname, $lastname, $email, $confirm, "reset_password");
 					$type		= "success";
 					$message	= "Everthing looks good, check your email<br>";
-					header("Location: ../fotgot_password.php?$type=$message");
+					header("Location: ../forgot_password.php?$type=$message");
 					// header("Location: ./logout.php");
 				}
 				catch(PDOException $e) {
@@ -163,13 +161,13 @@ try
 				echo ("email address not found");
 				$type		= "caution";
 				$message	= "Either you entered the wrong email or you dont have an account with us.<br>We cant find your email address<br>";
-				header("Location: ../fotgot_password.php?$type=$message");
+				header("Location: ../forgot_password.php?$type=$message");
 			}		
 		} else {
 			echo "Your email seams to be empty";
 			$type		= "danger";
 			$message	= "Your email seams to be empty<br>";
-			header("Location: ../fotgot_password.php?$type=$message");
+			header("Location: ../forgot_password.php?$type=$message");
 		}
 	}
 
@@ -411,47 +409,79 @@ try
 	/********************/
 	if ($_POST['delete_profile'])
 	{ // 
+		echo ("Deleting  account<br>");
 		if(isset($_SESSION['id']))
 		{
-			$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE id = :id");
-			$id = $_SESSION['id'];
+			echo "id is set to ".$_SESSION['id']." <br>";
+			echo "PS is set to ".$_POST['delete_password']." <br>";
+			$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE id = :id AND pssword = :pssword");
+			$id		= $_SESSION['id'];
+			$psword	= strtoupper(hash('whirlpool' , $_POST['delete_password']));
+			echo "1<br>";
 			$query->bindParam(':id', $id);
+			$query->bindParam(':pssword', $psword);
+			echo "2<br>";
 			$query->execute();
+			echo "3<br>";
 
-			$result = $query->fetch(PDO::FETCH_ASSOC);
-			$username	= $result['username'];
-			$firstname	= $result['firstname'];
-			$lastname	= $result['lastname'];
-			$email		= $result['email'];
-		}
-		
-		if ($count = $stmt->rowCount() == 0)
-		{ // Find out if email already exists in database (IF USER EXISTS)
-			try{
-				$stmt = $conn->prepare("DELETE * FROM ".$PICTABLE." WHERE username = :user_email");
-				$stmt->bindParam(':user_email', $_SESSION['email']);
-				$stmt->execute();
+			$result = $query->fetchAll();
+			echo "4<br>";
+			$username	= $result[0]['username'];
+			echo "5<br>";
+			$firstname	= $result[0]['firstname'];
+			echo "6<br>";
+			$lastname	= $result[0]['lastname'];
+			echo "7<br>";
+			$email		= $result[0]['email'];
+			echo "8<br>";
+
+			echo "Results: <br>";
+			print_r($result);
+			echo "<br>";
+			echo "9<br>";
+			echo "username: $username <br>";
+			echo "firstname: $firstname <br>";
+			echo "lastname: $lastname <br>";
+			echo "email: $email <br>";
+			echo "<br>";
+			
+			if ($query->rowCount() == 1)
+			{ // Find out if email already exists in database (IF USER EXISTS)
+				// if ($password ===)
+				try{
+					$stmt = $conn->prepare("DELETE FROM ".PICTABLE." WHERE username = :user_email");
+					$stmt->bindParam(':user_email', $_SESSION['email']);
+					$stmt->execute();
+					echo "DELETE FROM `user_pic_table` WHERE `user_pic_table`.`username` = 'moeketsane.sefako@gmail.com'<br>";
+				}
+				catch(PDOException $e) {
+					echo "Error: " . $e->getMessage() . "<br>";
+				}
+				try {
+					$stmt = $conn->prepare("DELETE FROM ".$usrsTB." WHERE id = :user_id");
+					$stmt->bindParam(':user_id', $_SESSION['id']);
+					$stmt->execute();
+					echo "DELETE FROM ".$usrsTB." WHERE id = :user_id<br>";
+				}
+				catch(PDOException $e) {
+					echo "Error: " . $e->getMessage() . "<br>";
+				}
+				$message = "Account deleted. <br>";
+				$type = 'success';
+				send_mail($username, $firstname, $lastname, $email, $confirm, "delete user");
+				
+				header("Location: logout.php?$type=$message");
+			}else {
+				echo "wring password<br>";
+				$message = "You might have gotten your password wrong, try again <br>";
+				$type = 'caution';
+				header("Location: ../profile.php?$type=$message");
+				// header("Location: ../register.php");
 			}
-			catch(PDOException $e) {
-				echo "Error: " . $e->getMessage() . "<br>";
-			}
-			try {
-			$stmt = $conn->prepare("DELETE FROM ".$usrsTB." WHERE id = :user_id");
-			$stmt->bindParam(':user_id', $_SESSION['id']);
-			$stmt->execute();
-			}
-			catch(PDOException $e) {
-				echo "Error: " . $e->getMessage() . "<br>";
-			}
-			$message = "Account created successfully. <br> Please check your email to confirm";
-			$type = 'success';
-			send_mail($username, $firstname, $lastname, $email, $confirm, "new user");
-			header("Location: ../index.php?$type=$message");
 		}else {
-			$message = "Do you have an account? The syste mdoesnt think you do..<br>";
+			$message = "You might have gotten your password wrong, try again <br>";
 			$type = 'caution';
-				header("Location: ../register.php?$type=$message");
-			// header("Location: ../register.php");
+			header("Location: ../profile.php?$type=$message");
 		}
 	}
 	// header("Location: ../index.php");
@@ -461,3 +491,4 @@ try
 
 $conn = null;
 ?>
+

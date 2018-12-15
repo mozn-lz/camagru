@@ -39,16 +39,15 @@ if ($sess) {
 			<h2>Profile</h2>
 		</div>
 		<div class="col-sm-2">
-			<input type="hidden" name="delete_user" id="delete_user">
 			<a href="./forgot_password.php"><button type="submit" class="btn btn-primary" value="updte">Change Password</button></a>
 		</div>
 		<div class="col-sm-1"></div>
 		<div class="col-sm-3">
 			<input type="hidden" name="delete_user" id="delete_user">
-			<form action="" method="post">
-				<a href="./forms/create_user.php"><button type="button" onclick="confirmation()" class="btn btn-danger btn-lg">Delete Account</button></a>
-				<input type="hidden" name="delete_profile">
-				
+			<form action="./forms/form.php" method="post">
+				<button type="submit" onclick="confirmation()" class="btn btn-danger btn-lg">Delete Account</button>
+				<input type="hidden" name="delete_profile" value="delete_profile">
+				<input type="hidden" name="delete_password" id="delete_password">
 			</form>
 		</div>
 	</div>
