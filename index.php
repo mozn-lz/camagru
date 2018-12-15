@@ -60,7 +60,7 @@ if ($sess) {
 									<button type='submit' name='likes' value='likes' class='btn btn-primary'>".$result[$i]['likes']." Likes</button>
 									<button type='submit' name='delete_img' value='delete_img' class='btn btn-danger'>Delete</button>
 								</form>
-								<div class='comments'>".$result[$i]['coments']."</div>
+								<div class='comments'>".htmlspecialchars($result[$i]['coments'], ENT_QUOTES)."</div>
 							</div>
 						</div>");
 						$i--;
