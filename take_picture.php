@@ -13,7 +13,6 @@ if ($sess) {
 	$type		= "danger";
 	$message	= "Plese login first<br>";
 	header("Location: login.php?$type=$message");
-	// header("Location: login.php");
 }
 ?>
 
@@ -60,7 +59,6 @@ if ($sess) {
 					$stmt->bindParam(':username', $_SESSION['email']);
 					$stmt->execute();
 					$result = $stmt->fetchAll();
-					// print_r($result);
 					$count = count($result);
 					if ($count > 0){
 						echo "<br>";

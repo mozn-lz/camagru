@@ -27,12 +27,9 @@ include 'forms/init_connect.php';
 	if(isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['hash']) && !empty($_GET['hash'])){
 		// Verify
 		try {
-			// echo "0. Selceting user.<br>";
 			$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE email = :email AND confirm = :hash");
 			$email = ($_GET['email']); // Set email variable
-			// echo "email" . $email . "<br>";
 			$hash = ($_GET['hash']); // Set hash variable
-			// echo "hash" . $hash . "<br>";
 			$query-> bindParam(':email', $email);
 			$query-> bindParam(':hash', $hash);
 			$query->execute();
@@ -54,7 +51,6 @@ include 'forms/init_connect.php';
 		$message = "It's Possible you had a weak password<br>Make sure to have 8 charecters<br>min: 1 UPPER CASE, lowercase, and NUMBER<br>";
 		$type = 'danger';
 		header("Location: index.php?$type=$message");
-		// header("Location: index.php");
 	}
 	?>
 	<form name="reg_form" action="forms/form.php" onsubmit="return validateRegForm()" method="POST">

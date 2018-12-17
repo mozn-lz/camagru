@@ -1,12 +1,10 @@
 <?php
 session_start(); 
-// ini_set('display_errors', 1);
 include_once 'default.php';
 include 'init_connect.php';
 
 
 function send_mail($username, $image_owner_email, $type) {		//	Send email to Registerd user
-	// echo "image_owner(mail function): $image_owner_email<br>";
 	$to      = $image_owner_email; // Send email to our user
 	$headers = 'From:noreply@comagaru.com' . "\r\n"; // Set from headers
 
@@ -20,31 +18,6 @@ function send_mail($username, $image_owner_email, $type) {		//	Send email to Reg
 		$message = "Someone Liked on your picture";
 	}
 		mail($to, $subject, $message, $headers);
-}
-function checkNotifications($email){
-
-	echo "<br><br>";
-	// $stmt = $conn->prepare("SELECT * FROM $usrsTB WHERE email=:email");
-	// $stmt->bindParam(':email', $email);
-	// $stmt->execute();
-
-	echo "0. emial $email<br>";
-	echo "^. send mail<br>";
-	// $stmt = $conn->prepare("SELECT * FROM $usrsTB WHERE id = :img_id");
-	$stmt = $conn->prepare("SELECT * FROM $usrsTB WHERE email=:email");
-	echo "1<br>";
-	$stmt->bindParam(':email', $email);
-	echo "2<br>";
-	$stmt->execute();
-	echo "3<br>";
-	echo "Go<br>";
-	$result = $stmt->fetchAll();
-	print_r($result);
-	echo "lolo<br>";
-	if ($result[0]['notification'] == 1 && $result[0]['email'] == $to){
-		return (true);
-	}
-	return (false);
 }
 
 $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
@@ -73,7 +46,6 @@ if ($sess) {
 				$stmt->bindParam(':uName', $email);
 				$stmt->bindParam(':imge', $image);
 				$stmt->execute();
-				echo 'Image uploaded<br>';
 				$type		="success";
 				$message	="Your image was successfully saved<br>";
 				header("Location: ../index.php?$type=$message");
@@ -88,13 +60,11 @@ if ($sess) {
 	/**************************************/
 	if ($_POST['comments'] || $_POST['likes'] || $_POST['delete_img'])
 	{
-		echo "Comments<br>";
 		$image_id = $_POST['img_details'];
 		$comment = trim($_POST['comment']);
 		if ($_POST['comments']){
 			if ($comment != '' && $image_id) 
 			{
-				echo"1<br>";
 				$stmt = $conn->prepare("SELECT * FROM ".PICTABLE." WHERE id = :img_id");
 				$stmt->bindParam(':img_id', $image_id);
 				$stmt->execute();
@@ -119,18 +89,13 @@ if ($sess) {
 					$stmt->bindParam(':usr_coment', $db_Comments);
 					$stmt->bindParam(':img_id', $image_id);
 					$stmt->execute();
-					// echo "ex upd <br>";
-					// echo "2. $username <br>3. $image_user_email<br>to mail-> <br>";
 						$stmt = $conn->prepare("SELECT * FROM $usrsTB WHERE email=:email");
 						$stmt->bindParam(':email', $image_user_email);
 						$stmt->execute();
 						$userDetails = $stmt->fetchAll();
-						echo "User deats " . $userDetails[0]['notification'] ."<br>";
 					if ($userDetails[0]['notification'] == 1){
-						echo ('sending mail <br>');
 						send_mail($username, $image_user_email, "comment");
 					}
-					echo "Hello<br>";
 					$message = "Image commented.<br>";
 					$type = 'success';
 					header("Location: ../index.php?$type=$message");
@@ -145,7 +110,7 @@ if ($sess) {
 				header("Location: ../index.php?$type=$message");
 			}
 		}
-		
+
 		/***********************************/
 		/*               LIKES             */
 		/***********************************/
@@ -157,8 +122,6 @@ if ($sess) {
 				$stmt->execute();
 				$result = $stmt->fetchAll();
 				$count = count($result);
-				echo "Excecution: ". $count. "<br>";
-				echo '<br>';
 				/**
 				 * get results
 				 * fund if user hasalready liked image before,
@@ -177,9 +140,7 @@ if ($sess) {
 							$stmt->bindParam(':email', $image_user_email);
 							$stmt->execute();
 							$userDetails = $stmt->fetchAll();
-							echo "User deats " . $userDetails[0]['notification'] ."<br>";
 							if ($userDetails[0]['notification'] == 1){
-								echo ('sending mail <br>');
 								send_mail($username, $image_user_email, "like");
 							}
 						$message = "Picture  liked.<br>";
@@ -199,46 +160,28 @@ if ($sess) {
 				echo ("likes error " . $e->getMessage());
 			}
 		}
-		
-		
-		
+	
 		/***********************************/
 		/*              DELETE             */
 		/***********************************/
 		if ($_POST['delete_img'] && $image_id)
 		{
 			try{
-				echo "image_id: " . $image_id . "<br>";
 				$stmt = $conn->prepare("SELECT * FROM ".PICTABLE." WHERE id = :img_id");
 				$stmt->bindParam(':img_id', $image_id);
 				$stmt->execute();
 				$result = $stmt->fetch(PDO::FETCH_ASSOC);
-				// $result = $stmt->fetchAll();
-				echo "conut: ".$count = $stmt->rowCount() . "<br>";
-				echo "Count 1: ". $count. "<br>";
-				echo '<br>';
-				/**
-				 * get results
-				 * fund if user hasalready liked image before,
-				 * 		if user.likes == true ? set user like to false : set user like to true
-				 */
+
 				if ($count == 1) {
-					echo "Count = 1<br>";
-					// echo ($_SESSION['email'] ."<br>". $result['username']. "<br>");
 					if ($_SESSION['email'] === $result['username']) {		//		if string is present in array
-						echo "usernames match <br>";
 						try{
 							$query = $conn->prepare("DELETE FROM ".PICTABLE." WHERE id = :img_id");
-							echo ('6. prepared<br>');
 							$query->bindParam(':img_id', $image_id);
-							echo ('7. Bind: <br>');
 							$query->execute();
-							echo 'image DELETED<br>';
 							$type		= "sussess";
 							$message	= "Image successfully deleted<br>";
 							header("Location: ../index.php?$type=$message");
 						}catch(PDOException $e){
-							echo ("Delete error " . $e->getMessage() . "<br>");
 							$type		= "danger";
 							$message	= "Error deliting image<br>";
 							header("Location: ../index.php?$type=$message");
@@ -266,5 +209,4 @@ if ($sess) {
 }
 
 $conn = null;
-
 ?>

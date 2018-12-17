@@ -2,7 +2,6 @@
 <?php
 if (isset($_GET['danger'])) {
     echo "<div class='danger'>".$_GET['danger']." </div>";
-    // echo "<div class=$type>. $message .</div>";
 } elseif (isset($_GET['caution'])) {
     echo "<div class='caution'>".$_GET['caution']." </div>";
 } elseif (isset($_GET['success'])) {

@@ -1,7 +1,6 @@
 <?php
 session_start();
 include 'default.php';
-// include 'forms/helpers.php';
 
 function send_mail($username, $firstname, $lastname, $email, $hash, $type) {		//	Send email to Registerd user
 	$to      = $email; // Send email to our user
@@ -13,7 +12,6 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {		//
 	}
 	if ($type == "new user") {		//	
 		$subject = 'Signup | Verification'; // Give the email a subject    
-		// $message = "Your account was created at " . $date;
 		$message = '
 		
 	   Thanks for signing up!
@@ -33,7 +31,6 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {		//
 	}
 	if ($type == "user login") {	//	if user login
 		$subject = 'Signin | Notification'; // Give the email a subject    
-		// $message = "Your account was created at " . $date;
 		$message = '
 		
 		Account accessed
@@ -46,7 +43,6 @@ function send_mail($username, $firstname, $lastname, $email, $hash, $type) {		//
 	}
 	if ($type == "reset_password") {		//	
 		$subject = 'Reset Password'; // Give the email a subject    
-		// $message = "Your account was created at " . $date;
 		$message = '
 		
 	   Someone said you forgot your password. If it was not you, please ignore this email.
@@ -96,27 +92,23 @@ try
 					$type		= "success";
 					$message	= "Password reset was successfull.<br>Please login";
 					header("Location: ../login.php?$type=$message");
-					// header("Location: ../login.php");
 				}catch(PDOException $e) {
 					echo "Forget Error: " . $e->getMessage() . "<br>";
 					$type		= "danger";
 					$message	= "There was an error resetign your password.<br>Try again";
 					header("Location: ../reset_password.php?$type=$message");
-					// header("Location: ../reset_password.php");
 				}
 			} else {
 				echo 'passwords dont match';
 				$type		= "danger";
 				$message	= "Your passwords should match<br>Be 8 charecters long<br>Contain an uppercase letter<br>Contain a lowercase letter<br>Contain a number";
 				header("Location: ../reset_password.php?$type=$message");
-					// header("Location: ../reset_password.php");
 			}
 		}else {
 			echo 'Password empty<br>';
 			$type		= "danger";
 			$message	= "Looks like one of your passwords is missing...<br>Try again...you might have to go back to yout email link<br>";
 			header("Location: ../reset_password.php?$type=$message");
-			// header("Location: ../reset_password.php");
 		}
 	}
 
@@ -146,13 +138,10 @@ try
 					$stmt->execute();
 
 					echo "Please check your email successfully";
-					// $_SESSION['message'] = "Account created successfully. <br> Please check your email to confirm";
-					// $_SESSION['type'] = 'success';
 					send_mail($username, $firstname, $lastname, $email, $confirm, "reset_password");
 					$type		= "success";
 					$message	= "Everthing looks good, check your email<br>";
 					header("Location: ../forgot_password.php?$type=$message");
-					// header("Location: ./logout.php");
 				}
 				catch(PDOException $e) {
 					echo "Forget Error: " . $e->getMessage() . "<br>";
@@ -271,7 +260,6 @@ try
 			$type		= "Success";
 			$message	= "Your change has been implemented<br>";
 			header("Location: ../profile.php?$type=$message");
-			// header("Location: ../profile.php");
 		}
 	}
 
@@ -301,7 +289,6 @@ try
 						$message = "It seams your account has not been verified yet.<br>Please check your email for verification details.<br>";
 						$type = 'danger';
 						header("Location: ../login.php?$type=$message");
-						// header("Location: ../login.php");
 					}
 					if ($result['active'] == 1) 
 					{	//start session if account verified=TRUE and usr email && password match
@@ -315,23 +302,19 @@ try
 						$message = "logged in successfully<br>";
 						send_mail($username, $firstname, $lastname, $email, $hash, "user login");
 						header("Location: ../index.php?$type=$message");
-						// header("Location: ../index.php");
 					}
 				}elseif ($count < 1) {
 					$message = 'Incorrect email or password<br> ...or you dont have an account<br>';
 					$type = 'danger';
 					header("Location: ../login.php?$type=$message");
-					// header("Location: ../login.php");
 				}elseif ($count > 1) {
 					$message = "multiple identity chrisis<br>Relax, a psychologist has been called<br>";
 					$type = 'danger';
 						header("Location: ../login.php?$type=$message");
-					// header("Location: ../login.php");
 				}else{
 					$message = "We ran out of errors... who knew, we sent an admin to fix it.<br>";
 					$type = 'danger';
 						header("Location: ../login.php?$type=$message");
-						// header("Location: ../login.php");
 				}
 			}
 			catch(PDOException $e) {
@@ -379,9 +362,6 @@ try
 						$stmt->bindParam(':confirm', $confirm);
 						$stmt->bindParam(':active', $active);
 						$stmt->execute();
-						// echo "New records created successfully";
-						// $_SESSION['message'] = "Account created successfully. <br> Please check your email to confirm";
-						// $_SESSION['type'] = 'success';
 						send_mail($username, $firstname, $lastname, $email, $confirm, "new user");
 						$message = "Just 1 more step befor you start, Please check you email and click on the link.<br>";
 						$type = 'success';
@@ -417,33 +397,15 @@ try
 			$query = $conn->prepare("SELECT * FROM ".$usrsTB." WHERE id = :id AND pssword = :pssword");
 			$id		= $_SESSION['id'];
 			$psword	= strtoupper(hash('whirlpool' , $_POST['delete_password']));
-			echo "1<br>";
 			$query->bindParam(':id', $id);
 			$query->bindParam(':pssword', $psword);
-			echo "2<br>";
 			$query->execute();
-			echo "3<br>";
 
 			$result = $query->fetchAll();
-			echo "4<br>";
 			$username	= $result[0]['username'];
-			echo "5<br>";
 			$firstname	= $result[0]['firstname'];
-			echo "6<br>";
 			$lastname	= $result[0]['lastname'];
-			echo "7<br>";
 			$email		= $result[0]['email'];
-			echo "8<br>";
-
-			echo "Results: <br>";
-			print_r($result);
-			echo "<br>";
-			echo "9<br>";
-			echo "username: $username <br>";
-			echo "firstname: $firstname <br>";
-			echo "lastname: $lastname <br>";
-			echo "email: $email <br>";
-			echo "<br>";
 			
 			if ($query->rowCount() == 1)
 			{ // Find out if email already exists in database (IF USER EXISTS)
@@ -476,7 +438,6 @@ try
 				$message = "You might have gotten your password wrong, try again <br>";
 				$type = 'caution';
 				header("Location: ../profile.php?$type=$message");
-				// header("Location: ../register.php");
 			}
 		}else {
 			$message = "You might have gotten your password wrong, try again <br>";

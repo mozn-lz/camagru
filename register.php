@@ -42,12 +42,10 @@ include 'frame/head.php';
 		<div class="form-group">
 			<label for="Password">Password</label>
 			<input required type="password" class="form-control" id="reg_password1" name="reg_password1" placeholder="Password">
-			 <!-- pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  -->
 		</div>
 		<div class="form-group">
 			<label for="Password2">Confirm Password</label>
 			<input required type="password" class="form-control" id="reg_password2" name="reg_password2" placeholder="Confirm Password">
-			 <!-- pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  -->
 		</div>
 		<button type="submit" class="btn btn-default" name="register" value="reg">Submit</button>
 	</form>

@@ -9,7 +9,7 @@ try {
 	// set the PDO error mode to exception
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	// sql to create table
-	$sql = "CREATE TABLE ".$usrsTB." (
+	$sql = "CREATE TABLE IF NOT EXISTS ".$usrsTB." (
 	id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 	username VARCHAR(20) NOT NULL , 
 	firstname VARCHAR(30) NOT NULL,
@@ -34,7 +34,7 @@ catch(PDOException $e) {
 
 // $sql = "CREATE TABLE ".$usrTB." ( id INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,  username VARCHAR(20) NOT NULL , `image` LONGTEXT NOT NULL ,  `time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,  coments TEXT NULL ,  likes TEXT NULL)"; for propper likes
 try{
-	$sql = "CREATE TABLE ".$usrTB." 
+	$sql = "CREATE TABLE IF NOT EXISTS ".$usrTB." 
 	( 
 		id INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,  
 		username VARCHAR(50) NOT NULL , 

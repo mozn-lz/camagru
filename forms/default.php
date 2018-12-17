@@ -2,8 +2,6 @@
 
 $servername = "localhost";
 $myDB = "camagru";
-// $username = "admin";
-// $password = "1234";
 $db_username = "root";
 $db_password = "wethinkcode";
 $usrsTB = "users";

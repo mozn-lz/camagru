@@ -51,7 +51,5 @@ if ($sess) {
 </section>
 
 <?php 
-// $_SESSION['type'] = '';
-// $_SESSION['message'] = '';
 include 'frame/tail.php'; 
 ?>

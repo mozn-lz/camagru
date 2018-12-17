@@ -71,13 +71,11 @@ include 'forms/init_connect.php';
 			$type		= 'caution';
 			$message	= "It looks like your account has already been verified. <br>Please try to login, or contat our admin at email@email.mail<br>";
 			header("Location: login.php?$type=$message");
-				// header("Location: login.php");
 		}
 	}else{
 		$type = 'caution';
 		$message = "Something went wrong, Don't worry you are safe now<br>";
 		header("Location: login.php?$type=$message");
-			// header("location: login.php");
 	}
 	?>
 </section>

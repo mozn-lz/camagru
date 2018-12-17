@@ -17,7 +17,6 @@ if ($sess) {
 	$type		= "danger";
 	$message	= "Please login/register to access that page<br>";
 	header("Location: login.php?$type=$message");
-	// header("Location: login.php");
 }
 ?>
 

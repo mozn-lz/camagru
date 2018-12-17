@@ -69,8 +69,6 @@ if ($sess) {
 				else {
 					echo"This is eemarassing... It looks like user no users and posted any pictures yet.<br>
 					Click on the take picture to be the first.";
-					// $_SESSION['message'] = "It looks like your account has been verified. Please try to login, or contat our admin at email@email.mail<br>";
-					// $_SESSION['type'] = 'danger';
 				}
 			}catch (PDOException $e){
 				echo "Sql querry error: " . $e->getMessage() . "<br>";
