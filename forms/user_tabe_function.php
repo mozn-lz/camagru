@@ -10,6 +10,7 @@ function send_mail($username, $image_owner_email, $type) {		//	Send email to Reg
 	$to      = $image_owner_email; // Send email to our user
 	$headers = 'From:noreply@comagaru.com' . "\r\n"; // Set from headers
 
+
 	if ($type == "comment") {		//	change user details
 		$subject = "New comment";
 		$message = "Someone Comented on your picture";
@@ -18,9 +19,32 @@ function send_mail($username, $image_owner_email, $type) {		//	Send email to Reg
 		$subject = "New like";
 		$message = "Someone Liked on your picture";
 	}
-	if ($result[0]['notification'] == 1 && $result[0]['email'] == $to){
 		mail($to, $subject, $message, $headers);
+}
+function checkNotifications($email){
+
+	echo "<br><br>";
+	// $stmt = $conn->prepare("SELECT * FROM $usrsTB WHERE email=:email");
+	// $stmt->bindParam(':email', $email);
+	// $stmt->execute();
+
+	echo "0. emial $email<br>";
+	echo "^. send mail<br>";
+	// $stmt = $conn->prepare("SELECT * FROM $usrsTB WHERE id = :img_id");
+	$stmt = $conn->prepare("SELECT * FROM $usrsTB WHERE email=:email");
+	echo "1<br>";
+	$stmt->bindParam(':email', $email);
+	echo "2<br>";
+	$stmt->execute();
+	echo "3<br>";
+	echo "Go<br>";
+	$result = $stmt->fetchAll();
+	print_r($result);
+	echo "lolo<br>";
+	if ($result[0]['notification'] == 1 && $result[0]['email'] == $to){
+		return (true);
 	}
+	return (false);
 }
 
 $sess = isset($_SESSION['id']) && isset($_SESSION['uName']) && isset($_SESSION['fName']) && isset($_SESSION['sName']) && isset($_SESSION['email']);
@@ -95,13 +119,20 @@ if ($sess) {
 					$stmt->bindParam(':usr_coment', $db_Comments);
 					$stmt->bindParam(':img_id', $image_id);
 					$stmt->execute();
-					echo "ex upd <br>";
-					echo "$username <br>$image_user_email<br>";
-					send_mail($username, $image_user_email, "comment");
+					// echo "ex upd <br>";
+					// echo "2. $username <br>3. $image_user_email<br>to mail-> <br>";
+						$stmt = $conn->prepare("SELECT * FROM $usrsTB WHERE email=:email");
+						$stmt->bindParam(':email', $image_user_email);
+						$stmt->execute();
+						$userDetails = $stmt->fetchAll();
+						echo "User deats " . $userDetails[0]['notification'] ."<br>";
+					if ($userDetails[0]['notification'] == 1){
+						echo ('sending mail <br>');
+						send_mail($username, $image_user_email, "comment");
+					}
 					echo "Hello<br>";
 					$message = "Image commented.<br>";
 					$type = 'success';
-					echo "commented <br>";
 					header("Location: ../index.php?$type=$message");
 				}catch(PDOException $e){
 					$message = $e->getMessage();
@@ -142,7 +173,15 @@ if ($sess) {
 						$query->bindParam(':usr_like', $likes);
 						$query->bindParam(':img_id', $image_id);
 						$query->execute();
-						send_mail($username, $image_user_email, "like");
+							$stmt = $conn->prepare("SELECT * FROM $usrsTB WHERE email=:email");
+							$stmt->bindParam(':email', $image_user_email);
+							$stmt->execute();
+							$userDetails = $stmt->fetchAll();
+							echo "User deats " . $userDetails[0]['notification'] ."<br>";
+							if ($userDetails[0]['notification'] == 1){
+								echo ('sending mail <br>');
+								send_mail($username, $image_user_email, "like");
+							}
 						$message = "Picture  liked.<br>";
 						$type = 'success';
 						header("Location: ../index.php?$type=$message");
@@ -221,9 +260,9 @@ if ($sess) {
 		// header("Location: ../index.php");
 	}
 } else {
-	$message = "Image was deleted.<br>";
+	$message = "Your credentials can not be verified.<br>";
 	$type = 'success';
-	header("Location: ../index.php?$type=$message");
+	header("Location: ./logout.php?$type=$message");
 }
 
 $conn = null;
